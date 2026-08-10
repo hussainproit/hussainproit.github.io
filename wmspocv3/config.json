@@ -1,5 +1,5 @@
 {
-	"backendURL": "/wmspocv3/api/gapwalk-application",
+	"backendURL": "https://www.as400toaws.com/wmspocv3/api/gapwalk-application",
     "useModernLegacyStyle": true,
     "verbose": false,
     "webApp": {
