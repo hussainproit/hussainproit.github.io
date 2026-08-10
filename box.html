@@ -1,170 +1,398 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cricket Match Contribution</title>
   <link rel="icon" type="image/png" href="cricket-logo.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 20px;
-      background: #f2f2f2;
-      color: #333;
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --success: #10b981;
     }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 20px;
+      padding-bottom: 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header & Logo */
     header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      margin-bottom: 10px;
     }
-    header img {
-      width: 40px;
-      height: 40px;
+    
+    .logo-badge {
+      background: var(--primary);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+      transition: transform 0.2s;
     }
-    h2 {
-      margin-top: 10px;
-      color: #007bff;
+    .logo-badge:active { transform: scale(0.95); }
+
+    .header-title {
+      text-align: center;
+      margin-bottom: 20px;
     }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
     }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
+    .header-title p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
       margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    input[type="date"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      padding-left: 36px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fafc;
+      transition: border-color 0.2s;
+      outline: none;
     }
     textarea {
-      height: 60px;
+      padding-left: 12px;
+      min-height: 80px;
+      resize: vertical;
     }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .result {
-      margin-top: 30px;
+    input:focus, textarea:focus {
+      border-color: var(--primary);
       background: #fff;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .btn-primary:active {
+      background: var(--primary-hover);
+      transform: scale(0.98);
+    }
+    .btn-success {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-top: 15px;
+    }
+    .btn-success:active { transform: scale(0.98); }
+
+    /* Results */
+    .result-box {
+      background: #1e293b;
+      color: #f8fafc;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
       white-space: pre-wrap;
-      line-height: 1.4;
-    }
-    .copy-btn {
       margin-top: 15px;
-      background: #28a745;
+      overflow-x: auto;
     }
-    .copy-btn:hover {
-      background: #218838;
-    }
+
+    /* Payment Box */
     .payment-box {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fff3cd;
-      border: 1px solid #ffeeba;
-      border-radius: 6px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
       text-align: center;
     }
-    .payment-box img {
-      max-width: 200px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+    .payment-box h3 {
+      color: #d97706;
+      font-size: 1rem;
+      margin-bottom: 10px;
     }
-    @media (max-width: 600px) {
-      input, textarea, button {
-        font-size: 16px;
-      }
+    .upi-details {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed #d97706;
+    }
+    .payment-box img {
+      max-width: 150px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="cricket-logo.png" alt="Logo">
-    <h2>Cricket Match Contribution</h2>
-  </header>
+  
+  <div class="container">
+    <header>
+      <a href="https://www.linkedin.com/in/as400toawshussain" target="_blank" class="logo-badge">
+        <i class="fab fa-linkedin"></i> By Md Hussain
+      </a>
+      <div style="font-size: 1.5rem;"><i class="fas fa-baseball-ball" style="color: #ef4444;"></i></div>
+    </header>
 
-  <label>Match Date:</label>
-  <input type="date" id="matchDate">
+    <div class="header-title">
+      <h1>Turf Cricket Ledger</h1>
+      <p>Instantly calculate match contributions</p>
+    </div>
 
-  <label>Ground Expense (₹):</label>
-  <input type="number" id="groundExpense" value="1500">
+    <!-- Expense Details -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-file-invoice-dollar"></i> Match Details</div>
+      
+      <div class="form-group">
+        <label>Match Date</label>
+        <div class="input-wrapper">
+          <i class="fas fa-calendar-alt"></i>
+          <input type="date" id="matchDate">
+        </div>
+      </div>
 
-  <label>Ball & Other Expense (₹):</label>
-  <input type="number" id="ballExpense" value="70">
+      <div class="form-group">
+        <label>Ground Expense (₹)</label>
+        <div class="input-wrapper">
+          <i class="fas fa-rupee-sign"></i>
+          <input type="number" id="groundExpense" value="1500" inputmode="numeric">
+        </div>
+      </div>
 
-  <label>Previous Balance (₹):</label>
-  <input type="number" id="prevBalance" value="250">
+      <div class="form-group">
+        <label>Ball & Other Expense (₹)</label>
+        <div class="input-wrapper">
+          <i class="fas fa-rupee-sign"></i>
+          <input type="number" id="ballExpense" value="70" inputmode="numeric">
+        </div>
+      </div>
 
-  <label>Senior Player Names (comma separated):</label>
-  <textarea id="seniorNames">Hussain, Ismail, Vinod</textarea>
+      <div class="form-group">
+        <label>Previous Balance (₹)</label>
+        <div class="input-wrapper">
+          <i class="fas fa-wallet"></i>
+          <input type="number" id="prevBalance" value="250" inputmode="numeric">
+        </div>
+      </div>
+    </div>
 
-  <label>Junior Player Names (comma separated):</label>
-  <textarea id="juniorNames">Rayan, Sufyan</textarea>
+    <!-- Players -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-users"></i> Players</div>
+      
+      <div class="form-group">
+        <label>Senior Players (comma separated)</label>
+        <textarea id="seniorNames" placeholder="Hussain, Ismail, Vinod">Hussain, Ismail, Vinod</textarea>
+      </div>
 
-  <button onclick="generateSummary()">Generate Summary</button>
+      <div class="form-group">
+        <label>Junior Players (comma separated)</label>
+        <textarea id="juniorNames" placeholder="Rayan, Sufyan">Rayan, Sufyan</textarea>
+      </div>
+    </div>
 
-  <div class="result" id="result"></div>
-  <button class="copy-btn" onclick="copyResult()">📋 Copy Summary</button>
+    <!-- Action -->
+    <button class="btn btn-primary" onclick="generateSummary()">
+      <i class="fas fa-calculator"></i> Calculate Split
+    </button>
 
-  <div class="payment-box">
-    <strong>Payment Options:</strong><br>
-    UPI ID: <strong>9620447444@upi</strong><br>
-    PhonePe: <strong>9620447444</strong><br>
-    <img src="phonepe-qr.jpeg" alt="PhonePe QR Code">
+    <!-- Results Section -->
+    <div class="card" id="resultsCard" style="display: none;">
+      <div class="card-title"><i class="fas fa-check-circle"></i> Summary Generated</div>
+      <div class="result-box" id="result"></div>
+      <button class="btn btn-success" onclick="copyResult()">
+        <i class="fas fa-copy"></i> Copy for WhatsApp
+      </button>
+    </div>
+
+    <!-- Payment Info -->
+    <div class="card payment-box">
+      <h3><i class="fas fa-qrcode"></i> Payment Options</h3>
+      
+      <div class="upi-details">
+        <span><i class="fas fa-mobile-alt"></i> PhonePe</span>
+        <span style="color: var(--primary);">9620447444</span>
+      </div>
+      
+      <div class="upi-details">
+        <span><i class="fas fa-university"></i> UPI ID</span>
+        <span style="color: var(--primary);">9620447444@upi</span>
+      </div>
+
+      <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Scan to pay instantly</p>
+      <img src="phonepe-qr.jpeg" alt="PhonePe QR" onerror="this.style.display='none'">
+    </div>
+
   </div>
 
   <script>
+    // Set default date to today
+    document.getElementById('matchDate').valueAsDate = new Date();
+
     function generateSummary() {
       const matchDate = document.getElementById('matchDate').value;
-      const ground = parseFloat(document.getElementById('groundExpense').value);
-      const ball = parseFloat(document.getElementById('ballExpense').value);
-      const prev = parseFloat(document.getElementById('prevBalance').value);
-      const seniors = document.getElementById('seniorNames').value.split(',').map(s => s.trim()).filter(s => s);
-      const juniors = document.getElementById('juniorNames').value.split(',').map(j => j.trim()).filter(j => j);
+      const ground = parseFloat(document.getElementById('groundExpense').value) || 0;
+      const ball = parseFloat(document.getElementById('ballExpense').value) || 0;
+      const prev = parseFloat(document.getElementById('prevBalance').value) || 0;
+      
+      const seniorsText = document.getElementById('seniorNames').value;
+      const juniorsText = document.getElementById('juniorNames').value;
+      
+      const seniors = seniorsText.split(',').map(s => s.trim()).filter(s => s);
+      const juniors = juniorsText.split(',').map(j => j.trim()).filter(j => j);
+
+      if(seniors.length === 0 && juniors.length === 0) {
+        alert("Please enter at least one player!");
+        return;
+      }
 
       const totalExpense = ground + ball;
       const totalWeight = seniors.length + (juniors.length * 0.5);
       const seniorAmt = Math.round(totalExpense / totalWeight);
       const juniorAmt = Math.round(seniorAmt / 2);
 
-      let html = `Results:\nMatch Played: ${matchDate || 'N/A'}\n`;
-      html += `Expanse Ground: ₹${ground}\nBall & Expanse: ₹${ball}\n`;
-      html += `Previous Balance: ₹${prev}\n`;
-      html += `Each Senior contributes: ₹${seniorAmt}\nEach Junior contributes: ₹${juniorAmt}\n`;
+      let html = 🏏 Match Played: \n\n;
+      html += 💰 EXPENSES:\n;
+      html += - Ground: ₹\n- Ball & Others: ₹\n;
+      html += - Previous Bal: ₹\n;
+      html += -------------------------\n;
+      html += Grand Total: ₹\n;
+      html += -------------------------\n\n;
+      
+      html += 📊 PER HEAD:\n;
+      html += - Senior: ₹\n- Junior: ₹\n\n;
 
-      html += `\nSeniors\nName\tAmount\tPaid/NoPaid\n`;
-      seniors.forEach(name => {
-        html += `${name}\t₹${seniorAmt}\t\n`;
-      });
+      if(seniors.length > 0) {
+        html += 👨 SENIORS\n;
+        seniors.forEach(name => {
+          html += ${name} - ₹\n;
+        });
+        html += \n;
+      }
 
-      html += `\nJuniors\nName\tAmount\tPaid/NoPaid\n`;
-      juniors.forEach(name => {
-        html += `${name}\t₹${juniorAmt}\t\n`;
-      });
+      if(juniors.length > 0) {
+        html += 👦 JUNIORS\n;
+        juniors.forEach(name => {
+          html += ${name} - ₹\n;
+        });
+        html += \n;
+      }
 
-      html += `\nGrand Total: ₹${totalExpense}\nMake the payment and share screenshot asap`;
+      html += ⚠️ Please make the payment to 9620447444 and share screenshot ASAP!;
 
       document.getElementById('result').textContent = html;
+      
+      // Show results card with animation
+      const resCard = document.getElementById('resultsCard');
+      resCard.style.display = 'block';
+      resCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function copyResult() {
       const text = document.getElementById('result').textContent;
       navigator.clipboard.writeText(text).then(() => {
-        alert("Summary copied to clipboard!");
+        const btn = document.querySelector('.btn-success');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#059669';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = 'var(--success)';
+        }, 2000);
       });
     }
   </script>
