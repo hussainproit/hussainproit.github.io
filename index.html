@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Md Hussain | Legacy to Cloud Architect</title>
+    <!-- Google Fonts: Monospace for AS400, Clean Sans for AWS -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1117; /* Very dark background for below the fold */
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* --- SPLIT HERO SECTION --- */
+        .split-hero {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        @media (max-width: 900px) {
+            .split-hero {
+                flex-direction: column;
+            }
+            .side {
+                min-height: auto;
+                padding-bottom: 50px;
+            }
+        }
+
+        .side {
+            flex: 1;
+            padding: 40px 5%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* 1. AS400 Greenscreen Side (LEFT) */
+        .as400-side {
+            background-color: #050a05;
+            color: #39ff14;
+            font-family: 'Fira Code', monospace;
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+            background-image: linear-gradient(rgba(57, 255, 20, 0.03) 50%, transparent 50%);
+            background-size: 100% 4px;
+        }
+
+        .as400-nav {
+            margin-bottom: 80px;
+        }
+
+        .as400-logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .as400-logo span:first-child { color: #69f0ae; margin-right: 10px; }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background-color: #39ff14;
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .as400-content {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .as400-content p.system-status {
+            color: #69f0ae;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .as400-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+        }
+
+        .as400-content h2 {
+            font-size: 1.5rem;
+            font-weight: normal;
+            margin-bottom: 40px;
+            color: #69f0ae;
+        }
+
+        .as400-content p.bio {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .as400-content p.bio::before {
+            content: "> ";
+        }
+
+        /* 2. AWS Cloud Side (RIGHT) */
+        .aws-side {
+            background-color: #0f172a; /* Slate dark */
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.15), transparent 60%);
+        }
+
+        .aws-nav {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 80px;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .social-links a.icon-link {
+            color: #94a3b8;
+            font-size: 1.5rem;
+            margin-left: 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a.icon-link:hover {
+            color: #38bdf8;
+        }
+
+        .contact-btn {
+            background: #38bdf8;
+            color: #0f172a !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .aws-content {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .aws-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .aws-content h2 {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 80px; /* Increased to prevent overlap with the center badge */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cloud-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .cloud-tag {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cloud-tag:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-2px);
+        }
+
+        /* --- ARROWS / CONNECTION BADGE --- */
+        .migration-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1e293b;
+            padding: 15px 30px;
+            border-radius: 30px;
+            border: 2px solid #38bdf8;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            z-index: 10;
+        }
+
+        .migration-badge i {
+            color: #38bdf8;
+            animation: pulse-arrow 1.5s infinite;
+        }
+
+        @keyframes pulse-arrow {
+            0% { transform: translateX(-5px); opacity: 0.5; }
+            50% { transform: translateX(5px); opacity: 1; }
+            100% { transform: translateX(-5px); opacity: 0.5; }
+        }
+
+        /* --- LIVE DEMO FLOATING ACTION BUTTONS --- */
+        .fab-container {
+            position: fixed;
+            right: 30px;
+            top: 120px; /* Positioned at top right below nav */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+            z-index: 9999;
+        }
+
+        .fab-header {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ff4757;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            animation: pulse-text 1.5s infinite alternate;
+        }
+
+        .fab-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            padding: 12px 24px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .fab-btn i {
+            margin-right: 10px;
+        }
+
+        .fab-btn:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse-text {
+            0% { opacity: 0.6; text-shadow: 0 0 5px rgba(255,71,87,0.2); }
+            100% { opacity: 1; text-shadow: 0 0 10px rgba(255,71,87,0.8); }
+        }
+
+        /* --- FULL WIDTH SECTIONS BELOW --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            text-align: center;
+            color: #f8fafc;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .portfolio-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .portfolio-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #38bdf8;
+        }
+
+        .portfolio-subtitle {
+            color: #94a3b8;
+            font-weight: 500;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-desc {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+            background: #38bdf8;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .view-link:hover {
+            background: #0ea5e9;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .fab-container {
+                display: none; /* Hide FAB on smaller screens to prevent overlap, users will use the main links */
+            }
+        }
+        @media (max-width: 900px) {
+            .migration-badge {
+                position: relative;
+                top: 0; left: 0;
+                transform: none;
+                margin: 20px auto;
+                width: max-content;
+                flex-direction: column;
+            }
+            .migration-badge i {
+                transform: rotate(90deg);
+                animation: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .as400-content h1 { font-size: 2.5rem; }
+            .aws-content h1 { font-size: 2.2rem; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Live Demo Buttons -->
+    <div class="fab-container">
+        <div class="fab-header"><i class="fas fa-circle" style="font-size: 0.6rem; vertical-align: middle;"></i> LIVE ARCHITECTURE DEMOS</div>
+        <a href="/wmspocv3" class="fab-btn"><i class="fas fa-cubes"></i> wmspocv3 (WMS/POS)</a>
+        <a href="/alphamfg" class="fab-btn"><i class="fas fa-cloud-upload-alt"></i> AlphaMFG (SCT/DMS)</a>
+    </div>
+
+    <!-- Split Hero Section -->
+    <section class="split-hero">
+
+        <!-- LEFT SIDE: Legacy AS400 -->
+        <div class="side as400-side">
+            <div class="as400-nav">
+                <div class="as400-logo">
+                    <span>usr@AS400:~$</span> Md_Hussain <span class="cursor"></span>
+                </div>
+            </div>
+            
+            <div class="as400-content">
+                <p class="system-status">SYS_STATUS: LEGACY_NODE_ACTIVE</p>
+                <h1>IBM i (AS/400)</h1>
+                <h2>Legacy Database Architect</h2>
+                <p class="bio">Decoupling decades of locked-in business logic from monolithic RPG environments.</p>
+                <p class="bio">Translating fixed-format constraints (CABEQ/GOTO) and native record-level access into modern architectures.</p>
+                <p class="bio" style="color: #69f0ae; margin-top: 40px; animation: blink 2s infinite;">Awaiting Extraction Protocol...</p>
+            </div>
+        </div>
+
+        <!-- Center Migration Badge -->
+        <div class="migration-badge">
+            AS/400 <i class="fas fa-arrow-right"></i> AWS
+        </div>
+
+        <!-- RIGHT SIDE: AWS Cloud -->
+        <div class="side aws-side">
+            <div class="aws-nav">
+                <div class="social-links">
+                    <a href="https://github.com/hussainproit" target="_blank" class="icon-link"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/as400toawshussain" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:hussainproit@gmail.com" class="contact-btn"><i class="fas fa-envelope"></i> Contact </a>
+                </div>
+            </div>
+
+            <div class="aws-content">
+                <h1>AWS Cloud</h1>
+                <h2>Target Architecture & Arsenal</h2>
+                
+                <div class="cloud-tags">
+                    <div class="cloud-tag"><i class="fab fa-aws"></i> AWS SCT & DMS</div>
+                    <div class="cloud-tag"><i class="fas fa-database"></i> Amazon RDS PostgreSQL</div>
+                    <div class="cloud-tag"><i class="fas fa-sync"></i> Qlik Replicate (CDC)</div>
+                    <div class="cloud-tag"><i class="fab fa-java"></i> Java / JDBC</div>
+                    <div class="cloud-tag"><i class="fas fa-code"></i> **FREE RPGLE</div>
+                    <div class="cloud-tag"><i class="fab fa-docker"></i> Docker</div>
+                    <div class="cloud-tag"><i class="fas fa-rocket"></i> Liquibase CI/CD</div>
+                </div>
+                
+                <p style="color: #94a3b8; margin-top: 40px; font-size: 1.1rem;">
+                    Engineering robust Change Data Capture architectures to stream DB2 journals directly into scalable AWS microservices in real-time.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Full Width Portfolio Section Below Fold -->
+    <div class="container" id="portfolio">
+        <h2 class="section-header">MIGRATION PROOF OF CONCEPTS</h2>
+        
+        <div class="portfolio-grid">
+            
+            <!-- Project 1 -->
+            <div class="portfolio-card">
+                <h3>WMSPOSv3</h3>
+                <div class="portfolio-subtitle">Warehouse Management & POS Modernization</div>
+                <p class="portfolio-desc">Engineered the refactoring of legacy RPGLE monolithic programs into modular Java classes. Modernized DB2 native record-level access into standard JDBC SQL cursors.</p>
+                <a href="/wmspocv3" class="view-link">View Architecture <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="portfolio-card">
+                <h3>AlphaMFG</h3>
+                <div class="portfolio-subtitle">Legacy DB2 to AWS Cloud Migration</div>
+                <p class="portfolio-desc">Designed a heterogeneous database migration pipeline to transition legacy IBM Db2 environments to AWS RDS PostgreSQL utilizing AWS SCT and real-time CDC extraction.</p>
+                <a href="/alphamfg" class="view-link">View Architecture <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
