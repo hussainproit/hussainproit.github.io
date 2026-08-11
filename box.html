@@ -340,7 +340,7 @@
         return;
       }
 
-      const totalExpense = ground + ball;
+      const totalExpense = ground + ball + prev;
       const totalWeight = seniors.length + (juniors.length * 0.5);
       const seniorAmt = Math.round(totalExpense / totalWeight);
       const juniorAmt = Math.round(seniorAmt / 2);
