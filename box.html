@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -345,34 +345,34 @@
       const seniorAmt = Math.round(totalExpense / totalWeight);
       const juniorAmt = Math.round(seniorAmt / 2);
 
-      let html = 🏏 Match Played: \n\n;
-      html += 💰 EXPENSES:\n;
-      html += - Ground: ₹\n- Ball & Others: ₹\n;
-      html += - Previous Bal: ₹\n;
-      html += -------------------------\n;
-      html += Grand Total: ₹\n;
-      html += -------------------------\n\n;
+      let html = `🏏 Match Played: ${matchDate || 'N/A'}\n\n`;
+      html += `💰 EXPENSES:\n`;
+      html += `- Ground: ₹${ground}\n- Ball & Others: ₹${ball}\n`;
+      html += `- Previous Bal: ₹${prev}\n`;
+      html += `-------------------------\n`;
+      html += `Grand Total: ₹${totalExpense}\n`;
+      html += `-------------------------\n\n`;
       
-      html += 📊 PER HEAD:\n;
-      html += - Senior: ₹\n- Junior: ₹\n\n;
+      html += `📊 PER HEAD:\n`;
+      html += `- Senior: ₹${seniorAmt}\n- Junior: ₹${juniorAmt}\n\n`;
 
       if(seniors.length > 0) {
-        html += 👨 SENIORS\n;
+        html += `👨 SENIORS\n`;
         seniors.forEach(name => {
-          html += ${name} - ₹\n;
+          html += `${name} - ₹${seniorAmt}\n`;
         });
-        html += \n;
+        html += `\n`;
       }
 
       if(juniors.length > 0) {
-        html += 👦 JUNIORS\n;
+        html += `👦 JUNIORS\n`;
         juniors.forEach(name => {
-          html += ${name} - ₹\n;
+          html += `${name} - ₹${juniorAmt}\n`;
         });
-        html += \n;
+        html += `\n`;
       }
 
-      html += ⚠️ Please make the payment to 9620447444 and share screenshot ASAP!;
+      html += `⚠️ Please make the payment to 9620447444 and share screenshot ASAP!`;
 
       document.getElementById('result').textContent = html;
       
