@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Cricket Match Contribution</title>
+  <title>Turf Cricket Ledger & Head-to-Head Series</title>
   <link rel="icon" type="image/png" href="cricket-logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --bg-color: #f1f5f9;
       --card-bg: #ffffff;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --text-main: #1e293b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #e2e8f0;
       --success: #10b981;
+      --danger: #ef4444;
+      --amber: #f59e0b;
+      --hussain: #2563eb;
+      --ismu: #ea580c;
     }
     
     * {
@@ -29,7 +34,7 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 20px;
+      padding: 16px;
       padding-bottom: 60px;
       display: flex;
       justify-content: center;
@@ -37,10 +42,10 @@
 
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
     /* Header & Logo */
@@ -48,7 +53,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
     }
     
     .logo-badge {
@@ -62,51 +67,113 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
       transition: transform 0.2s;
     }
-    .logo-badge:active { transform: scale(0.95); }
+    .logo-badge:active { transform: scale(0.96); }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.3rem;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      background: #e2e8f0;
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 8px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .tab-btn.active.rivalry-active {
+      color: #dc2626;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .tab-content.active {
+      display: flex;
+    }
 
     .header-title {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 4px;
     }
     .header-title h1 {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .header-title p {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     /* Cards */
     .card {
       background: var(--card-bg);
       border-radius: 16px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(226, 232, 240, 0.8);
     }
     
     .card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 15px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--primary);
+    }
+    .card-title-left {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--primary);
     }
 
     /* Form Elements */
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
+    }
+    .form-group:last-child {
+      margin-bottom: 0;
     }
     .form-group label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 6px;
       color: var(--text-main);
@@ -123,35 +190,44 @@
     }
     input[type="date"],
     input[type="number"],
+    input[type="text"],
     textarea {
       width: 100%;
-      padding: 12px;
+      padding: 11px 12px;
       padding-left: 36px;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       background: #f8fafc;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
       outline: none;
+      color: var(--text-main);
     }
     textarea {
       padding-left: 12px;
-      min-height: 80px;
+      min-height: 75px;
       resize: vertical;
     }
     input:focus, textarea:focus {
       border-color: var(--primary);
       background: #fff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     /* Buttons */
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
       border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 0.98rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       justify-content: center;
@@ -162,7 +238,7 @@
     .btn-primary {
       background: var(--primary);
       color: white;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
     }
     .btn-primary:active {
       background: var(--primary-hover);
@@ -171,22 +247,41 @@
     .btn-success {
       background: var(--success);
       color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      margin-top: 15px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
     }
     .btn-success:active { transform: scale(0.98); }
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+    }
+    .btn-whatsapp:active { transform: scale(0.98); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      border-radius: 6px;
+      width: auto;
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
 
     /* Results */
     .result-box {
       background: #1e293b;
       color: #f8fafc;
-      padding: 20px;
+      padding: 16px;
       border-radius: 8px;
       font-family: 'Fira Code', monospace;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       white-space: pre-wrap;
-      margin-top: 15px;
+      margin-top: 12px;
       overflow-x: auto;
+      line-height: 1.45;
     }
 
     /* Payment Box */
@@ -205,124 +300,804 @@
       padding: 10px;
       border-radius: 8px;
       font-weight: 600;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border: 1px dashed #d97706;
+      font-size: 0.9rem;
     }
     .payment-box img {
-      max-width: 150px;
+      max-width: 140px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    }
+
+    /* =========================================
+       RIVALRY & POINTS TABLE STYLES
+       ========================================= */
+    .rivalry-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 20px 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4);
+    }
+    .rivalry-hero::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #fbbf24;
+      margin-bottom: 12px;
+    }
+
+    /* Head to Head Grid */
+    .h2h-vs-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .player-fighter-card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      position: relative;
+    }
+    .player-fighter-card.hussain-side {
+      border-top: 3px solid var(--hussain);
+    }
+    .player-fighter-card.ismu-side {
+      border-top: 3px solid var(--ismu);
+    }
+
+    .fighter-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .hussain-side .fighter-avatar {
+      background: rgba(37, 99, 235, 0.3);
+      color: #60a5fa;
+    }
+    .ismu-side .fighter-avatar {
+      background: rgba(234, 88, 12, 0.3);
+      color: #fb923c;
+    }
+
+    .fighter-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+    .fighter-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .fighter-stats-box {
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+    .fighter-stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .fighter-stat-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .fighter-stat-lbl {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .vs-center-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .vs-flame-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.8rem;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+    }
+
+    /* Series Status Banner */
+    .series-status-banner {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+    .status-highlight {
+      color: #fbbf24;
+      font-weight: 800;
+    }
+
+    /* Bar comparison */
+    .comparison-section {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .comp-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .comp-label-left { color: #60a5fa; }
+    .comp-label-right { color: #fb923c; }
+
+    .ratio-bar {
+      height: 12px;
+      border-radius: 6px;
+      background: #334155;
+      overflow: hidden;
+      display: flex;
+      width: 100%;
+    }
+    .ratio-fill-hussain {
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .ratio-fill-ismu {
+      background: linear-gradient(90deg, #ea580c, #f97316);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .comp-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+    }
+    .lead-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    /* Points Table Card */
+    .table-container {
+      overflow-x: auto;
+      margin: 0 -4px;
+    }
+    .standings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .standings-table th {
+      background: #f8fafc;
+      padding: 10px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .standings-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .standings-table tr:last-child td {
+      border-bottom: none;
+    }
+    .table-player-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+    .table-pill {
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .pill-win { background: #dcfce7; color: #15803d; }
+    .pill-loss { background: #fee2e2; color: #b91c1c; }
+    .pill-tie { background: #f1f5f9; color: #475569; }
+
+    /* History Timeline */
+    .timeline-item {
+      border-left: 3px solid var(--border-color);
+      padding-left: 14px;
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 4px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .timeline-item.ismu-win::before {
+      background: var(--ismu);
+    }
+    .timeline-item.hussain-win::before {
+      background: var(--hussain);
+    }
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .timeline-date {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .series-win-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-hussain {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .badge-ismu {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+    .badge-tie {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .timeline-match-scores {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .score-chip {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .btn-delete-record {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .btn-delete-record:hover {
+      color: var(--danger);
+    }
+
+    /* Share Section */
+    .share-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    /* Accordion Toggle */
+    .toggle-add-form {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .help-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   
   <div class="container">
+    <!-- Header -->
     <header>
       <a href="https://www.linkedin.com/in/as400toawshussain" target="_blank" class="logo-badge">
         <i class="fab fa-linkedin"></i> By Md Hussain
       </a>
-      <div style="font-size: 1.5rem;"><i class="fas fa-baseball-ball" style="color: #ef4444;"></i></div>
+      <div class="header-icons">
+        <i class="fas fa-baseball-ball" style="color: #ef4444;" title="Cricket"></i>
+        <i class="fas fa-trophy" style="color: #f59e0b;" title="Championship"></i>
+      </div>
     </header>
 
-    <div class="header-title">
-      <h1>Turf Cricket Ledger</h1>
-      <p>Instantly calculate match contributions</p>
-    </div>
-
-    <!-- Expense Details -->
-    <div class="card">
-      <div class="card-title"><i class="fas fa-file-invoice-dollar"></i> Match Details</div>
-      
-      <div class="form-group">
-        <label>Match Date</label>
-        <div class="input-wrapper">
-          <i class="fas fa-calendar-alt"></i>
-          <input type="date" id="matchDate">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Ground Expense (₹)</label>
-        <div class="input-wrapper">
-          <i class="fas fa-rupee-sign"></i>
-          <input type="number" id="groundExpense" value="1500" inputmode="numeric">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Ball & Other Expense (₹)</label>
-        <div class="input-wrapper">
-          <i class="fas fa-rupee-sign"></i>
-          <input type="number" id="ballExpense" value="70" inputmode="numeric">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Previous Balance (₹)</label>
-        <div class="input-wrapper">
-          <i class="fas fa-wallet"></i>
-          <input type="number" id="prevBalance" value="250" inputmode="numeric">
-        </div>
-      </div>
-    </div>
-
-    <!-- Players -->
-    <div class="card">
-      <div class="card-title"><i class="fas fa-users"></i> Players</div>
-      
-      <div class="form-group">
-        <label>Senior Players (comma separated)</label>
-        <textarea id="seniorNames" placeholder="Hussain, Ismail, Vinod">Hussain, Ismail, Vinod</textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Junior Players (comma separated)</label>
-        <textarea id="juniorNames" placeholder="Rayan, Sufyan">Rayan, Sufyan</textarea>
-      </div>
-    </div>
-
-    <!-- Action -->
-    <button class="btn btn-primary" onclick="generateSummary()">
-      <i class="fas fa-calculator"></i> Calculate Split
-    </button>
-
-    <!-- Results Section -->
-    <div class="card" id="resultsCard" style="display: none;">
-      <div class="card-title"><i class="fas fa-check-circle"></i> Summary Generated</div>
-      <div class="result-box" id="result"></div>
-      <button class="btn btn-success" onclick="copyResult()">
-        <i class="fas fa-copy"></i> Copy for WhatsApp
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tabLedgerBtn" onclick="switchTab('ledger')">
+        <i class="fas fa-calculator"></i> Expense Splitter
+      </button>
+      <button class="tab-btn" id="tabRivalryBtn" onclick="switchTab('rivalry')">
+        <i class="fas fa-fire"></i> Points Table & H2H
       </button>
     </div>
 
-    <!-- Payment Info -->
-    <div class="card payment-box">
-      <h3><i class="fas fa-qrcode"></i> Payment Options</h3>
-      
-      <div class="upi-details">
-        <span><i class="fas fa-mobile-alt"></i> PhonePe</span>
-        <span style="color: var(--primary);">9620447444</span>
-      </div>
-      
-      <div class="upi-details">
-        <span><i class="fas fa-university"></i> UPI ID</span>
-        <span style="color: var(--primary);">9620447444@upi</span>
+    <!-- ========================================================
+         TAB 1: EXPENSE SPLITTER (TURF LEDGER)
+         ======================================================== -->
+    <div class="tab-content active" id="tab-ledger">
+      <div class="header-title">
+        <h1>Turf Cricket Ledger</h1>
+        <p>Instantly calculate match contributions</p>
       </div>
 
-      <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Scan to pay instantly</p>
-      <img src="phonepe-qr.jpeg" alt="PhonePe QR" onerror="this.style.display='none'">
+      <!-- Expense Details -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-file-invoice-dollar"></i> Match Details</div>
+        </div>
+        
+        <div class="form-group">
+          <label>Match Date</label>
+          <div class="input-wrapper">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="date" id="matchDate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ground Expense (₹)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-rupee-sign"></i>
+            <input type="number" id="groundExpense" value="1500" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ball & Other Expense (₹)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-rupee-sign"></i>
+            <input type="number" id="ballExpense" value="70" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Previous Balance (₹)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-wallet"></i>
+            <input type="number" id="prevBalance" value="250" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <!-- Players -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-users"></i> Players</div>
+        </div>
+        
+        <div class="form-group">
+          <label>Senior Players (comma separated)</label>
+          <textarea id="seniorNames" placeholder="Hussain, Ismail, Vinod">Hussain, Ismail, Vinod</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Junior Players (comma separated)</label>
+          <textarea id="juniorNames" placeholder="Rayan, Sufyan">Rayan, Sufyan</textarea>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <button class="btn btn-primary" onclick="generateSummary()">
+        <i class="fas fa-calculator"></i> Calculate Split
+      </button>
+
+      <!-- Results Section -->
+      <div class="card" id="resultsCard" style="display: none;">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-check-circle" style="color: var(--success);"></i> Summary Generated</div>
+        </div>
+        <div class="result-box" id="result"></div>
+        <button class="btn btn-success" onclick="copyResult()" style="margin-top: 14px;">
+          <i class="fas fa-copy"></i> Copy for WhatsApp
+        </button>
+      </div>
+
+      <!-- Payment Info -->
+      <div class="card payment-box">
+        <h3><i class="fas fa-qrcode"></i> Payment Options</h3>
+        
+        <div class="upi-details">
+          <span><i class="fas fa-mobile-alt"></i> PhonePe</span>
+          <span style="color: var(--primary);">9620447444</span>
+        </div>
+        
+        <div class="upi-details">
+          <span><i class="fas fa-university"></i> UPI ID</span>
+          <span style="color: var(--primary);">9620447444@upi</span>
+        </div>
+
+        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Scan to pay instantly</p>
+        <img src="phonepe-qr.jpeg" alt="PhonePe QR" onerror="this.style.display='none'">
+      </div>
+    </div>
+
+    <!-- ========================================================
+         TAB 2: POINTS TABLE & HEAD-TO-HEAD RIVALRY
+         ======================================================== -->
+    <div class="tab-content" id="tab-rivalry">
+      <div class="header-title">
+        <h1>⚔️ Weekend Turf Rivalry</h1>
+        <p>Hussain vs Ismu Weekly Championship & Head-to-Head</p>
+      </div>
+
+      <!-- Hero Fighter Card -->
+      <div class="rivalry-hero">
+        <div class="hero-badge-tag">
+          <i class="fas fa-fire"></i> Weekly Series Battle
+        </div>
+
+        <!-- 2 Fighters Grid -->
+        <div class="h2h-vs-grid">
+          <!-- Hussain -->
+          <div class="player-fighter-card hussain-side">
+            <div class="fighter-avatar">👑</div>
+            <div class="fighter-name">Hussain</div>
+            <div class="fighter-sub">Captain</div>
+            <div class="fighter-stats-box">
+              <div class="fighter-stat-item">
+                <span class="fighter-stat-val" id="heroHussainSeries">1</span>
+                <span class="fighter-stat-lbl">Series W</span>
+              </div>
+              <div class="fighter-stat-item">
+                <span class="fighter-stat-val" id="heroHussainMatches" style="color: #60a5fa;">7</span>
+                <span class="fighter-stat-lbl">Matches</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VS center -->
+          <div class="vs-center-col">
+            <div class="vs-flame-circle">VS</div>
+          </div>
+
+          <!-- Ismu -->
+          <div class="player-fighter-card ismu-side">
+            <div class="fighter-avatar">⚡</div>
+            <div class="fighter-name">Ismu</div>
+            <div class="fighter-sub">Challenger</div>
+            <div class="fighter-stats-box">
+              <div class="fighter-stat-item">
+                <span class="fighter-stat-val" id="heroIsmuSeries">1</span>
+                <span class="fighter-stat-lbl">Series W</span>
+              </div>
+              <div class="fighter-stat-item">
+                <span class="fighter-stat-val" id="heroIsmuMatches" style="color: #fb923c;">4</span>
+                <span class="fighter-stat-lbl">Matches</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Series Status Banner -->
+        <div class="series-status-banner" id="seriesStatusBanner">
+          <i class="fas fa-trophy status-highlight"></i>
+          <span>Series Score: <strong class="status-highlight" id="bannerSeriesScore">1 - 1 (Tied)</strong></span>
+        </div>
+
+        <!-- Match Head to Head Bar -->
+        <div class="comparison-section">
+          <div class="comp-labels">
+            <span class="comp-label-left" id="compLabelHussain">Hussain: 7 Wins (64%)</span>
+            <span class="comp-label-right" id="compLabelIsmu">Ismu: 4 Wins (36%)</span>
+          </div>
+          <div class="ratio-bar">
+            <div class="ratio-fill-hussain" id="ratioBarHussain" style="width: 63.6%;"></div>
+            <div class="ratio-fill-ismu" id="ratioBarIsmu" style="width: 36.4%;"></div>
+          </div>
+          <div class="comp-footer">
+            <span id="totalMatchesText">Total 11 matches played</span>
+            <span class="lead-badge" id="leadBadgeText">👑 Hussain leads by +3 wins</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Official Standings Points Table -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-list-ol"></i> Points Table Standings</div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(2 pts / Series Win)</span>
+        </div>
+        
+        <div class="table-container">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Series P</th>
+                <th>Series W</th>
+                <th>Matches W</th>
+                <th>Matches L</th>
+                <th>Win %</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody id="standingsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Weekly Series History -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-history"></i> Weekly Series History</div>
+          <button class="btn-outline" onclick="toggleAddForm()" id="btnAddToggle">
+            <i class="fas fa-plus"></i> Add Weekend
+          </button>
+        </div>
+
+        <!-- Add New Weekend Series (Form) -->
+        <div id="addSeriesSection" style="display: none; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 10px; color: var(--text-main);"><i class="fas fa-calendar-plus" style="color: var(--primary);"></i> Record Weekend Series</h4>
+          
+          <div class="form-group">
+            <label>Weekend Date</label>
+            <div class="input-wrapper">
+              <i class="fas fa-calendar-alt"></i>
+              <input type="date" id="newSeriesDate">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label style="color: var(--hussain);">👑 Hussain Wins</label>
+              <div class="input-wrapper">
+                <i class="fas fa-medal" style="color: var(--hussain);"></i>
+                <input type="number" id="newHussainWins" placeholder="e.g. 4" min="0" oninput="updateAddPreview()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label style="color: var(--ismu);">⚡ Ismu Wins</label>
+              <div class="input-wrapper">
+                <i class="fas fa-medal" style="color: var(--ismu);"></i>
+                <input type="number" id="newIsmuWins" placeholder="e.g. 2" min="0" oninput="updateAddPreview()">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Matches Tied / Drawn</label>
+              <div class="input-wrapper">
+                <i class="fas fa-handshake"></i>
+                <input type="number" id="newTiedMatches" value="0" min="0" oninput="updateAddPreview()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Turf / Ground Notes (optional)</label>
+              <div class="input-wrapper">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="newNotes" placeholder="e.g. Turf 99">
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Preview Banner -->
+          <div id="newSeriesPreview" style="font-size: 0.82rem; font-weight: 600; padding: 8px 12px; background: #e0f2fe; color: #0369a1; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <span>Matches: 0</span>
+            <span>Outcome: Pending</span>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="saveNewSeries()" style="flex: 1;">
+              <i class="fas fa-save"></i> Save Series
+            </button>
+            <button class="btn-outline" onclick="toggleAddForm()">Cancel</button>
+          </div>
+        </div>
+
+        <!-- History Timeline Container -->
+        <div id="seriesHistoryTimeline">
+          <!-- Populated by JS -->
+        </div>
+
+        <div style="margin-top: 14px; text-align: center;">
+          <button class="btn-outline" onclick="resetToDefaultData()" style="font-size: 0.75rem; color: #94a3b8;">
+            <i class="fas fa-undo"></i> Reset to Default (26 Sep & 03 Oct)
+          </button>
+        </div>
+      </div>
+
+      <!-- WhatsApp Broadcaster Card -->
+      <div class="card share-card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fab fa-whatsapp" style="color: #25d366;"></i> WhatsApp Rivalry Report</div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
+          Send the official standings & head-to-head tally directly to Ismu or your cricket group!
+        </p>
+
+        <div class="result-box" id="whatsappRivalryText" style="margin-top: 0; margin-bottom: 12px; font-size: 0.82rem;"></div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="btn btn-whatsapp" onclick="shareToWhatsAppDirect()">
+            <i class="fab fa-whatsapp"></i> Send Directly via WhatsApp
+          </button>
+          <button class="btn btn-success" onclick="copyRivalryReport()">
+            <i class="fas fa-copy"></i> Copy Rivalry Text
+          </button>
+        </div>
+      </div>
+
     </div>
 
   </div>
 
-  <script>
-    // Set default date to today
-    document.getElementById('matchDate').valueAsDate = new Date();
+  <!-- Toast Notification -->
+  <div id="toast">
+    <i class="fas fa-check-circle" style="color: #34d399;"></i>
+    <span id="toastMsg">Copied!</span>
+  </div>
 
+  <script>
+    // ==========================================
+    // INITIAL SETUP & TAB SWITCHING
+    // ==========================================
+    document.getElementById('matchDate').valueAsDate = new Date();
+    document.getElementById('newSeriesDate').valueAsDate = new Date();
+
+    function switchTab(tab) {
+      const ledgerTab = document.getElementById('tab-ledger');
+      const rivalryTab = document.getElementById('tab-rivalry');
+      const ledgerBtn = document.getElementById('tabLedgerBtn');
+      const rivalryBtn = document.getElementById('tabRivalryBtn');
+
+      if (tab === 'rivalry') {
+        ledgerTab.classList.remove('active');
+        rivalryTab.classList.add('active');
+        ledgerBtn.classList.remove('active');
+        rivalryBtn.classList.add('active', 'rivalry-active');
+        window.location.hash = 'rivalry';
+        renderRivalryDashboard();
+      } else {
+        rivalryTab.classList.remove('active');
+        ledgerTab.classList.add('active');
+        rivalryBtn.classList.remove('active', 'rivalry-active');
+        ledgerBtn.classList.add('active');
+        history.replaceState(null, null, ' ');
+      }
+    }
+
+    // Check URL Hash on Load
+    if (window.location.hash === '#rivalry' || window.location.hash === '#points') {
+      switchTab('rivalry');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+
+    // ==========================================
+    // TAB 1: EXPENSE LEDGER LOGIC (PRESERVED)
+    // ==========================================
     function generateSummary() {
       const matchDate = document.getElementById('matchDate').value;
       const ground = parseFloat(document.getElementById('groundExpense').value) || 0;
@@ -386,16 +1161,466 @@
     function copyResult() {
       const text = document.getElementById('result').textContent;
       navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.btn-success');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        btn.style.background = '#059669';
-        setTimeout(() => {
-          btn.innerHTML = originalText;
-          btn.style.background = 'var(--success)';
-        }, 2000);
+        showToast('Summary copied for WhatsApp!');
       });
     }
+
+    // ==========================================
+    // TAB 2: RIVALRY & POINTS TABLE ENGINE
+    // ==========================================
+    const STORAGE_KEY = 'turf_cricket_rivalry_series_v1';
+
+    // Default Seed Data based on Hussain's matches
+    const DEFAULT_SERIES_DATA = [
+      {
+        id: 'series_20261003',
+        date: '2026-10-03',
+        dateFormatted: '03 Oct 2026',
+        hussainWins: 2,
+        ismuWins: 3,
+        draws: 0,
+        totalMatches: 5,
+        winner: 'Ismu',
+        notes: 'Ismu won series 3-2'
+      },
+      {
+        id: 'series_20260926',
+        date: '2026-09-26',
+        dateFormatted: '26 Sep 2026',
+        hussainWins: 5,
+        ismuWins: 1,
+        draws: 0,
+        totalMatches: 6,
+        winner: 'Hussain',
+        notes: 'Hussain dominated series 5-1'
+      }
+    ];
+
+    function getSeriesData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SERIES_DATA));
+        return DEFAULT_SERIES_DATA;
+      }
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+        return DEFAULT_SERIES_DATA;
+      } catch (e) {
+        return DEFAULT_SERIES_DATA;
+      }
+    }
+
+    function saveSeriesData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      renderRivalryDashboard();
+    }
+
+    function resetToDefaultData() {
+      if (confirm('Reset rivalry records back to the default 26 Sep and 03 Oct series?')) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SERIES_DATA));
+        renderRivalryDashboard();
+        showToast('Reset to default match data');
+      }
+    }
+
+    function formatDateDisplay(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        const d = new Date(dateStr + 'T00:00:00');
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = months[d.getMonth()];
+        const year = d.getFullYear();
+        return `${day} ${month} ${year}`;
+      } catch(e) {
+        return dateStr;
+      }
+    }
+
+    function toggleAddForm() {
+      const sec = document.getElementById('addSeriesSection');
+      const btn = document.getElementById('btnAddToggle');
+      if (sec.style.display === 'none') {
+        sec.style.display = 'block';
+        btn.innerHTML = '<i class="fas fa-times"></i> Close';
+        updateAddPreview();
+      } else {
+        sec.style.display = 'none';
+        btn.innerHTML = '<i class="fas fa-plus"></i> Add Weekend';
+      }
+    }
+
+    function updateAddPreview() {
+      const hWins = parseInt(document.getElementById('newHussainWins').value) || 0;
+      const iWins = parseInt(document.getElementById('newIsmuWins').value) || 0;
+      const draws = parseInt(document.getElementById('newTiedMatches').value) || 0;
+      const total = hWins + iWins + draws;
+      const preview = document.getElementById('newSeriesPreview');
+
+      let winnerText = 'Pending';
+      if (total > 0) {
+        if (hWins > iWins) {
+          winnerText = `👑 Hussain Wins Series (${hWins} - ${iWins})`;
+          preview.style.background = '#eff6ff';
+          preview.style.color = '#1d4ed8';
+        } else if (iWins > hWins) {
+          winnerText = `⚡ Ismu Wins Series (${iWins} - ${hWins})`;
+          preview.style.background = '#fff7ed';
+          preview.style.color = '#c2410c';
+        } else {
+          winnerText = `🤝 Series Drawn (${hWins} - ${iWins})`;
+          preview.style.background = '#f1f5f9';
+          preview.style.color = '#475569';
+        }
+      }
+
+      preview.innerHTML = `<span><strong>Total Matches:</strong> ${total}</span><span><strong>Result:</strong> ${winnerText}</span>`;
+    }
+
+    function saveNewSeries() {
+      const dateVal = document.getElementById('newSeriesDate').value;
+      const hWins = parseInt(document.getElementById('newHussainWins').value);
+      const iWins = parseInt(document.getElementById('newIsmuWins').value);
+      const draws = parseInt(document.getElementById('newTiedMatches').value) || 0;
+      const notes = document.getElementById('newNotes').value.trim();
+
+      if (!dateVal) {
+        alert('Please pick a weekend date.');
+        return;
+      }
+      if (isNaN(hWins) || isNaN(iWins) || hWins < 0 || iWins < 0) {
+        alert('Please enter valid match win counts for both Hussain and Ismu.');
+        return;
+      }
+
+      const totalMatches = hWins + iWins + draws;
+      if (totalMatches === 0) {
+        alert('Total matches cannot be zero.');
+        return;
+      }
+
+      let winner = 'Tie';
+      if (hWins > iWins) winner = 'Hussain';
+      else if (iWins > hWins) winner = 'Ismu';
+
+      const newRecord = {
+        id: 'series_' + Date.now(),
+        date: dateVal,
+        dateFormatted: formatDateDisplay(dateVal),
+        hussainWins: hWins,
+        ismuWins: iWins,
+        draws: draws,
+        totalMatches: totalMatches,
+        winner: winner,
+        notes: notes || (winner === 'Tie' ? `Series tied ${hWins}-${iWins}` : `${winner} won series ${Math.max(hWins, iWins)}-${Math.min(hWins, iWins)}`)
+      };
+
+      const data = getSeriesData();
+      // Insert at beginning (newest first)
+      data.unshift(newRecord);
+      // Sort by date descending
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      saveSeriesData(data);
+
+      // Reset form
+      document.getElementById('newHussainWins').value = '';
+      document.getElementById('newIsmuWins').value = '';
+      document.getElementById('newTiedMatches').value = '0';
+      document.getElementById('newNotes').value = '';
+      toggleAddForm();
+      showToast('Weekend series added successfully!');
+    }
+
+    function deleteSeries(id) {
+      if (confirm('Are you sure you want to remove this weekend series record?')) {
+        let data = getSeriesData();
+        data = data.filter(item => item.id !== id);
+        saveSeriesData(data);
+        showToast('Record removed.');
+      }
+    }
+
+    // ==========================================
+    // RENDER DASHBOARD & POINTS TABLE
+    // ==========================================
+    function renderRivalryDashboard() {
+      const data = getSeriesData();
+
+      let totalSeries = data.length;
+      let hussainSeriesWins = 0;
+      let ismuSeriesWins = 0;
+      let seriesDraws = 0;
+
+      let totalMatches = 0;
+      let hussainMatchWins = 0;
+      let ismuMatchWins = 0;
+      let matchDraws = 0;
+
+      data.forEach(item => {
+        totalMatches += item.totalMatches || (item.hussainWins + item.ismuWins + (item.draws || 0));
+        hussainMatchWins += item.hussainWins || 0;
+        ismuMatchWins += item.ismuWins || 0;
+        matchDraws += (item.draws || 0);
+
+        if (item.winner === 'Hussain') hussainSeriesWins++;
+        else if (item.winner === 'Ismu') ismuSeriesWins++;
+        else seriesDraws++;
+      });
+
+      // Update Hero Cards
+      document.getElementById('heroHussainSeries').textContent = hussainSeriesWins;
+      document.getElementById('heroHussainMatches').textContent = hussainMatchWins;
+      document.getElementById('heroIsmuSeries').textContent = ismuSeriesWins;
+      document.getElementById('heroIsmuMatches').textContent = ismuMatchWins;
+
+      // Status Banner
+      const statusScoreEl = document.getElementById('bannerSeriesScore');
+      let statusText = '';
+      if (hussainSeriesWins > ismuSeriesWins) {
+        statusText = `Hussain leads series ${hussainSeriesWins} - ${ismuSeriesWins} 🏆`;
+      } else if (ismuSeriesWins > hussainSeriesWins) {
+        statusText = `Ismu leads series ${ismuSeriesWins} - ${hussainSeriesWins} ⚡`;
+      } else {
+        statusText = `Series Level ${hussainSeriesWins} - ${ismuSeriesWins} (Tied) 🤝`;
+      }
+      statusScoreEl.textContent = statusText;
+
+      // Match Comparison Bar
+      const hussainPct = totalMatches > 0 ? ((hussainMatchWins / totalMatches) * 100).toFixed(1) : 50;
+      const ismuPct = totalMatches > 0 ? ((ismuMatchWins / totalMatches) * 100).toFixed(1) : 50;
+
+      document.getElementById('compLabelHussain').textContent = `Hussain: ${hussainMatchWins} Wins (${hussainPct}%)`;
+      document.getElementById('compLabelIsmu').textContent = `Ismu: ${ismuMatchWins} Wins (${ismuPct}%)`;
+
+      document.getElementById('ratioBarHussain').style.width = `${hussainPct}%`;
+      document.getElementById('ratioBarIsmu').style.width = `${ismuPct}%`;
+
+      document.getElementById('totalMatchesText').textContent = `Total ${totalMatches} matches in ${totalSeries} series`;
+
+      const leadBadge = document.getElementById('leadBadgeText');
+      const diff = hussainMatchWins - ismuMatchWins;
+      if (diff > 0) {
+        leadBadge.textContent = `👑 Hussain leads by +${diff} match wins`;
+        leadBadge.style.color = '#34d399';
+        leadBadge.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+      } else if (diff < 0) {
+        leadBadge.textContent = `⚡ Ismu leads by +${Math.abs(diff)} match wins`;
+        leadBadge.style.color = '#fb923c';
+        leadBadge.style.borderColor = 'rgba(251, 146, 60, 0.4)';
+      } else {
+        leadBadge.textContent = `🤝 Matches Deadlock (${hussainMatchWins} - ${ismuMatchWins})`;
+        leadBadge.style.color = '#94a3b8';
+        leadBadge.style.borderColor = 'rgba(148, 163, 184, 0.4)';
+      }
+
+      // Standings Table
+      renderStandingsTable({
+        totalSeries,
+        hussainSeriesWins,
+        ismuSeriesWins,
+        seriesDraws,
+        totalMatches,
+        hussainMatchWins,
+        ismuMatchWins,
+        hussainPct,
+        ismuPct
+      });
+
+      // Series Timeline
+      renderSeriesTimeline(data);
+
+      // WhatsApp Text Box
+      generateWhatsAppReportText({
+        data,
+        totalSeries,
+        hussainSeriesWins,
+        ismuSeriesWins,
+        seriesDraws,
+        totalMatches,
+        hussainMatchWins,
+        ismuMatchWins,
+        hussainPct,
+        ismuPct,
+        diff
+      });
+    }
+
+    function renderStandingsTable(stats) {
+      const tbody = document.getElementById('standingsTableBody');
+      tbody.innerHTML = '';
+
+      // Points: 2 per series win, 1 per tie
+      const hPoints = (stats.hussainSeriesWins * 2) + (stats.seriesDraws * 1);
+      const iPoints = (stats.ismuSeriesWins * 2) + (stats.seriesDraws * 1);
+
+      const players = [
+        {
+          name: 'Hussain',
+          title: 'Hussain (Me)',
+          badge: '👑',
+          seriesP: stats.totalSeries,
+          seriesW: stats.hussainSeriesWins,
+          seriesL: stats.ismuSeriesWins,
+          matchW: stats.hussainMatchWins,
+          matchL: stats.ismuMatchWins,
+          winPct: stats.hussainPct,
+          points: hPoints
+        },
+        {
+          name: 'Ismu',
+          title: 'Ismu (Cousin)',
+          badge: '⚡',
+          seriesP: stats.totalSeries,
+          seriesW: stats.ismuSeriesWins,
+          seriesL: stats.hussainSeriesWins,
+          matchW: stats.ismuMatchWins,
+          matchL: stats.hussainMatchWins,
+          winPct: stats.ismuPct,
+          points: iPoints
+        }
+      ];
+
+      // Sort by Points, then Series Wins, then Match Wins
+      players.sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.seriesW !== a.seriesW) return b.seriesW - a.seriesW;
+        return b.matchW - a.matchW;
+      });
+
+      players.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${idx + 1}</strong></td>
+          <td>
+            <div class="table-player-name">
+              <span>${p.badge}</span>
+              <span>${p.title}</span>
+            </div>
+          </td>
+          <td>${p.seriesP}</td>
+          <td><span class="table-pill pill-win">${p.seriesW}</span></td>
+          <td style="color: var(--primary);">${p.matchW}</td>
+          <td style="color: var(--text-muted);">${p.matchL}</td>
+          <td>${p.winPct}%</td>
+          <td><strong style="font-size: 0.95rem; color: #0f172a;">${p.points}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSeriesTimeline(data) {
+      const container = document.getElementById('seriesHistoryTimeline');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 12px; font-size: 0.85rem;">No series recorded yet.</p>';
+        return;
+      }
+
+      data.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        const winClass = item.winner === 'Hussain' ? 'hussain-win' : (item.winner === 'Ismu' ? 'ismu-win' : '');
+        itemDiv.className = `timeline-item ${winClass}`;
+
+        let badgeClass = 'badge-hussain';
+        let badgeIcon = '👑';
+        let winnerText = `Series Won: Hussain (${item.hussainWins}-${item.ismuWins})`;
+
+        if (item.winner === 'Ismu') {
+          badgeClass = 'badge-ismu';
+          badgeIcon = '⚡';
+          winnerText = `Series Won: Ismu (${item.ismuWins}-${item.hussainWins})`;
+        } else if (item.winner === 'Tie') {
+          badgeClass = 'badge-tie';
+          badgeIcon = '🤝';
+          winnerText = `Series Tied (${item.hussainWins}-${item.ismuWins})`;
+        }
+
+        itemDiv.innerHTML = `
+          <div class="timeline-header">
+            <span class="timeline-date"><i class="far fa-calendar-check" style="color: var(--primary);"></i> ${item.dateFormatted || item.date}</span>
+            <span class="series-win-badge ${badgeClass}">${badgeIcon} ${item.winner}</span>
+          </div>
+          <div class="timeline-match-scores">
+            <span>
+              <strong>${item.totalMatches} Matches</strong>: 
+              <span style="color: var(--hussain); font-weight: 700;">Hussain ${item.hussainWins}</span> - 
+              <span style="color: var(--ismu); font-weight: 700;">${item.ismuWins} Ismu</span>
+              ${item.draws ? `(${item.draws} draw)` : ''}
+            </span>
+            <button class="btn-delete-record" onclick="deleteSeries('${item.id}')" title="Delete entry">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+          ${item.notes ? `<div style="font-size: 0.75rem; color: #94a3b8; margin-top: 3px;"><i class="fas fa-info-circle"></i> ${item.notes}</div>` : ''}
+        `;
+        container.appendChild(itemDiv);
+      });
+    }
+
+    function generateWhatsAppReportText(stats) {
+      let leadText = '';
+      if (stats.diff > 0) {
+        leadText = `👑 Hussain leads the match tally by +${stats.diff} wins!`;
+      } else if (stats.diff < 0) {
+        leadText = `⚡ Ismu leads the match tally by +${Math.abs(stats.diff)} wins!`;
+      } else {
+        leadText = `🤝 Match tally is deadlocked!`;
+      }
+
+      let seriesStatus = '';
+      if (stats.hussainSeriesWins > stats.ismuSeriesWins) {
+        seriesStatus = `Hussain leads ${stats.hussainSeriesWins} - ${stats.ismuSeriesWins} 🏆`;
+      } else if (stats.ismuSeriesWins > stats.hussainSeriesWins) {
+        seriesStatus = `Ismu leads ${stats.ismuSeriesWins} - ${stats.hussainSeriesWins} ⚡`;
+      } else {
+        seriesStatus = `Tied ${stats.hussainSeriesWins} - ${stats.ismuSeriesWins} 🤝`;
+      }
+
+      let msg = `🏏 *WEEKEND TURF CRICKET CHAMPIONSHIP* 🏏\n`;
+      msg += `⚔️ *HUSSAIN vs ISMU RIVALRY*\n\n`;
+      msg += `🏆 *SERIES SCORECARD*:\n`;
+      msg += `• Hussain: ${stats.hussainSeriesWins} Series Win${stats.hussainSeriesWins === 1 ? '' : 's'}\n`;
+      msg += `• Ismu: ${stats.ismuSeriesWins} Series Win${stats.ismuSeriesWins === 1 ? '' : 's'}\n`;
+      msg += `➡️ Status: *${seriesStatus}*\n\n`;
+
+      msg += `📊 *HEAD-TO-HEAD MATCH STATS*:\n`;
+      msg += `• Total Matches Played: ${stats.totalMatches}\n`;
+      msg += `• 👑 Hussain: ${stats.hussainMatchWins} Wins (${stats.hussainPct}%)\n`;
+      msg += `• ⚡ Ismu: ${stats.ismuMatchWins} Wins (${stats.ismuPct}%)\n`;
+      msg += `👉 ${leadText}\n\n`;
+
+      msg += `📅 *WEEKLY SERIES BREAKDOWN*:\n`;
+      stats.data.slice(0, 5).forEach(item => {
+        const icon = item.winner === 'Hussain' ? '👑' : (item.winner === 'Ismu' ? '⚡' : '🤝');
+        msg += `• ${item.dateFormatted || item.date}: ${icon} ${item.winner} won (${item.hussainWins}-${item.ismuWins}) [${item.totalMatches} matches]\n`;
+      });
+
+      msg += `\n🌐 View Live Points Table: https://hussainproit.github.io/box.html#rivalry\n`;
+      msg += `👨‍💻 Created by Md Hussain`;
+
+      document.getElementById('whatsappRivalryText').textContent = msg;
+    }
+
+    function copyRivalryReport() {
+      const text = document.getElementById('whatsappRivalryText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Rivalry report copied for WhatsApp!');
+      });
+    }
+
+    function shareToWhatsAppDirect() {
+      const text = document.getElementById('whatsappRivalryText').textContent;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    // Auto initialize if rivalry tab active
+    renderRivalryDashboard();
   </script>
 </body>
 </html>
