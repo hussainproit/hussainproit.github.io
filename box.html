@@ -263,11 +263,30 @@
       padding: 8px 12px;
       font-size: 0.82rem;
       border-radius: 6px;
-      width: auto;
+      cursor: pointer;
+      transition: all 0.2s;
     }
     .btn-outline:hover {
       background: #f8fafc;
       color: var(--text-main);
+    }
+
+    .btn-copy-chip {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-copy-chip:hover {
+      background: #dbeafe;
     }
 
     /* Results */
@@ -293,24 +312,33 @@
     .payment-box h3 {
       color: #d97706;
       font-size: 1rem;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .upi-details {
       background: white;
-      padding: 10px;
+      padding: 10px 12px;
       border-radius: 8px;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border: 1px dashed #d97706;
       font-size: 0.9rem;
     }
-    .payment-box img {
+    .qr-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .qr-container img {
       max-width: 140px;
       border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+      background: white;
+      padding: 6px;
     }
 
     /* =========================================
@@ -640,10 +668,6 @@
       justify-content: space-between;
       align-items: center;
     }
-    .score-chip {
-      font-weight: 700;
-      color: var(--text-main);
-    }
     .btn-delete-record {
       background: transparent;
       border: none;
@@ -657,27 +681,26 @@
       color: var(--danger);
     }
 
-    /* Share Section */
-    .share-card {
-      background: #f8fafc;
+    /* Scorecard Image Card Section */
+    .image-share-card {
+      background: #ffffff;
+      border-radius: 16px;
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 14px;
+      padding: 16px;
+      text-align: center;
     }
-
-    /* Accordion Toggle */
-    .toggle-add-form {
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .scorecard-canvas-wrap {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      margin-bottom: 14px;
+      background: #0f172a;
     }
-
-    .help-note {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+    .scorecard-canvas-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     /* Toast Notification */
@@ -750,7 +773,7 @@
           <label>Match Date</label>
           <div class="input-wrapper">
             <i class="fas fa-calendar-alt"></i>
-            <input type="date" id="matchDate">
+            <input type="date" id="matchDate" onchange="generateSummary()">
           </div>
         </div>
 
@@ -758,7 +781,7 @@
           <label>Ground Expense (₹)</label>
           <div class="input-wrapper">
             <i class="fas fa-rupee-sign"></i>
-            <input type="number" id="groundExpense" value="1500" inputmode="numeric">
+            <input type="number" id="groundExpense" value="1500" inputmode="numeric" oninput="generateSummary()">
           </div>
         </div>
 
@@ -766,7 +789,7 @@
           <label>Ball & Other Expense (₹)</label>
           <div class="input-wrapper">
             <i class="fas fa-rupee-sign"></i>
-            <input type="number" id="ballExpense" value="70" inputmode="numeric">
+            <input type="number" id="ballExpense" value="70" inputmode="numeric" oninput="generateSummary()">
           </div>
         </div>
 
@@ -774,7 +797,7 @@
           <label>Previous Balance (₹)</label>
           <div class="input-wrapper">
             <i class="fas fa-wallet"></i>
-            <input type="number" id="prevBalance" value="250" inputmode="numeric">
+            <input type="number" id="prevBalance" value="250" inputmode="numeric" oninput="generateSummary()">
           </div>
         </div>
       </div>
@@ -787,27 +810,27 @@
         
         <div class="form-group">
           <label>Senior Players (comma separated)</label>
-          <textarea id="seniorNames" placeholder="Hussain, Ismail, Vinod">Hussain, Ismail, Vinod</textarea>
+          <textarea id="seniorNames" placeholder="Hussain, Ismail, Vinod" oninput="generateSummary()">Hussain, Ismail, Vinod</textarea>
         </div>
 
         <div class="form-group">
           <label>Junior Players (comma separated)</label>
-          <textarea id="juniorNames" placeholder="Rayan, Sufyan">Rayan, Sufyan</textarea>
+          <textarea id="juniorNames" placeholder="Rayan, Sufyan" oninput="generateSummary()">Rayan, Sufyan</textarea>
         </div>
       </div>
 
-      <!-- Action -->
-      <button class="btn btn-primary" onclick="generateSummary()">
+      <!-- Action Button -->
+      <button class="btn btn-primary" onclick="generateSummary(true)">
         <i class="fas fa-calculator"></i> Calculate Split
       </button>
 
-      <!-- Results Section -->
-      <div class="card" id="resultsCard" style="display: none;">
+      <!-- Results Section (Visible with summary & Copy button before Payment Options) -->
+      <div class="card" id="resultsCard">
         <div class="card-title">
           <div class="card-title-left"><i class="fas fa-check-circle" style="color: var(--success);"></i> Summary Generated</div>
         </div>
         <div class="result-box" id="result"></div>
-        <button class="btn btn-success" onclick="copyResult()" style="margin-top: 14px;">
+        <button class="btn btn-success" id="btnCopyResult" onclick="copyResult()" style="margin-top: 14px;">
           <i class="fas fa-copy"></i> Copy for WhatsApp
         </button>
       </div>
@@ -817,17 +840,25 @@
         <h3><i class="fas fa-qrcode"></i> Payment Options</h3>
         
         <div class="upi-details">
-          <span><i class="fas fa-mobile-alt"></i> PhonePe</span>
-          <span style="color: var(--primary);">9620447444</span>
+          <span><i class="fas fa-mobile-alt"></i> PhonePe: <strong style="color: var(--primary);">9620447444</strong></span>
+          <button class="btn-copy-chip" onclick="copyUPIValue('9620447444', this)">
+            <i class="fas fa-copy"></i> Copy
+          </button>
         </div>
         
         <div class="upi-details">
-          <span><i class="fas fa-university"></i> UPI ID</span>
-          <span style="color: var(--primary);">9620447444@upi</span>
+          <span><i class="fas fa-university"></i> UPI ID: <strong style="color: var(--primary);">9620447444@upi</strong></span>
+          <button class="btn-copy-chip" onclick="copyUPIValue('9620447444@upi', this)">
+            <i class="fas fa-copy"></i> Copy
+          </button>
         </div>
 
-        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Scan to pay instantly</p>
-        <img src="phonepe-qr.jpeg" alt="PhonePe QR" onerror="this.style.display='none'">
+        <div class="qr-container">
+          <p style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Scan to pay instantly</p>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi%3A%2F%2Fpay%3Fpa%3D9620447444%40upi%26pn%3DMd%20Hussain%26cu%3DINR" 
+               alt="PhonePe / UPI QR Code" 
+               onerror="this.src='phonepe-qr.jpeg'; this.onerror=function(){this.style.display='none'};">
+        </div>
       </div>
     </div>
 
@@ -860,7 +891,7 @@
               </div>
               <div class="fighter-stat-item">
                 <span class="fighter-stat-val" id="heroHussainMatches" style="color: #60a5fa;">7</span>
-                <span class="fighter-stat-lbl">Matches</span>
+                <span class="fighter-stat-lbl">Matches Won</span>
               </div>
             </div>
           </div>
@@ -882,7 +913,7 @@
               </div>
               <div class="fighter-stat-item">
                 <span class="fighter-stat-val" id="heroIsmuMatches" style="color: #fb923c;">4</span>
-                <span class="fighter-stat-lbl">Matches</span>
+                <span class="fighter-stat-lbl">Matches Won</span>
               </div>
             </div>
           </div>
@@ -897,8 +928,8 @@
         <!-- Match Head to Head Bar -->
         <div class="comparison-section">
           <div class="comp-labels">
-            <span class="comp-label-left" id="compLabelHussain">Hussain: 7 Wins (64%)</span>
-            <span class="comp-label-right" id="compLabelIsmu">Ismu: 4 Wins (36%)</span>
+            <span class="comp-label-left" id="compLabelHussain">Hussain: 7 Wins (63.6%)</span>
+            <span class="comp-label-right" id="compLabelIsmu">Ismu: 4 Wins (36.4%)</span>
           </div>
           <div class="ratio-bar">
             <div class="ratio-fill-hussain" id="ratioBarHussain" style="width: 63.6%;"></div>
@@ -924,16 +955,14 @@
               <tr>
                 <th>#</th>
                 <th>Player</th>
-                <th>Series P</th>
+                <th>Series Played</th>
                 <th>Series W</th>
-                <th>Matches W</th>
-                <th>Matches L</th>
                 <th>Win %</th>
                 <th>Points</th>
               </tr>
             </thead>
             <tbody id="standingsTableBody">
-              <!-- Rendered via JS -->
+              <!-- Rendered via JS without (Me), (Cousin), and without Matches W / Matches L -->
             </tbody>
           </table>
         </div>
@@ -1020,30 +1049,43 @@
         </div>
       </div>
 
-      <!-- WhatsApp Broadcaster Card -->
-      <div class="card share-card">
-        <div class="card-title">
-          <div class="card-title-left"><i class="fab fa-whatsapp" style="color: #25d366;"></i> WhatsApp Rivalry Report</div>
+      <!-- IMAGE SHARE CARD (Replaces old text WhatsApp Rivalry Report) -->
+      <div class="image-share-card">
+        <div class="card-title" style="margin-bottom: 10px;">
+          <div class="card-title-left"><i class="fas fa-image" style="color: var(--primary);"></i> Rivalry Scorecard Image</div>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Ready to share</span>
         </div>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
-          Send the official standings & head-to-head tally directly to Ismu or your cricket group!
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; text-align: left;">
+          Share or copy this official scorecard image directly to Ismu or your turf cricket WhatsApp group!
         </p>
 
-        <div class="result-box" id="whatsappRivalryText" style="margin-top: 0; margin-bottom: 12px; font-size: 0.82rem;"></div>
+        <!-- Preview Container for Generated Image -->
+        <div class="scorecard-canvas-wrap">
+          <img id="scorecardImagePreview" alt="Turf Cricket Rivalry Scorecard Poster">
+        </div>
 
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <button class="btn btn-whatsapp" onclick="shareToWhatsAppDirect()">
-            <i class="fab fa-whatsapp"></i> Send Directly via WhatsApp
+        <!-- Action Buttons for Image -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="btn btn-whatsapp" id="btnShareWhatsAppImg" onclick="shareScorecardImage()">
+            <i class="fab fa-whatsapp"></i> Share Image to WhatsApp
           </button>
-          <button class="btn btn-success" onclick="copyRivalryReport()">
-            <i class="fas fa-copy"></i> Copy Rivalry Text
-          </button>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" id="btnCopyImg" onclick="copyScorecardImage()" style="flex: 1; font-size: 0.88rem;">
+              <i class="fas fa-copy"></i> Copy Image
+            </button>
+            <button class="btn btn-outline" onclick="downloadScorecardImage()" style="flex: 1; font-size: 0.88rem; padding: 12px;">
+              <i class="fas fa-download"></i> Save Image
+            </button>
+          </div>
         </div>
       </div>
 
     </div>
 
   </div>
+
+  <!-- Hidden Canvas for Drawing the Scorecard Poster Image -->
+  <canvas id="scorecardCanvas" width="1080" height="1080" style="display: none;"></canvas>
 
   <!-- Toast Notification -->
   <div id="toast">
@@ -1092,13 +1134,13 @@
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');
-      }, 2200);
+      }, 2400);
     }
 
     // ==========================================
-    // TAB 1: EXPENSE LEDGER LOGIC (PRESERVED)
+    // TAB 1: EXPENSE LEDGER LOGIC
     // ==========================================
-    function generateSummary() {
+    function generateSummary(scrollToResults = false) {
       const matchDate = document.getElementById('matchDate').value;
       const ground = parseFloat(document.getElementById('groundExpense').value) || 0;
       const ball = parseFloat(document.getElementById('ballExpense').value) || 0;
@@ -1111,7 +1153,7 @@
       const juniors = juniorsText.split(',').map(j => j.trim()).filter(j => j);
 
       if(seniors.length === 0 && juniors.length === 0) {
-        alert("Please enter at least one player!");
+        if (scrollToResults) alert("Please enter at least one player!");
         return;
       }
 
@@ -1152,16 +1194,42 @@
 
       document.getElementById('result').textContent = html;
       
-      // Show results card with animation
       const resCard = document.getElementById('resultsCard');
       resCard.style.display = 'block';
-      resCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (scrollToResults) {
+        resCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
+    // Original green button feedback for Copy
     function copyResult() {
       const text = document.getElementById('result').textContent;
       navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnCopyResult');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#059669';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = 'var(--success)';
+        }, 2000);
         showToast('Summary copied for WhatsApp!');
+      });
+    }
+
+    function copyUPIValue(val, btn) {
+      navigator.clipboard.writeText(val).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#10b981';
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = '#eff6ff';
+          btn.style.color = '#1d4ed8';
+        }, 2000);
+        showToast(`Copied ${val}`);
       });
     }
 
@@ -1319,14 +1387,11 @@
       };
 
       const data = getSeriesData();
-      // Insert at beginning (newest first)
       data.unshift(newRecord);
-      // Sort by date descending
       data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
       saveSeriesData(data);
 
-      // Reset form
       document.getElementById('newHussainWins').value = '';
       document.getElementById('newIsmuWins').value = '';
       document.getElementById('newTiedMatches').value = '0';
@@ -1347,6 +1412,8 @@
     // ==========================================
     // RENDER DASHBOARD & POINTS TABLE
     // ==========================================
+    let cachedStats = null;
+
     function renderRivalryDashboard() {
       const data = getSeriesData();
 
@@ -1371,7 +1438,7 @@
         else seriesDraws++;
       });
 
-      // Update Hero Cards
+      // Update Hero Cards (With Matches Won label)
       document.getElementById('heroHussainSeries').textContent = hussainSeriesWins;
       document.getElementById('heroHussainMatches').textContent = hussainMatchWins;
       document.getElementById('heroIsmuSeries').textContent = ismuSeriesWins;
@@ -1417,24 +1484,7 @@
         leadBadge.style.borderColor = 'rgba(148, 163, 184, 0.4)';
       }
 
-      // Standings Table
-      renderStandingsTable({
-        totalSeries,
-        hussainSeriesWins,
-        ismuSeriesWins,
-        seriesDraws,
-        totalMatches,
-        hussainMatchWins,
-        ismuMatchWins,
-        hussainPct,
-        ismuPct
-      });
-
-      // Series Timeline
-      renderSeriesTimeline(data);
-
-      // WhatsApp Text Box
-      generateWhatsAppReportText({
+      cachedStats = {
         data,
         totalSeries,
         hussainSeriesWins,
@@ -1445,50 +1495,55 @@
         ismuMatchWins,
         hussainPct,
         ismuPct,
-        diff
-      });
+        diff,
+        statusText
+      };
+
+      // Standings Table (Updated per requirement 3)
+      renderStandingsTable(cachedStats);
+
+      // Series Timeline
+      renderSeriesTimeline(data);
+
+      // Generate the Image Scorecard
+      drawScorecardCanvas(cachedStats);
     }
 
+    // Points Table Standings:
+    // Hussain (Me) -> Hussain
+    // Ismu (Cousin) -> Ismu
+    // Series P -> Series Played
+    // Removed Matches W and Matches L
     function renderStandingsTable(stats) {
       const tbody = document.getElementById('standingsTableBody');
       tbody.innerHTML = '';
 
-      // Points: 2 per series win, 1 per tie
       const hPoints = (stats.hussainSeriesWins * 2) + (stats.seriesDraws * 1);
       const iPoints = (stats.ismuSeriesWins * 2) + (stats.seriesDraws * 1);
 
       const players = [
         {
           name: 'Hussain',
-          title: 'Hussain (Me)',
           badge: '👑',
           seriesP: stats.totalSeries,
           seriesW: stats.hussainSeriesWins,
-          seriesL: stats.ismuSeriesWins,
-          matchW: stats.hussainMatchWins,
-          matchL: stats.ismuMatchWins,
           winPct: stats.hussainPct,
           points: hPoints
         },
         {
           name: 'Ismu',
-          title: 'Ismu (Cousin)',
           badge: '⚡',
           seriesP: stats.totalSeries,
           seriesW: stats.ismuSeriesWins,
-          seriesL: stats.hussainSeriesWins,
-          matchW: stats.ismuMatchWins,
-          matchL: stats.hussainMatchWins,
           winPct: stats.ismuPct,
           points: iPoints
         }
       ];
 
-      // Sort by Points, then Series Wins, then Match Wins
       players.sort((a, b) => {
         if (b.points !== a.points) return b.points - a.points;
         if (b.seriesW !== a.seriesW) return b.seriesW - a.seriesW;
-        return b.matchW - a.matchW;
+        return parseFloat(b.winPct) - parseFloat(a.winPct);
       });
 
       players.forEach((p, idx) => {
@@ -1498,13 +1553,11 @@
           <td>
             <div class="table-player-name">
               <span>${p.badge}</span>
-              <span>${p.title}</span>
+              <span>${p.name}</span>
             </div>
           </td>
           <td>${p.seriesP}</td>
           <td><span class="table-pill pill-win">${p.seriesW}</span></td>
-          <td style="color: var(--primary);">${p.matchW}</td>
-          <td style="color: var(--text-muted);">${p.matchL}</td>
           <td>${p.winPct}%</td>
           <td><strong style="font-size: 0.95rem; color: #0f172a;">${p.points}</strong></td>
         `;
@@ -1521,23 +1574,20 @@
         return;
       }
 
-      data.forEach((item, index) => {
+      data.forEach((item) => {
         const itemDiv = document.createElement('div');
         const winClass = item.winner === 'Hussain' ? 'hussain-win' : (item.winner === 'Ismu' ? 'ismu-win' : '');
         itemDiv.className = `timeline-item ${winClass}`;
 
         let badgeClass = 'badge-hussain';
         let badgeIcon = '👑';
-        let winnerText = `Series Won: Hussain (${item.hussainWins}-${item.ismuWins})`;
 
         if (item.winner === 'Ismu') {
           badgeClass = 'badge-ismu';
           badgeIcon = '⚡';
-          winnerText = `Series Won: Ismu (${item.ismuWins}-${item.hussainWins})`;
         } else if (item.winner === 'Tie') {
           badgeClass = 'badge-tie';
           badgeIcon = '🤝';
-          winnerText = `Series Tied (${item.hussainWins}-${item.ismuWins})`;
         }
 
         itemDiv.innerHTML = `
@@ -1562,64 +1612,379 @@
       });
     }
 
-    function generateWhatsAppReportText(stats) {
-      let leadText = '';
-      if (stats.diff > 0) {
-        leadText = `👑 Hussain leads the match tally by +${stats.diff} wins!`;
-      } else if (stats.diff < 0) {
-        leadText = `⚡ Ismu leads the match tally by +${Math.abs(stats.diff)} wins!`;
-      } else {
-        leadText = `🤝 Match tally is deadlocked!`;
-      }
+    // ==========================================
+    // CANVAS POSTER IMAGE GENERATOR
+    // ==========================================
+    function drawScorecardCanvas(stats) {
+      const canvas = document.getElementById('scorecardCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
 
-      let seriesStatus = '';
-      if (stats.hussainSeriesWins > stats.ismuSeriesWins) {
-        seriesStatus = `Hussain leads ${stats.hussainSeriesWins} - ${stats.ismuSeriesWins} 🏆`;
-      } else if (stats.ismuSeriesWins > stats.hussainSeriesWins) {
-        seriesStatus = `Ismu leads ${stats.ismuSeriesWins} - ${stats.hussainSeriesWins} ⚡`;
-      } else {
-        seriesStatus = `Tied ${stats.hussainSeriesWins} - ${stats.ismuSeriesWins} 🤝`;
-      }
+      // 1. Background Gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, '#0a0f1d');
+      bgGrad.addColorStop(0.5, '#111827');
+      bgGrad.addColorStop(1, '#1e1b4b');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
 
-      let msg = `🏏 *WEEKEND TURF CRICKET CHAMPIONSHIP* 🏏\n`;
-      msg += `⚔️ *HUSSAIN vs ISMU RIVALRY*\n\n`;
-      msg += `🏆 *SERIES SCORECARD*:\n`;
-      msg += `• Hussain: ${stats.hussainSeriesWins} Series Win${stats.hussainSeriesWins === 1 ? '' : 's'}\n`;
-      msg += `• Ismu: ${stats.ismuSeriesWins} Series Win${stats.ismuSeriesWins === 1 ? '' : 's'}\n`;
-      msg += `➡️ Status: *${seriesStatus}*\n\n`;
+      // Subtle Decorative Arcs / Lights
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(W / 2, 280, 420, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+      ctx.lineWidth = 14;
+      ctx.stroke();
 
-      msg += `📊 *HEAD-TO-HEAD MATCH STATS*:\n`;
-      msg += `• Total Matches Played: ${stats.totalMatches}\n`;
-      msg += `• 👑 Hussain: ${stats.hussainMatchWins} Wins (${stats.hussainPct}%)\n`;
-      msg += `• ⚡ Ismu: ${stats.ismuMatchWins} Wins (${stats.ismuPct}%)\n`;
-      msg += `👉 ${leadText}\n\n`;
+      ctx.beginPath();
+      ctx.arc(W / 2, 280, 520, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(249, 115, 22, 0.05)';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      ctx.restore();
 
-      msg += `📅 *WEEKLY SERIES BREAKDOWN*:\n`;
-      stats.data.slice(0, 5).forEach(item => {
-        const icon = item.winner === 'Hussain' ? '👑' : (item.winner === 'Ismu' ? '⚡' : '🤝');
-        msg += `• ${item.dateFormatted || item.date}: ${icon} ${item.winner} won (${item.hussainWins}-${item.ismuWins}) [${item.totalMatches} matches]\n`;
+      // Top Tag
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.roundRect ? ctx.roundRect(W / 2 - 200, 50, 400, 42, 21) : ctx.fillRect(W / 2 - 200, 50, 400, 42);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.font = '700 18px "Inter", sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.textAlign = 'center';
+      ctx.fillText('🏆 WEEKEND TURF CHAMPIONSHIP', W / 2, 77);
+      ctx.restore();
+
+      // Main Title
+      ctx.font = '900 48px "Inter", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.fillText('HUSSAIN  ⚔️  ISMU', W / 2, 145);
+
+      ctx.font = '600 20px "Inter", sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('HEAD-TO-HEAD SERIES & MATCH STANDINGS', W / 2, 180);
+
+      // Fighter Cards
+      const cardY = 220;
+      const cardW = 420;
+      const cardH = 260;
+
+      // Hussain Card (Left)
+      drawFighterCard(ctx, 80, cardY, cardW, cardH, {
+        name: 'HUSSAIN',
+        role: 'Captain',
+        avatar: '👑',
+        color: '#2563eb',
+        accent: '#60a5fa',
+        seriesWon: stats.hussainSeriesWins,
+        matchesWon: stats.hussainMatchWins,
+        pct: stats.hussainPct
       });
 
-      msg += `\n🌐 View Live Points Table: https://hussainproit.github.io/box.html#rivalry\n`;
-      msg += `👨‍💻 Created by Md Hussain`;
+      // Ismu Card (Right)
+      drawFighterCard(ctx, W - 80 - cardW, cardY, cardW, cardH, {
+        name: 'ISMU',
+        role: 'Challenger',
+        avatar: '⚡',
+        color: '#ea580c',
+        accent: '#fb923c',
+        seriesWon: stats.ismuSeriesWins,
+        matchesWon: stats.ismuMatchWins,
+        pct: stats.ismuPct
+      });
 
-      document.getElementById('whatsappRivalryText').textContent = msg;
+      // VS Badge (Center)
+      ctx.save();
+      const vsX = W / 2;
+      const vsY = cardY + cardH / 2;
+      ctx.beginPath();
+      ctx.arc(vsX, vsY, 44, 0, Math.PI * 2);
+      const vsGrad = ctx.createLinearGradient(vsX - 44, vsY - 44, vsX + 44, vsY + 44);
+      vsGrad.addColorStop(0, '#ef4444');
+      vsGrad.addColorStop(1, '#f59e0b');
+      ctx.fillStyle = vsGrad;
+      ctx.shadowColor = 'rgba(239, 68, 68, 0.6)';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+
+      ctx.font = '900 24px "Inter", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('VS', vsX, vsY);
+      ctx.restore();
+
+      // Series Score Banner
+      const bannerY = 515;
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, 80, bannerY, W - 160, 60, 14);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.font = '700 24px "Inter", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`🏆 Series Score: ${stats.statusText}`, W / 2, bannerY + 30);
+      ctx.restore();
+
+      // Match Comparison Bar Box
+      const compY = 600;
+      ctx.save();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+      roundRect(ctx, 80, compY, W - 160, 110, 14);
+      ctx.fill();
+
+      // Labels
+      ctx.font = '700 20px "Inter", sans-serif';
+      ctx.fillStyle = '#60a5fa';
+      ctx.textAlign = 'left';
+      ctx.fillText(`Hussain: ${stats.hussainMatchWins} Wins (${stats.hussainPct}%)`, 105, compY + 32);
+
+      ctx.fillStyle = '#fb923c';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Ismu: ${stats.ismuMatchWins} Wins (${stats.ismuPct}%)`, W - 105, compY + 32);
+
+      // Bar
+      const barX = 105;
+      const barY = compY + 48;
+      const barW = W - 210;
+      const barH = 16;
+      ctx.fillStyle = '#334155';
+      roundRect(ctx, barX, barY, barW, barH, 8);
+      ctx.fill();
+
+      const hussainBarW = (parseFloat(stats.hussainPct) / 100) * barW;
+      ctx.fillStyle = '#2563eb';
+      roundRect(ctx, barX, barY, hussainBarW, barH, 8);
+      ctx.fill();
+
+      ctx.fillStyle = '#ea580c';
+      roundRect(ctx, barX + hussainBarW, barY, barW - hussainBarW, barH, 8);
+      ctx.fill();
+
+      // Footer of comparison
+      ctx.font = '600 16px "Inter", sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.textAlign = 'left';
+      ctx.fillText(`Total ${stats.totalMatches} matches played across ${stats.totalSeries} series`, 105, compY + 92);
+
+      ctx.fillStyle = stats.diff > 0 ? '#34d399' : (stats.diff < 0 ? '#fb923c' : '#94a3b8');
+      ctx.textAlign = 'right';
+      const leadText = stats.diff > 0 ? `👑 Hussain leads by +${stats.diff} wins` : (stats.diff < 0 ? `⚡ Ismu leads by +${Math.abs(stats.diff)} wins` : `🤝 Deadlock`);
+      ctx.fillText(leadText, W - 105, compY + 92);
+      ctx.restore();
+
+      // Recent Series Breakdown Box
+      const histY = 735;
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      roundRect(ctx, 80, histY, W - 160, 230, 14);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.font = '700 20px "Inter", sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.textAlign = 'left';
+      ctx.fillText('📅 WEEKLY SERIES BREAKDOWN', 105, histY + 38);
+
+      let itemY = histY + 80;
+      stats.data.slice(0, 3).forEach((item) => {
+        const isHussain = item.winner === 'Hussain';
+        const isIsmu = item.winner === 'Ismu';
+        const icon = isHussain ? '👑' : (isIsmu ? '⚡' : '🤝');
+        const winnerColor = isHussain ? '#60a5fa' : (isIsmu ? '#fb923c' : '#cbd5e1');
+
+        ctx.font = '700 18px "Inter", sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(`• ${item.dateFormatted || item.date}:`, 105, itemY);
+
+        ctx.fillStyle = winnerColor;
+        ctx.fillText(`${icon} ${item.winner} won (${item.hussainWins}-${item.ismuWins})`, 260, itemY);
+
+        ctx.font = '500 16px "Inter", sans-serif';
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'right';
+        ctx.fillText(`[${item.totalMatches} matches]`, W - 105, itemY);
+        ctx.textAlign = 'left';
+
+        itemY += 44;
+      });
+      ctx.restore();
+
+      // Footer
+      ctx.font = '500 16px "Inter", sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.textAlign = 'center';
+      ctx.fillText('🌐 Live Standings: https://hussainproit.github.io/box.html#rivalry', W / 2, 1005);
+      ctx.fillText('⚡ Turf Cricket Ledger & Points Table  |  By Md Hussain', W / 2, 1032);
+
+      // Update Preview Image
+      const previewImg = document.getElementById('scorecardImagePreview');
+      previewImg.src = canvas.toDataURL('image/png');
     }
 
-    function copyRivalryReport() {
-      const text = document.getElementById('whatsappRivalryText').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Rivalry report copied for WhatsApp!');
+    function drawFighterCard(ctx, x, y, w, h, data) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.strokeStyle = data.color;
+      ctx.lineWidth = 2;
+      roundRect(ctx, x, y, w, h, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      // Avatar
+      ctx.font = '40px "Inter", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(data.avatar, x + w / 2, y + 55);
+
+      // Name & Role
+      ctx.font = '800 24px "Inter", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(data.name, x + w / 2, y + 95);
+
+      ctx.font = '600 14px "Inter", sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(data.role, x + w / 2, y + 118);
+
+      // Divider
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x + 20, y + 135);
+      ctx.lineTo(x + w - 20, y + 135);
+      ctx.stroke();
+
+      // Stats 2 Column
+      const col1X = x + w * 0.28;
+      const col2X = x + w * 0.72;
+
+      ctx.font = '800 36px "Inter", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(data.seriesWon, col1X, y + 185);
+
+      ctx.fillStyle = data.accent;
+      ctx.fillText(data.matchesWon, col2X, y + 185);
+
+      ctx.font = '700 13px "Inter", sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('SERIES WON', col1X, y + 215);
+      ctx.fillText('MATCHES WON', col2X, y + 215);
+
+      ctx.restore();
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      if (ctx.roundRect) {
+        ctx.roundRect(x, y, width, height, radius);
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+      }
+    }
+
+    // ==========================================
+    // SHARE / COPY IMAGE TO WHATSAPP
+    // ==========================================
+    function getScorecardBlob() {
+      return new Promise((resolve) => {
+        const canvas = document.getElementById('scorecardCanvas');
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/png');
       });
     }
 
-    function shareToWhatsAppDirect() {
-      const text = document.getElementById('whatsappRivalryText').textContent;
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+    async function shareScorecardImage() {
+      const btn = document.getElementById('btnShareWhatsAppImg');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing Image...';
+
+      try {
+        const blob = await getScorecardBlob();
+        const file = new File([blob], 'turf-cricket-rivalry.png', { type: 'image/png' });
+
+        // Native Web Share API (Directly launches WhatsApp on phones!)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Turf Cricket Championship: Hussain vs Ismu',
+            text: '🔥 Weekend Turf Rivalry Standings & Scorecard!'
+          });
+          btn.innerHTML = orig;
+          return;
+        }
+
+        // Desktop Fallback: Copy to clipboard & open WhatsApp Web
+        await copyScorecardImage(false);
+        showToast('Image copied to clipboard! Paste (Ctrl+V) in WhatsApp.');
+        
+        // Open WhatsApp Web
+        window.open('https://web.whatsapp.com', '_blank');
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          downloadScorecardImage();
+          showToast('Image downloaded! Share via WhatsApp.');
+        }
+      } finally {
+        btn.innerHTML = orig;
+      }
     }
 
-    // Auto initialize if rivalry tab active
+    async function copyScorecardImage(showToastMsg = true) {
+      const btn = document.getElementById('btnCopyImg');
+      const orig = btn.innerHTML;
+      try {
+        const blob = await getScorecardBlob();
+        if (navigator.clipboard && navigator.clipboard.write) {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          btn.innerHTML = '<i class="fas fa-check"></i> Image Copied!';
+          btn.style.background = '#059669';
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.background = 'var(--primary)';
+          }, 2000);
+          if (showToastMsg) showToast('Scorecard image copied! Paste (Ctrl+V) in WhatsApp.');
+          return;
+        }
+      } catch (e) {
+        console.error('Clipboard write failed:', e);
+      }
+      // If clipboard copy fails, download image
+      downloadScorecardImage();
+      if (showToastMsg) showToast('Image downloaded to device.');
+    }
+
+    function downloadScorecardImage() {
+      const canvas = document.getElementById('scorecardCanvas');
+      const link = document.createElement('a');
+      link.download = 'turf-cricket-rivalry.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Image saved to downloads!');
+    }
+
+    // Initialize both sections on page load
+    generateSummary(false);
     renderRivalryDashboard();
   </script>
 </body>
