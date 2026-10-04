@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="cricket-logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2canvas for capturing exact pixel-perfect design as image -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     :root {
       --bg-color: #f1f5f9;
@@ -342,8 +344,17 @@
     }
 
     /* =========================================
-       RIVALRY & POINTS TABLE STYLES
+       RIVALRY & POINTS TABLE STYLES (SS2 DESIGN)
        ========================================= */
+    .capture-container {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
     .rivalry-hero {
       background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
       color: white;
@@ -598,6 +609,20 @@
     .pill-loss { background: #fee2e2; color: #b91c1c; }
     .pill-tie { background: #f1f5f9; color: #475569; }
 
+    /* Watermark for captured image */
+    .capture-watermark {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      border: 1px dashed var(--border-color);
+    }
+
     /* History Timeline */
     .timeline-item {
       border-left: 3px solid var(--border-color);
@@ -679,28 +704,6 @@
     }
     .btn-delete-record:hover {
       color: var(--danger);
-    }
-
-    /* Scorecard Image Card Section */
-    .image-share-card {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      padding: 16px;
-      text-align: center;
-    }
-    .scorecard-canvas-wrap {
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-      margin-bottom: 14px;
-      background: #0f172a;
-    }
-    .scorecard-canvas-wrap img {
-      width: 100%;
-      height: auto;
-      display: block;
     }
 
     /* Toast Notification */
@@ -863,108 +866,137 @@
     </div>
 
     <!-- ========================================================
-         TAB 2: POINTS TABLE & HEAD-TO-HEAD RIVALRY
+         TAB 2: POINTS TABLE & HEAD-TO-HEAD RIVALRY (SS2 DESIGN)
          ======================================================== -->
     <div class="tab-content" id="tab-rivalry">
-      <div class="header-title">
-        <h1>⚔️ Weekend Turf Rivalry</h1>
-        <p>Hussain vs Ismu Weekly Championship & Head-to-Head</p>
-      </div>
-
-      <!-- Hero Fighter Card -->
-      <div class="rivalry-hero">
-        <div class="hero-badge-tag">
-          <i class="fas fa-fire"></i> Weekly Series Battle
-        </div>
-
-        <!-- 2 Fighters Grid -->
-        <div class="h2h-vs-grid">
-          <!-- Hussain -->
-          <div class="player-fighter-card hussain-side">
-            <div class="fighter-avatar">👑</div>
-            <div class="fighter-name">Hussain</div>
-            <div class="fighter-sub">Captain</div>
-            <div class="fighter-stats-box">
-              <div class="fighter-stat-item">
-                <span class="fighter-stat-val" id="heroHussainSeries">1</span>
-                <span class="fighter-stat-lbl">Series W</span>
-              </div>
-              <div class="fighter-stat-item">
-                <span class="fighter-stat-val" id="heroHussainMatches" style="color: #60a5fa;">7</span>
-                <span class="fighter-stat-lbl">Matches Won</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- VS center -->
-          <div class="vs-center-col">
-            <div class="vs-flame-circle">VS</div>
-          </div>
-
-          <!-- Ismu -->
-          <div class="player-fighter-card ismu-side">
-            <div class="fighter-avatar">⚡</div>
-            <div class="fighter-name">Ismu</div>
-            <div class="fighter-sub">Challenger</div>
-            <div class="fighter-stats-box">
-              <div class="fighter-stat-item">
-                <span class="fighter-stat-val" id="heroIsmuSeries">1</span>
-                <span class="fighter-stat-lbl">Series W</span>
-              </div>
-              <div class="fighter-stat-item">
-                <span class="fighter-stat-val" id="heroIsmuMatches" style="color: #fb923c;">4</span>
-                <span class="fighter-stat-lbl">Matches Won</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Overall Series Status Banner -->
-        <div class="series-status-banner" id="seriesStatusBanner">
-          <i class="fas fa-trophy status-highlight"></i>
-          <span>Series Score: <strong class="status-highlight" id="bannerSeriesScore">1 - 1 (Tied)</strong></span>
-        </div>
-
-        <!-- Match Head to Head Bar -->
-        <div class="comparison-section">
-          <div class="comp-labels">
-            <span class="comp-label-left" id="compLabelHussain">Hussain: 7 Wins (63.6%)</span>
-            <span class="comp-label-right" id="compLabelIsmu">Ismu: 4 Wins (36.4%)</span>
-          </div>
-          <div class="ratio-bar">
-            <div class="ratio-fill-hussain" id="ratioBarHussain" style="width: 63.6%;"></div>
-            <div class="ratio-fill-ismu" id="ratioBarIsmu" style="width: 36.4%;"></div>
-          </div>
-          <div class="comp-footer">
-            <span id="totalMatchesText">Total 11 matches played</span>
-            <span class="lead-badge" id="leadBadgeText">👑 Hussain leads by +3 wins</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Official Standings Points Table -->
-      <div class="card">
-        <div class="card-title">
-          <div class="card-title-left"><i class="fas fa-list-ol"></i> Points Table Standings</div>
-          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(2 pts / Series Win)</span>
-        </div>
+      
+      <!-- CAPTURE SECTION (EXACTLY MATCHES SS2: TITLE + BATTLE HERO + POINTS TABLE) -->
+      <div class="capture-container" id="captureSection">
         
-        <div class="table-container">
-          <table class="standings-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Player</th>
-                <th>Series Played</th>
-                <th>Series W</th>
-                <th>Win %</th>
-                <th>Points</th>
-              </tr>
-            </thead>
-            <tbody id="standingsTableBody">
-              <!-- Rendered via JS without (Me), (Cousin), and without Matches W / Matches L -->
-            </tbody>
-          </table>
+        <!-- Title & Subtitle -->
+        <div class="header-title" style="margin-bottom: 2px;">
+          <h1>⚔️ Weekend Turf Rivalry</h1>
+          <p>Hussain vs Ismu Weekly Championship & Head-to-Head</p>
+        </div>
+
+        <!-- Weekly Series Battle (Hero Fighter Card) -->
+        <div class="rivalry-hero">
+          <div class="hero-badge-tag">
+            <i class="fas fa-fire"></i> Weekly Series Battle
+          </div>
+
+          <!-- 2 Fighters Grid -->
+          <div class="h2h-vs-grid">
+            <!-- Hussain -->
+            <div class="player-fighter-card hussain-side">
+              <div class="fighter-avatar">👑</div>
+              <div class="fighter-name">Hussain</div>
+              <div class="fighter-sub">Captain</div>
+              <div class="fighter-stats-box">
+                <div class="fighter-stat-item">
+                  <span class="fighter-stat-val" id="heroHussainSeries">1</span>
+                  <span class="fighter-stat-lbl">Series W</span>
+                </div>
+                <div class="fighter-stat-item">
+                  <span class="fighter-stat-val" id="heroHussainMatches" style="color: #60a5fa;">7</span>
+                  <span class="fighter-stat-lbl">Matches Won</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VS center -->
+            <div class="vs-center-col">
+              <div class="vs-flame-circle">VS</div>
+            </div>
+
+            <!-- Ismu -->
+            <div class="player-fighter-card ismu-side">
+              <div class="fighter-avatar">⚡</div>
+              <div class="fighter-name">Ismu</div>
+              <div class="fighter-sub">Challenger</div>
+              <div class="fighter-stats-box">
+                <div class="fighter-stat-item">
+                  <span class="fighter-stat-val" id="heroIsmuSeries">1</span>
+                  <span class="fighter-stat-lbl">Series W</span>
+                </div>
+                <div class="fighter-stat-item">
+                  <span class="fighter-stat-val" id="heroIsmuMatches" style="color: #fb923c;">4</span>
+                  <span class="fighter-stat-lbl">Matches Won</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overall Series Status Banner -->
+          <div class="series-status-banner" id="seriesStatusBanner">
+            <i class="fas fa-trophy status-highlight"></i>
+            <span>Series Score: <strong class="status-highlight" id="bannerSeriesScore">1 - 1 (Tied)</strong></span>
+          </div>
+
+          <!-- Match Head to Head Bar -->
+          <div class="comparison-section">
+            <div class="comp-labels">
+              <span class="comp-label-left" id="compLabelHussain">Hussain: 7 Wins (63.6%)</span>
+              <span class="comp-label-right" id="compLabelIsmu">Ismu: 4 Wins (36.4%)</span>
+            </div>
+            <div class="ratio-bar">
+              <div class="ratio-fill-hussain" id="ratioBarHussain" style="width: 63.6%;"></div>
+              <div class="ratio-fill-ismu" id="ratioBarIsmu" style="width: 36.4%;"></div>
+            </div>
+            <div class="comp-footer">
+              <span id="totalMatchesText">Total 11 matches in 2 series</span>
+              <span class="lead-badge" id="leadBadgeText">👑 Hussain leads by +3 match wins</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Standings Points Table Card -->
+        <div class="card" style="margin: 0;">
+          <div class="card-title">
+            <div class="card-title-left"><i class="fas fa-list-ol"></i> Points Table Standings</div>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(2 pts / Series Win)</span>
+          </div>
+          
+          <div class="table-container">
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Player</th>
+                  <th>Series Played</th>
+                  <th>Series W</th>
+                  <th>Win %</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody id="standingsTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Watermark footer included in shared image -->
+        <div class="capture-watermark">
+          <span>🌐 hussainproit.github.io/box.html#rivalry</span>
+          <span>⚡ Turf Cricket Ledger | By Md Hussain</span>
+        </div>
+
+      </div>
+      <!-- END CAPTURE SECTION -->
+
+      <!-- SHARE ACTIONS (Directly captures the exact design above as an image) -->
+      <div class="card" style="text-align: center; padding: 16px;">
+        <button class="btn btn-whatsapp" id="btnShareWhatsApp" onclick="shareAsImage()">
+          <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> Share Image to WhatsApp
+        </button>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button class="btn btn-outline" id="btnCopyImg" onclick="copyAsImage()" style="flex: 1; padding: 11px; font-weight: 700;">
+            <i class="fas fa-copy"></i> Copy Image
+          </button>
+          <button class="btn btn-outline" onclick="downloadAsImage()" style="flex: 1; padding: 11px; font-weight: 700;">
+            <i class="fas fa-download"></i> Save Image
+          </button>
         </div>
       </div>
 
@@ -1049,43 +1081,9 @@
         </div>
       </div>
 
-      <!-- IMAGE SHARE CARD (Replaces old text WhatsApp Rivalry Report) -->
-      <div class="image-share-card">
-        <div class="card-title" style="margin-bottom: 10px;">
-          <div class="card-title-left"><i class="fas fa-image" style="color: var(--primary);"></i> Rivalry Scorecard Image</div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);">Ready to share</span>
-        </div>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; text-align: left;">
-          Share or copy this official scorecard image directly to Ismu or your turf cricket WhatsApp group!
-        </p>
-
-        <!-- Preview Container for Generated Image -->
-        <div class="scorecard-canvas-wrap">
-          <img id="scorecardImagePreview" alt="Turf Cricket Rivalry Scorecard Poster">
-        </div>
-
-        <!-- Action Buttons for Image -->
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <button class="btn btn-whatsapp" id="btnShareWhatsAppImg" onclick="shareScorecardImage()">
-            <i class="fab fa-whatsapp"></i> Share Image to WhatsApp
-          </button>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-primary" id="btnCopyImg" onclick="copyScorecardImage()" style="flex: 1; font-size: 0.88rem;">
-              <i class="fas fa-copy"></i> Copy Image
-            </button>
-            <button class="btn btn-outline" onclick="downloadScorecardImage()" style="flex: 1; font-size: 0.88rem; padding: 12px;">
-              <i class="fas fa-download"></i> Save Image
-            </button>
-          </div>
-        </div>
-      </div>
-
     </div>
 
   </div>
-
-  <!-- Hidden Canvas for Drawing the Scorecard Poster Image -->
-  <canvas id="scorecardCanvas" width="1080" height="1080" style="display: none;"></canvas>
 
   <!-- Toast Notification -->
   <div id="toast">
@@ -1202,7 +1200,6 @@
       }
     }
 
-    // Original green button feedback for Copy
     function copyResult() {
       const text = document.getElementById('result').textContent;
       navigator.clipboard.writeText(text).then(() => {
@@ -1238,7 +1235,6 @@
     // ==========================================
     const STORAGE_KEY = 'turf_cricket_rivalry_series_v1';
 
-    // Default Seed Data based on Hussain's matches
     const DEFAULT_SERIES_DATA = [
       {
         id: 'series_20261003',
@@ -1412,8 +1408,6 @@
     // ==========================================
     // RENDER DASHBOARD & POINTS TABLE
     // ==========================================
-    let cachedStats = null;
-
     function renderRivalryDashboard() {
       const data = getSeriesData();
 
@@ -1484,8 +1478,8 @@
         leadBadge.style.borderColor = 'rgba(148, 163, 184, 0.4)';
       }
 
-      cachedStats = {
-        data,
+      // Standings Table
+      renderStandingsTable({
         totalSeries,
         hussainSeriesWins,
         ismuSeriesWins,
@@ -1494,26 +1488,13 @@
         hussainMatchWins,
         ismuMatchWins,
         hussainPct,
-        ismuPct,
-        diff,
-        statusText
-      };
-
-      // Standings Table (Updated per requirement 3)
-      renderStandingsTable(cachedStats);
+        ismuPct
+      });
 
       // Series Timeline
       renderSeriesTimeline(data);
-
-      // Generate the Image Scorecard
-      drawScorecardCanvas(cachedStats);
     }
 
-    // Points Table Standings:
-    // Hussain (Me) -> Hussain
-    // Ismu (Cousin) -> Ismu
-    // Series P -> Series Played
-    // Removed Matches W and Matches L
     function renderStandingsTable(stats) {
       const tbody = document.getElementById('standingsTableBody');
       tbody.innerHTML = '';
@@ -1613,335 +1594,54 @@
     }
 
     // ==========================================
-    // CANVAS POSTER IMAGE GENERATOR
+    // CAPTURE EXACT SS2 DESIGN AS AN IMAGE
     // ==========================================
-    function drawScorecardCanvas(stats) {
-      const canvas = document.getElementById('scorecardCanvas');
-      const ctx = canvas.getContext('2d');
-      const W = canvas.width;
-      const H = canvas.height;
-
-      // 1. Background Gradient
-      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-      bgGrad.addColorStop(0, '#0a0f1d');
-      bgGrad.addColorStop(0.5, '#111827');
-      bgGrad.addColorStop(1, '#1e1b4b');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, W, H);
-
-      // Subtle Decorative Arcs / Lights
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(W / 2, 280, 420, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
-      ctx.lineWidth = 14;
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(W / 2, 280, 520, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(249, 115, 22, 0.05)';
-      ctx.lineWidth = 8;
-      ctx.stroke();
-      ctx.restore();
-
-      // Top Tag
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.roundRect ? ctx.roundRect(W / 2 - 200, 50, 400, 42, 21) : ctx.fillRect(W / 2 - 200, 50, 400, 42);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      ctx.font = '700 18px "Inter", sans-serif';
-      ctx.fillStyle = '#fbbf24';
-      ctx.textAlign = 'center';
-      ctx.fillText('🏆 WEEKEND TURF CHAMPIONSHIP', W / 2, 77);
-      ctx.restore();
-
-      // Main Title
-      ctx.font = '900 48px "Inter", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.fillText('HUSSAIN  ⚔️  ISMU', W / 2, 145);
-
-      ctx.font = '600 20px "Inter", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('HEAD-TO-HEAD SERIES & MATCH STANDINGS', W / 2, 180);
-
-      // Fighter Cards
-      const cardY = 220;
-      const cardW = 420;
-      const cardH = 260;
-
-      // Hussain Card (Left)
-      drawFighterCard(ctx, 80, cardY, cardW, cardH, {
-        name: 'HUSSAIN',
-        role: 'Captain',
-        avatar: '👑',
-        color: '#2563eb',
-        accent: '#60a5fa',
-        seriesWon: stats.hussainSeriesWins,
-        matchesWon: stats.hussainMatchWins,
-        pct: stats.hussainPct
-      });
-
-      // Ismu Card (Right)
-      drawFighterCard(ctx, W - 80 - cardW, cardY, cardW, cardH, {
-        name: 'ISMU',
-        role: 'Challenger',
-        avatar: '⚡',
-        color: '#ea580c',
-        accent: '#fb923c',
-        seriesWon: stats.ismuSeriesWins,
-        matchesWon: stats.ismuMatchWins,
-        pct: stats.ismuPct
-      });
-
-      // VS Badge (Center)
-      ctx.save();
-      const vsX = W / 2;
-      const vsY = cardY + cardH / 2;
-      ctx.beginPath();
-      ctx.arc(vsX, vsY, 44, 0, Math.PI * 2);
-      const vsGrad = ctx.createLinearGradient(vsX - 44, vsY - 44, vsX + 44, vsY + 44);
-      vsGrad.addColorStop(0, '#ef4444');
-      vsGrad.addColorStop(1, '#f59e0b');
-      ctx.fillStyle = vsGrad;
-      ctx.shadowColor = 'rgba(239, 68, 68, 0.6)';
-      ctx.shadowBlur = 20;
-      ctx.fill();
-
-      ctx.font = '900 24px "Inter", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('VS', vsX, vsY);
-      ctx.restore();
-
-      // Series Score Banner
-      const bannerY = 515;
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 1;
-      roundRect(ctx, 80, bannerY, W - 160, 60, 14);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.font = '700 24px "Inter", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(`🏆 Series Score: ${stats.statusText}`, W / 2, bannerY + 30);
-      ctx.restore();
-
-      // Match Comparison Bar Box
-      const compY = 600;
-      ctx.save();
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-      roundRect(ctx, 80, compY, W - 160, 110, 14);
-      ctx.fill();
-
-      // Labels
-      ctx.font = '700 20px "Inter", sans-serif';
-      ctx.fillStyle = '#60a5fa';
-      ctx.textAlign = 'left';
-      ctx.fillText(`Hussain: ${stats.hussainMatchWins} Wins (${stats.hussainPct}%)`, 105, compY + 32);
-
-      ctx.fillStyle = '#fb923c';
-      ctx.textAlign = 'right';
-      ctx.fillText(`Ismu: ${stats.ismuMatchWins} Wins (${stats.ismuPct}%)`, W - 105, compY + 32);
-
-      // Bar
-      const barX = 105;
-      const barY = compY + 48;
-      const barW = W - 210;
-      const barH = 16;
-      ctx.fillStyle = '#334155';
-      roundRect(ctx, barX, barY, barW, barH, 8);
-      ctx.fill();
-
-      const hussainBarW = (parseFloat(stats.hussainPct) / 100) * barW;
-      ctx.fillStyle = '#2563eb';
-      roundRect(ctx, barX, barY, hussainBarW, barH, 8);
-      ctx.fill();
-
-      ctx.fillStyle = '#ea580c';
-      roundRect(ctx, barX + hussainBarW, barY, barW - hussainBarW, barH, 8);
-      ctx.fill();
-
-      // Footer of comparison
-      ctx.font = '600 16px "Inter", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.textAlign = 'left';
-      ctx.fillText(`Total ${stats.totalMatches} matches played across ${stats.totalSeries} series`, 105, compY + 92);
-
-      ctx.fillStyle = stats.diff > 0 ? '#34d399' : (stats.diff < 0 ? '#fb923c' : '#94a3b8');
-      ctx.textAlign = 'right';
-      const leadText = stats.diff > 0 ? `👑 Hussain leads by +${stats.diff} wins` : (stats.diff < 0 ? `⚡ Ismu leads by +${Math.abs(stats.diff)} wins` : `🤝 Deadlock`);
-      ctx.fillText(leadText, W - 105, compY + 92);
-      ctx.restore();
-
-      // Recent Series Breakdown Box
-      const histY = 735;
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      roundRect(ctx, 80, histY, W - 160, 230, 14);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.font = '700 20px "Inter", sans-serif';
-      ctx.fillStyle = '#fbbf24';
-      ctx.textAlign = 'left';
-      ctx.fillText('📅 WEEKLY SERIES BREAKDOWN', 105, histY + 38);
-
-      let itemY = histY + 80;
-      stats.data.slice(0, 3).forEach((item) => {
-        const isHussain = item.winner === 'Hussain';
-        const isIsmu = item.winner === 'Ismu';
-        const icon = isHussain ? '👑' : (isIsmu ? '⚡' : '🤝');
-        const winnerColor = isHussain ? '#60a5fa' : (isIsmu ? '#fb923c' : '#cbd5e1');
-
-        ctx.font = '700 18px "Inter", sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(`• ${item.dateFormatted || item.date}:`, 105, itemY);
-
-        ctx.fillStyle = winnerColor;
-        ctx.fillText(`${icon} ${item.winner} won (${item.hussainWins}-${item.ismuWins})`, 260, itemY);
-
-        ctx.font = '500 16px "Inter", sans-serif';
-        ctx.fillStyle = '#94a3b8';
-        ctx.textAlign = 'right';
-        ctx.fillText(`[${item.totalMatches} matches]`, W - 105, itemY);
-        ctx.textAlign = 'left';
-
-        itemY += 44;
-      });
-      ctx.restore();
-
-      // Footer
-      ctx.font = '500 16px "Inter", sans-serif';
-      ctx.fillStyle = '#64748b';
-      ctx.textAlign = 'center';
-      ctx.fillText('🌐 Live Standings: https://hussainproit.github.io/box.html#rivalry', W / 2, 1005);
-      ctx.fillText('⚡ Turf Cricket Ledger & Points Table  |  By Md Hussain', W / 2, 1032);
-
-      // Update Preview Image
-      const previewImg = document.getElementById('scorecardImagePreview');
-      previewImg.src = canvas.toDataURL('image/png');
-    }
-
-    function drawFighterCard(ctx, x, y, w, h, data) {
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-      ctx.strokeStyle = data.color;
-      ctx.lineWidth = 2;
-      roundRect(ctx, x, y, w, h, 16);
-      ctx.fill();
-      ctx.stroke();
-
-      // Avatar
-      ctx.font = '40px "Inter", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(data.avatar, x + w / 2, y + 55);
-
-      // Name & Role
-      ctx.font = '800 24px "Inter", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(data.name, x + w / 2, y + 95);
-
-      ctx.font = '600 14px "Inter", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(data.role, x + w / 2, y + 118);
-
-      // Divider
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x + 20, y + 135);
-      ctx.lineTo(x + w - 20, y + 135);
-      ctx.stroke();
-
-      // Stats 2 Column
-      const col1X = x + w * 0.28;
-      const col2X = x + w * 0.72;
-
-      ctx.font = '800 36px "Inter", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(data.seriesWon, col1X, y + 185);
-
-      ctx.fillStyle = data.accent;
-      ctx.fillText(data.matchesWon, col2X, y + 185);
-
-      ctx.font = '700 13px "Inter", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('SERIES WON', col1X, y + 215);
-      ctx.fillText('MATCHES WON', col2X, y + 215);
-
-      ctx.restore();
-    }
-
-    function roundRect(ctx, x, y, width, height, radius) {
-      if (ctx.roundRect) {
-        ctx.roundRect(x, y, width, height, radius);
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
+    async function captureElementToBlob() {
+      const el = document.getElementById('captureSection');
+      if (typeof html2canvas !== 'function') {
+        throw new Error('html2canvas library is loading, please try again in a moment.');
       }
-    }
+      
+      const canvas = await html2canvas(el, {
+        scale: 2.5, // Crisp high-definition output
+        useCORS: true,
+        backgroundColor: '#f1f5f9',
+        logging: false
+      });
 
-    // ==========================================
-    // SHARE / COPY IMAGE TO WHATSAPP
-    // ==========================================
-    function getScorecardBlob() {
       return new Promise((resolve) => {
-        const canvas = document.getElementById('scorecardCanvas');
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/png');
+        canvas.toBlob((blob) => resolve(blob), 'image/png');
       });
     }
 
-    async function shareScorecardImage() {
-      const btn = document.getElementById('btnShareWhatsAppImg');
+    async function shareAsImage() {
+      const btn = document.getElementById('btnShareWhatsApp');
       const orig = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing Image...';
-
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Image...';
+      
       try {
-        const blob = await getScorecardBlob();
+        const blob = await captureElementToBlob();
         const file = new File([blob], 'turf-cricket-rivalry.png', { type: 'image/png' });
-
-        // Native Web Share API (Directly launches WhatsApp on phones!)
+        
+        // Mobile Browser: Web Share API opens WhatsApp native share with image attached!
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
             title: 'Turf Cricket Championship: Hussain vs Ismu',
-            text: '🔥 Weekend Turf Rivalry Standings & Scorecard!'
+            text: '🔥 Weekend Turf Rivalry: Standings & Head-to-Head!'
           });
           btn.innerHTML = orig;
           return;
         }
-
-        // Desktop Fallback: Copy to clipboard & open WhatsApp Web
-        await copyScorecardImage(false);
-        showToast('Image copied to clipboard! Paste (Ctrl+V) in WhatsApp.');
         
-        // Open WhatsApp Web
+        // Desktop Browser Fallback: Copy to clipboard & open WhatsApp Web
+        await copyBlobToClipboard(blob);
+        showToast('Image copied to clipboard! Paste (Ctrl+V) in WhatsApp.');
         window.open('https://web.whatsapp.com', '_blank');
       } catch (err) {
         if (err.name !== 'AbortError') {
-          downloadScorecardImage();
+          console.error(err);
+          downloadAsImage();
           showToast('Image downloaded! Share via WhatsApp.');
         }
       } finally {
@@ -1949,38 +1649,50 @@
       }
     }
 
-    async function copyScorecardImage(showToastMsg = true) {
+    async function copyAsImage() {
       const btn = document.getElementById('btnCopyImg');
       const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying...';
       try {
-        const blob = await getScorecardBlob();
-        if (navigator.clipboard && navigator.clipboard.write) {
-          const item = new ClipboardItem({ 'image/png': blob });
-          await navigator.clipboard.write([item]);
-          btn.innerHTML = '<i class="fas fa-check"></i> Image Copied!';
-          btn.style.background = '#059669';
-          setTimeout(() => {
-            btn.innerHTML = orig;
-            btn.style.background = 'var(--primary)';
-          }, 2000);
-          if (showToastMsg) showToast('Scorecard image copied! Paste (Ctrl+V) in WhatsApp.');
-          return;
-        }
-      } catch (e) {
-        console.error('Clipboard write failed:', e);
+        const blob = await captureElementToBlob();
+        await copyBlobToClipboard(blob);
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#059669';
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--text-muted)';
+        }, 2000);
+        showToast('Scorecard image copied! Paste (Ctrl+V) in WhatsApp.');
+      } catch (err) {
+        console.error(err);
+        downloadAsImage();
       }
-      // If clipboard copy fails, download image
-      downloadScorecardImage();
-      if (showToastMsg) showToast('Image downloaded to device.');
     }
 
-    function downloadScorecardImage() {
-      const canvas = document.getElementById('scorecardCanvas');
-      const link = document.createElement('a');
-      link.download = 'turf-cricket-rivalry.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      showToast('Image saved to downloads!');
+    async function copyBlobToClipboard(blob) {
+      if (navigator.clipboard && navigator.clipboard.write) {
+        const item = new ClipboardItem({ 'image/png': blob });
+        await navigator.clipboard.write([item]);
+      } else {
+        downloadAsImage();
+      }
+    }
+
+    async function downloadAsImage() {
+      try {
+        const blob = await captureElementToBlob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'turf-cricket-rivalry.png';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('Image saved to downloads!');
+      } catch(e) {
+        console.error(e);
+      }
     }
 
     // Initialize both sections on page load
