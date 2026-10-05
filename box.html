@@ -565,30 +565,56 @@
 
     /* Points Table Card */
     .table-container {
+      width: 100%;
       overflow-x: auto;
-      margin: 0 -4px;
+      margin: 0;
     }
     .standings-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
-      text-align: left;
+      font-size: 0.82rem;
+      table-layout: auto;
     }
     .standings-table th {
       background: #f8fafc;
-      padding: 10px 8px;
-      font-size: 0.72rem;
+      padding: 8px 4px;
+      font-size: 0.68rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
       border-bottom: 1px solid var(--border-color);
       white-space: nowrap;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .standings-table th:first-child {
+      width: 22px;
+      text-align: center;
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+    .standings-table th:nth-child(2) {
+      text-align: left;
+      padding-left: 6px;
     }
     .standings-table td {
-      padding: 12px 8px;
+      padding: 10px 4px;
       border-bottom: 1px solid var(--border-color);
       font-weight: 600;
       white-space: nowrap;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+    .standings-table td:first-child {
+      text-align: center;
+      padding-left: 2px;
+      padding-right: 2px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .standings-table td:nth-child(2) {
+      text-align: left;
+      padding-left: 6px;
     }
     .standings-table tr:last-child td {
       border-bottom: none;
@@ -596,14 +622,16 @@
     .table-player-name {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: 700;
+      font-size: 0.85rem;
     }
     .table-pill {
       font-size: 0.72rem;
       padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
+      display: inline-block;
     }
     .pill-win { background: #dcfce7; color: #15803d; }
     .pill-loss { background: #fee2e2; color: #b91c1c; }
@@ -612,15 +640,18 @@
     /* Watermark for captured image */
     .capture-watermark {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      padding: 6px 10px;
-      font-size: 0.72rem;
+      text-align: center;
+      gap: 3px;
+      padding: 7px 10px;
+      font-size: 0.7rem;
       color: #64748b;
       font-weight: 600;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       border-radius: 8px;
       border: 1px dashed var(--border-color);
+      line-height: 1.3;
     }
 
     /* History Timeline */
@@ -954,7 +985,7 @@
         <div class="card" style="margin: 0;">
           <div class="card-title">
             <div class="card-title-left"><i class="fas fa-list-ol"></i> Points Table Standings</div>
-            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(2 pts / Series Win)</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal;">(2 pts / Win)</span>
           </div>
           
           <div class="table-container">
@@ -963,10 +994,10 @@
                 <tr>
                   <th>#</th>
                   <th>Player</th>
-                  <th>Series Played</th>
-                  <th>Series W</th>
-                  <th>Win %</th>
-                  <th>Points</th>
+                  <th>Series</th>
+                  <th>Won</th>
+                  <th>Win%</th>
+                  <th>Pts</th>
                 </tr>
               </thead>
               <tbody id="standingsTableBody">
@@ -979,7 +1010,7 @@
         <!-- Watermark footer included in shared image -->
         <div class="capture-watermark">
           <span>🌐 hussainproit.github.io/box.html#rivalry</span>
-          <span>⚡ Turf Cricket Ledger | By Md Hussain</span>
+          <span>⚡ Turf Cricket Ledger & Points Table | By Md Hussain</span>
         </div>
 
       </div>
@@ -1530,7 +1561,7 @@
       players.forEach((p, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${idx + 1}</strong></td>
+          <td>${idx + 1}</td>
           <td>
             <div class="table-player-name">
               <span>${p.badge}</span>
@@ -1539,7 +1570,7 @@
           </td>
           <td>${p.seriesP}</td>
           <td><span class="table-pill pill-win">${p.seriesW}</span></td>
-          <td>${p.winPct}%</td>
+          <td style="font-weight: 700; color: var(--text-main);">${p.winPct}%</td>
           <td><strong style="font-size: 0.95rem; color: #0f172a;">${p.points}</strong></td>
         `;
         tbody.appendChild(tr);
@@ -1606,7 +1637,9 @@
         scale: 2.5, // Crisp high-definition output
         useCORS: true,
         backgroundColor: '#f1f5f9',
-        logging: false
+        logging: false,
+        scrollX: 0,
+        scrollY: 0
       });
 
       return new Promise((resolve) => {
