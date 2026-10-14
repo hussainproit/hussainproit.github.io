@@ -285,12 +285,12 @@
       }
     }
 
-    /* Advance List: Compact vertical list of single horizontal rows */
+    /* Advance List: Compact list with multi-admin input pills */
     .advance-grid {
       display: flex;
       flex-direction: column;
       gap: 7px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .advance-card-item {
       background: #f8fafc;
@@ -298,31 +298,104 @@
       border-radius: 8px;
       padding: 7px 10px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      flex-direction: column;
+      gap: 6px;
       transition: all 0.2s;
     }
     .advance-card-item:focus-within {
       border-color: var(--primary);
       background: #ffffff;
     }
+    .advance-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
     .advance-name {
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
       gap: 6px;
       color: var(--text-main);
-      flex: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .advance-item-controls {
+    .advance-admin-badge {
+      font-size: 0.64rem;
+      font-weight: 700;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+    .advance-total-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 2px 7px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+    .advance-admin-inputs {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
+    }
+    .advance-admin-pill {
+      flex: 1;
+      min-width: 120px;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 4px 6px;
+      gap: 4px;
+    }
+    .advance-admin-pill:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+    }
+    .advance-pill-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #64748b;
+      white-space: nowrap;
+    }
+    .advance-pill-input {
+      position: relative;
+      width: 66px;
+      flex: none;
+    }
+    .advance-pill-input span {
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .advance-pill-input input {
+      width: 100%;
+      padding: 3px 4px 3px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-align: right;
+      outline: none;
+      background: #fafafa;
+    }
+    .advance-pill-input input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
     }
     .advance-input-box {
       position: relative;
@@ -351,18 +424,6 @@
     }
     .advance-input-box input:focus {
       border-color: var(--primary);
-    }
-    .advance-paidto-select {
-      font-size: 0.72rem;
-      padding: 5px 5px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      background: #ffffff;
-      outline: none;
-      font-weight: 700;
-      color: #1e293b;
-      cursor: pointer;
-      max-width: 90px;
     }
 
     /* Settlement Table Mobile Optimization */
@@ -1058,13 +1119,10 @@
               </button>
             </div>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <p style="font-size: 0.78rem; color: var(--text-muted);">
-              Track advance payments collected.
+          <div style="margin-bottom: 6px;">
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+              Enter advance payments contributed to each trip admin.
             </p>
-            <button class="btn-outline" onclick="setAllAdvancesToFirstAdmin()" style="font-size: 0.7rem; padding: 2px 6px; color: var(--primary);" title="Set all paid to first admin">
-              All to <span id="lblPrimaryAdmin">Ismail</span>
-            </button>
           </div>
 
           <div class="advance-grid" id="advanceListContainer">
@@ -1219,6 +1277,16 @@
         'Sachu': 'Ismail',
         'Nishad': 'Ismail'
       },
+      memberAdvances: {
+        'Hussain': { 'Ismail': 2000, 'Hussain': 0 },
+        'Ismu': { 'Ismail': 2000, 'Hussain': 0 },
+        'Anees': { 'Ismail': 2000, 'Hussain': 0 },
+        'Anshad': { 'Ismail': 0, 'Hussain': 0 },
+        'Ashiq': { 'Ismail': 0, 'Hussain': 0 },
+        'Sachu': { 'Ismail': 0, 'Hussain': 0 },
+        'Nishad': { 'Ismail': 2000, 'Hussain': 0 }
+      },
+      adminPoolTransfer: 0,
       categories: {
         fuel: 3500,
         hotel: 6000,
@@ -1237,6 +1305,86 @@
       },
       customExpenses: []
     };
+
+    function ensureMemberAdvances(data) {
+      if (!data) return;
+      if (!data.memberAdvances) data.memberAdvances = {};
+      if (data.adminPoolTransfer === undefined) data.adminPoolTransfer = 0;
+      const primaryAdmin = data.admins?.[0]?.name || 'Ismail';
+      if (Array.isArray(data.members)) {
+        data.members.forEach(m => {
+          if (!data.memberAdvances[m]) data.memberAdvances[m] = {};
+          if (Array.isArray(data.admins)) {
+            data.admins.forEach(a => {
+              if (data.memberAdvances[m][a.name] === undefined) {
+                const oldAmt = data.advances?.[m] || 0;
+                const oldAdmin = data.advancePaidTo?.[m] || primaryAdmin;
+                if (oldAdmin === a.name && oldAmt > 0) {
+                  data.memberAdvances[m][a.name] = oldAmt;
+                } else {
+                  data.memberAdvances[m][a.name] = 0;
+                }
+              }
+            });
+          }
+        });
+      }
+    }
+
+    function getMemberAdvanceToAdmin(member, adminName) {
+      ensureMemberAdvances(tripData);
+      return (tripData.memberAdvances?.[member]?.[adminName]) || 0;
+    }
+
+    function getMemberTotalAdvance(member) {
+      ensureMemberAdvances(tripData);
+      let total = 0;
+      if (Array.isArray(tripData.admins)) {
+        tripData.admins.forEach(a => {
+          total += (tripData.memberAdvances?.[member]?.[a.name] || 0);
+        });
+      }
+      return total;
+    }
+
+    function setMemberAdvanceToAdmin(member, adminName, val, inputEl) {
+      ensureMemberAdvances(tripData);
+      const parsedVal = parseFloat(val) || 0;
+      if (!tripData.memberAdvances[member]) tripData.memberAdvances[member] = {};
+      tripData.memberAdvances[member][adminName] = parsedVal;
+
+      let total = 0;
+      let primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+      tripData.admins.forEach(a => {
+        const amt = tripData.memberAdvances[member][a.name] || 0;
+        total += amt;
+        if (amt > 0) primaryAdmin = a.name;
+      });
+      tripData.advances[member] = total;
+      tripData.advancePaidTo[member] = primaryAdmin;
+
+      const card = inputEl?.closest('.advance-card-item');
+      if (card) {
+        const totalBadge = card.querySelector('.advance-total-badge');
+        if (totalBadge) totalBadge.textContent = `Total: ₹${total.toLocaleString('en-IN')}`;
+      }
+
+      saveTripData();
+      recalculateAll();
+    }
+
+    function updateAdminPoolTransfer(val) {
+      tripData.adminPoolTransfer = parseFloat(val) || 0;
+      saveTripData();
+      recalculateAll();
+    }
+
+    function autoSetAdminPoolTransfer(val) {
+      tripData.adminPoolTransfer = parseFloat(val) || 0;
+      saveTripData();
+      recalculateAll();
+      showToast(val > 0 ? `Set ₹${val.toLocaleString('en-IN')} pool cash transfer!` : 'Reset pool transfer.');
+    }
 
     let tripData = loadTripData();
     let currentWhatsAppSummary = '';
@@ -1283,6 +1431,8 @@
             admin3Upi: data.admins[2]?.upi || '',
             admin3Role: data.admins[2]?.role || '',
             advancePaidToJson: JSON.stringify(data.advancePaidTo || {}),
+            memberAdvancesJson: JSON.stringify(data.memberAdvances || {}),
+            adminPoolTransfer: data.adminPoolTransfer || 0,
             categoryPaidByJson: JSON.stringify(data.categoryPaidBy || {}),
             updatedAt: Date.now()
           }
@@ -1333,6 +1483,12 @@
               try { loadedCategoryPaidBy = JSON.parse(json.data.categoryPaidByJson); } catch(e){}
             }
 
+            let loadedMemberAdvances = null;
+            if (json.data.memberAdvancesJson) {
+              try { loadedMemberAdvances = JSON.parse(json.data.memberAdvancesJson); } catch(e){}
+            }
+            const loadedAdminPoolTransfer = parseFloat(json.data.adminPoolTransfer) || 0;
+
             // Clean advances: keep only active members
             const cleanAdvances = {};
             json.data.members.forEach(m => {
@@ -1345,10 +1501,13 @@
               admins: loadedAdmins,
               advances: cleanAdvances,
               advancePaidTo: loadedAdvancePaidTo,
+              memberAdvances: loadedMemberAdvances,
+              adminPoolTransfer: loadedAdminPoolTransfer,
               categories: json.data.categories || DEFAULT_DATA.categories,
               categoryPaidBy: loadedCategoryPaidBy,
               customExpenses: json.data.customExpenses || []
             };
+            ensureMemberAdvances(tripData);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tripData));
             hydrateUI();
             recalculateAll();
@@ -1370,6 +1529,8 @@
           d: data.admins,
           a: data.advances,
           p: data.advancePaidTo,
+          ma: data.memberAdvances,
+          apt: data.adminPoolTransfer || 0,
           c: data.categories,
           b: data.categoryPaidBy,
           x: data.customExpenses
@@ -1389,16 +1550,20 @@
         const decodedStr = decodeURIComponent(escape(atob(clean)));
         const parsed = JSON.parse(decodedStr);
         if (parsed.m && Array.isArray(parsed.m)) {
-          return {
+          const resObj = {
             tripName: parsed.t || 'Malanad Mist',
             members: parsed.m,
             admins: parsed.d || DEFAULT_DATA.admins,
             advances: parsed.a || {},
             advancePaidTo: parsed.p || {},
+            memberAdvances: parsed.ma || null,
+            adminPoolTransfer: parsed.apt || 0,
             categories: parsed.c || DEFAULT_DATA.categories,
             categoryPaidBy: parsed.b || DEFAULT_DATA.categoryPaidBy,
             customExpenses: parsed.x || []
           };
+          ensureMemberAdvances(resObj);
+          return resObj;
         }
       } catch (e) {
         console.error('Error decoding trip state:', e);
@@ -1476,13 +1641,17 @@
             if (!parsed.admins || parsed.admins.length === 0) parsed.admins = DEFAULT_DATA.admins;
             if (!parsed.advancePaidTo) parsed.advancePaidTo = DEFAULT_DATA.advancePaidTo;
             if (!parsed.categoryPaidBy) parsed.categoryPaidBy = DEFAULT_DATA.categoryPaidBy;
+            ensureMemberAdvances(parsed);
             return parsed;
           }
         }
       } catch (e) {
         console.error(e);
       }
-      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+      const defData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      ensureMemberAdvances(defData);
+      return defData;
     }
 
     function saveTripData() {
@@ -1549,15 +1718,13 @@
       
       tripData.members = parsedMembers.length > 0 ? parsedMembers : ['Member 1'];
 
-      // Ensure advances and advancePaidTo exist for all active members
-      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
-      tripData.members.forEach(m => {
-        if (tripData.advances[m] === undefined) tripData.advances[m] = 0;
-        if (!tripData.advancePaidTo[m]) tripData.advancePaidTo[m] = primaryAdmin;
-      });
+      ensureMemberAdvances(tripData);
 
-      // Clean up deleted members from advances
-      Object.keys(tripData.advances).forEach(k => {
+      // Clean up deleted members from memberAdvances & advances
+      Object.keys(tripData.memberAdvances || {}).forEach(k => {
+        if (!tripData.members.includes(k)) delete tripData.memberAdvances[k];
+      });
+      Object.keys(tripData.advances || {}).forEach(k => {
         if (!tripData.members.includes(k)) delete tripData.advances[k];
       });
 
@@ -1601,75 +1768,109 @@
 
     function renderAdvancesList() {
       const container = document.getElementById('advanceListContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       document.getElementById('memberCountBadge').textContent = `${tripData.members.length} Member${tripData.members.length === 1 ? '' : 's'}`;
 
-      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+      ensureMemberAdvances(tripData);
+
+      const isSingleAdmin = tripData.admins.length === 1;
 
       tripData.members.forEach((member) => {
-        const amt = tripData.advances[member] || 0;
-        const currentPaidTo = tripData.advancePaidTo[member] || primaryAdmin;
+        const totalAmt = getMemberTotalAdvance(member);
 
-        let optionsHtml = '';
-        tripData.admins.forEach(a => {
-          optionsHtml += `<option value="${a.name}" ${a.name === currentPaidTo ? 'selected' : ''}>To ${a.name}</option>`;
-        });
+        // Check if member is an admin
+        const matchingAdmin = tripData.admins.find(a => a.name.toLowerCase() === member.toLowerCase());
+        const adminBadge = matchingAdmin ? `<span class="advance-admin-badge"><i class="fas fa-shield-alt"></i> Admin (${matchingAdmin.name})</span>` : '';
 
         const card = document.createElement('div');
         card.className = 'advance-card-item';
-        card.innerHTML = `
-          <div class="advance-name">
-            <i class="fas fa-user-circle" style="color: var(--primary); font-size: 0.95rem;"></i>
-            <span>${member}</span>
-          </div>
-          <div class="advance-item-controls">
-            <div class="advance-input-box">
-              <span>₹</span>
-              <input type="number" min="0" value="${amt}" 
-                     oninput="updateMemberAdvance('${member}', this.value)" 
-                     placeholder="0">
+
+        if (isSingleAdmin) {
+          const adminName = tripData.admins[0]?.name || 'Admin';
+          const amt = getMemberAdvanceToAdmin(member, adminName);
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="advance-name">
+                <i class="fas fa-user-circle" style="color: var(--primary); font-size: 0.95rem;"></i>
+                <strong>${member}</strong>
+                ${adminBadge}
+              </span>
+              <div class="advance-input-box">
+                <span>₹</span>
+                <input type="number" min="0" value="${amt}" 
+                       oninput="setMemberAdvanceToAdmin('${member}', '${adminName}', this.value, this)" 
+                       placeholder="0">
+              </div>
             </div>
-            <select class="advance-paidto-select" onchange="updateAdvancePaidTo('${member}', this.value)" title="Transferred to Admin">
-              ${optionsHtml}
-            </select>
-          </div>
-        `;
+          `;
+        } else {
+          // Multiple Admins: Show inputs for each admin!
+          let pillsHtml = '';
+          tripData.admins.forEach(admin => {
+            const amt = getMemberAdvanceToAdmin(member, admin.name);
+            pillsHtml += `
+              <div class="advance-admin-pill">
+                <span class="advance-pill-label">To ${admin.name}:</span>
+                <div class="advance-pill-input">
+                  <span>₹</span>
+                  <input type="number" min="0" value="${amt}" 
+                         oninput="setMemberAdvanceToAdmin('${member}', '${admin.name}', this.value, this)" 
+                         placeholder="0">
+                </div>
+              </div>
+            `;
+          });
+
+          card.innerHTML = `
+            <div class="advance-card-header">
+              <span class="advance-name">
+                <i class="fas fa-user-circle" style="color: var(--primary); font-size: 0.95rem;"></i>
+                <strong>${member}</strong>
+                ${adminBadge}
+              </span>
+              <span class="advance-total-badge">Total: ₹${totalAmt.toLocaleString('en-IN')}</span>
+            </div>
+            <div class="advance-admin-inputs">
+              ${pillsHtml}
+            </div>
+          `;
+        }
+
         container.appendChild(card);
       });
     }
 
-    function updateMemberAdvance(member, val) {
-      tripData.advances[member] = parseFloat(val) || 0;
-      recalculateAll();
-    }
-
-    function updateAdvancePaidTo(member, adminName) {
-      tripData.advancePaidTo[member] = adminName;
-      recalculateAll();
-    }
-
-    function setAllAdvancesToFirstAdmin() {
-      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
-      tripData.members.forEach(m => {
-        tripData.advancePaidTo[m] = primaryAdmin;
-      });
-      renderAdvancesList();
-      recalculateAll();
-      showToast(`All member advances set as paid to ${primaryAdmin}`);
-    }
-
     function setEqualAdvancePrompt() {
       const amtStr = prompt('Enter equal advance amount for each member (₹):', '2000');
-      if (amtStr !== null) {
-        const amt = parseFloat(amtStr) || 0;
-        tripData.members.forEach(m => {
-          tripData.advances[m] = amt;
-        });
-        renderAdvancesList();
-        recalculateAll();
-        showToast(`Set ₹${amt} advance for all members!`);
+      if (amtStr === null) return;
+      const amt = parseFloat(amtStr) || 0;
+
+      let targetAdmin = tripData.admins[0]?.name || 'Ismail';
+      if (tripData.admins.length > 1) {
+        const adminNames = tripData.admins.map((a, i) => `${i + 1}. ${a.name}`).join('\n');
+        const pick = prompt(`Which Admin should receive this equal advance?\n${adminNames}\nEnter 1 or 2 (or admin name):`, '1');
+        if (pick !== null) {
+          const idx = parseInt(pick) - 1;
+          if (tripData.admins[idx]) {
+            targetAdmin = tripData.admins[idx].name;
+          } else {
+            const found = tripData.admins.find(a => a.name.toLowerCase() === pick.trim().toLowerCase());
+            if (found) targetAdmin = found.name;
+          }
+        }
       }
+
+      ensureMemberAdvances(tripData);
+      tripData.members.forEach(m => {
+        if (!tripData.memberAdvances[m]) tripData.memberAdvances[m] = {};
+        tripData.memberAdvances[m][targetAdmin] = amt;
+      });
+
+      renderAdvancesList();
+      recalculateAll();
+      showToast(`Set ₹${amt} advance to ${targetAdmin} for all members!`);
     }
 
     // ==========================================
@@ -1920,19 +2121,20 @@
       const grandTotal = categoryTotal + customTotal;
 
       // 2. Calculate Total Advance Collected
+      ensureMemberAdvances(tripData);
       let totalAdvance = 0;
       const adminAdvanceCollected = {};
       tripData.admins.forEach(a => adminAdvanceCollected[a.name] = 0);
 
       tripData.members.forEach(m => {
-        const amt = (tripData.advances[m] || 0);
-        totalAdvance += amt;
-        const toAdmin = tripData.advancePaidTo[m] || tripData.admins[0]?.name;
-        if (toAdmin && adminAdvanceCollected[toAdmin] !== undefined) {
-          adminAdvanceCollected[toAdmin] += amt;
-        } else if (toAdmin) {
-          adminAdvanceCollected[toAdmin] = (adminAdvanceCollected[toAdmin] || 0) + amt;
-        }
+        let memberTotalAdv = 0;
+        tripData.admins.forEach(a => {
+          const amt = tripData.memberAdvances[m]?.[a.name] || 0;
+          memberTotalAdv += amt;
+          adminAdvanceCollected[a.name] = (adminAdvanceCollected[a.name] || 0) + amt;
+        });
+        totalAdvance += memberTotalAdv;
+        tripData.advances[m] = memberTotalAdv;
       });
 
       // 3. Per Head Contribution
@@ -1978,7 +2180,7 @@
       // 7. Member Settlements & Balance
       const settlementData = [];
       tripData.members.forEach(member => {
-        const adv = tripData.advances[member] || 0;
+        const adv = getMemberTotalAdvance(member);
         const direct = memberDirectPaid[member] || 0;
         const totalPaidByMember = adv + direct;
         const netBalance = totalPaidByMember - perHeadShare;
@@ -2119,16 +2321,38 @@
         }
       });
 
-      // Build cards for each admin
-      let gridHtml = '';
-      const adminBalances = [];
-
+      // Find raw surplus / deficit before pool cash transfer
+      const poolTransfer = parseFloat(tripData.adminPoolTransfer) || 0;
+      const rawBalances = [];
       tripData.admins.forEach(admin => {
         const collected = adminAdvanceCollected[admin.name] || 0;
         const spent = adminExpensesHandled[admin.name] || 0;
-        const netCash = collected - spent;
+        rawBalances.push({ name: admin.name, netRaw: collected - spent, collected: collected, spent: spent });
+      });
 
-        adminBalances.push({ name: admin.name, netCash: netCash, collected: collected, spent: spent });
+      const surplusAdminRaw = rawBalances.find(a => a.netRaw > 1);
+      const deficitAdminRaw = rawBalances.find(a => a.netRaw < -1);
+      const suggestedTransfer = (surplusAdminRaw && deficitAdminRaw) ? Math.min(surplusAdminRaw.netRaw, Math.abs(deficitAdminRaw.netRaw)) : 0;
+
+      // Build cards for each admin applying poolTransfer
+      let gridHtml = '';
+      tripData.admins.forEach(admin => {
+        const collected = adminAdvanceCollected[admin.name] || 0;
+        const spent = adminExpensesHandled[admin.name] || 0;
+        let transferAdj = 0;
+        let transferNote = '';
+
+        if (poolTransfer > 0 && surplusAdminRaw && deficitAdminRaw) {
+          if (admin.name === surplusAdminRaw.name) {
+            transferAdj = -poolTransfer;
+            transferNote = `<span style="color:#b91c1c; font-size:0.72rem;">• Pool Cash Handed Over: -₹${poolTransfer.toLocaleString('en-IN')} (to ${deficitAdminRaw.name})</span><br>`;
+          } else if (admin.name === deficitAdminRaw.name) {
+            transferAdj = poolTransfer;
+            transferNote = `<span style="color:#15803d; font-size:0.72rem;">• Pool Cash Received: +₹${poolTransfer.toLocaleString('en-IN')} (from ${surplusAdminRaw.name})</span><br>`;
+          }
+        }
+
+        const netCash = collected - spent + transferAdj;
 
         let statusBadge = '';
         if (netCash > 0) {
@@ -2136,7 +2360,7 @@
         } else if (netCash < 0) {
           statusBadge = `<strong style="color: #ef4444; font-size: 0.92rem;"><i class="fas fa-hand-holding-usd"></i> -₹${Math.abs(netCash).toLocaleString('en-IN')} Out of Pocket</strong>`;
         } else {
-          statusBadge = `<strong style="color: #64748b; font-size: 0.92rem;"><i class="fas fa-check"></i> ₹0 Balanced</strong>`;
+          statusBadge = `<strong style="color: #64748b; font-size: 0.92rem;"><i class="fas fa-check"></i> ₹0 Fully Balanced</strong>`;
         }
 
         gridHtml += `
@@ -2145,9 +2369,10 @@
               <span><i class="fas fa-user-circle"></i> ${admin.name}</span>
               <span style="font-size: 0.72rem; color: #78716c; font-weight: 600;">${admin.role || 'Admin'}</span>
             </div>
-            <div style="font-size: 0.75rem; color: #57534e; margin-top: 2px;">
+            <div style="font-size: 0.75rem; color: #57534e; margin-top: 2px; line-height: 1.45;">
               • Advance Received: <strong>₹${collected.toLocaleString('en-IN')}</strong><br>
-              • Expenses Paid: <strong>₹${spent.toLocaleString('en-IN')}</strong>
+              • Expenses Paid: <strong>₹${spent.toLocaleString('en-IN')}</strong><br>
+              ${transferNote}
             </div>
             <div style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed #fed7aa;">
               ${statusBadge}
@@ -2156,19 +2381,35 @@
         `;
       });
 
-      // Compute inter-admin rebalancing transfer
+      // Compute inter-admin rebalancing transfer block
       let rebalanceHtml = '';
-      const surplusAdmin = adminBalances.find(a => a.netCash > 1);
-      const deficitAdmin = adminBalances.find(a => a.netCash < -1);
-
-      if (surplusAdmin && deficitAdmin) {
-        const transferAmt = Math.min(surplusAdmin.netCash, Math.abs(deficitAdmin.netCash));
+      if (surplusAdminRaw && deficitAdminRaw) {
         rebalanceHtml = `
           <div class="admin-rebalance-alert">
-            <i class="fas fa-exchange-alt" style="font-size: 1.1rem; color: #2563eb;"></i>
-            <div>
-              <strong>Fund Equalization Transfer:</strong><br>
-              👉 <strong>${surplusAdmin.name}</strong> transfers <strong>₹${transferAmt.toLocaleString('en-IN')}</strong> to <strong>${deficitAdmin.name}</strong> (passes collected advance to cover expenses).
+            <i class="fas fa-exchange-alt" style="font-size: 1.15rem; color: #2563eb; margin-top: 2px;"></i>
+            <div style="flex: 1;">
+              <strong style="color: #1e40af;">Inter-Admin Pool Cash Handover:</strong><br>
+              <span style="font-size: 0.76rem; color: #3b82f6;">
+                👉 <strong>${surplusAdminRaw.name}</strong> holds surplus room/group pool cash. Pass it to <strong>${deficitAdminRaw.name}</strong> to cover fuel & expenses without paying out-of-pocket!
+              </span>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #1e40af;">Pool Cash Handed Over:</span>
+                <div style="position: relative; width: 90px;">
+                  <span style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: 0.8rem; color: #64748b;">₹</span>
+                  <input type="number" min="0" value="${tripData.adminPoolTransfer || 0}" 
+                         oninput="updateAdminPoolTransfer(this.value)" 
+                         style="width: 100%; padding: 4px 6px 4px 18px; border-radius: 6px; border: 1px solid #93c5fd; font-weight: 700; font-size: 0.84rem; outline: none; background: #fff; text-align: right;"
+                         placeholder="0">
+                </div>
+                <button class="btn-outline" onclick="autoSetAdminPoolTransfer(${suggestedTransfer})" style="font-size: 0.72rem; padding: 4px 8px; background: #fff; border-color: #93c5fd; color: #1e40af;" title="Set recommended transfer">
+                  Set ₹${suggestedTransfer.toLocaleString('en-IN')}
+                </button>
+                ${(tripData.adminPoolTransfer || 0) > 0 ? `
+                  <button onclick="autoSetAdminPoolTransfer(0)" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer; font-weight:700;">
+                    Reset
+                  </button>
+                ` : ''}
+              </div>
             </div>
           </div>
         `;
