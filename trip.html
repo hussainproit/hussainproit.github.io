@@ -663,7 +663,7 @@
           <label>Trip Name</label>
           <div class="input-wrapper">
             <i class="fas fa-compass"></i>
-            <input type="text" id="tripName" value="Wayanad Weekend Getaway" oninput="recalculateAll()">
+            <input type="text" id="tripName" value="Malanad Mist" oninput="recalculateAll()">
           </div>
         </div>
 
@@ -933,11 +933,11 @@
     // ==========================================
     // DATA MODEL & INITIALIZATION
     // ==========================================
-    const STORAGE_KEY = 'hussain_trip_tracker_v2';
+    const STORAGE_KEY = 'hussain_trip_tracker_v3';
 
     // Sample Trip Data to give an immediate polished experience
     const DEFAULT_DATA = {
-      tripName: 'Wayanad Weekend Getaway',
+      tripName: 'Malanad Mist',
       members: ['Hussain', 'Ismu', 'Anees', 'Anshad', 'Ashiq', 'Sachu', 'Akif'],
       advances: {
         'Hussain': 2000,
@@ -981,7 +981,7 @@
     }
 
     function resetTripToDefault() {
-      if (confirm('Reset trip data back to the sample Wayanad trip?')) {
+      if (confirm('Reset trip data back to the sample Malanad Mist trip?')) {
         tripData = JSON.parse(JSON.stringify(DEFAULT_DATA));
         saveTripData();
         hydrateUI();
