@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Trip Expense Tracker & Split Ledger</title>
+  <link rel="icon" type="image/png" href="cricket-logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2canvas for high-res image export -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --primary: #059669; /* Emerald Green for Travel/Trip */
+      --primary-hover: #047857;
+      --primary-light: #ecfdf5;
+      --accent: #2563eb;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --success: #10b981;
+      --danger: #ef4444;
+      --amber: #f59e0b;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 16px;
+      padding-bottom: 70px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .logo-badge {
+      background: var(--primary);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25);
+      transition: transform 0.2s;
+    }
+    .logo-badge:active { transform: scale(0.96); }
+
+    .header-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-pill-link {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 6px 12px;
+      border-radius: 16px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-pill-link:hover {
+      background: #dbeafe;
+    }
+
+    .header-title {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .header-title h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .header-title p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--primary);
+    }
+    .card-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    input[type="date"],
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      padding-left: 36px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #f8fafc;
+      transition: all 0.2s;
+      outline: none;
+      color: var(--text-main);
+    }
+    textarea {
+      padding-left: 12px;
+      min-height: 70px;
+      resize: vertical;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Category Grid */
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .category-item {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px;
+      transition: border-color 0.2s;
+    }
+    .category-item:focus-within {
+      border-color: var(--primary);
+      background: #fff;
+    }
+    .category-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .category-input-wrap {
+      position: relative;
+    }
+    .category-input-wrap span {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .category-input-wrap input {
+      width: 100%;
+      padding: 8px 8px 8px 24px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: #ffffff;
+      outline: none;
+    }
+    .category-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Advance List Rows */
+    .advance-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .advance-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .advance-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+    .advance-input-box {
+      width: 120px;
+      position: relative;
+    }
+    .advance-input-box span {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .advance-input-box input {
+      width: 100%;
+      padding: 7px 8px 7px 22px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    .btn-primary:active {
+      background: var(--primary-hover);
+      transform: scale(0.98);
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+    }
+    .btn-whatsapp:active { transform: scale(0.98); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
+
+    .btn-copy-chip {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-copy-chip:hover {
+      background: #dbeafe;
+    }
+
+    /* Stats Overview Hero Box */
+    .stats-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .stat-hero-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .stat-hero-card.highlight-card {
+      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+    .stat-hero-card.highlight-card .stat-hero-lbl {
+      color: #a7f3d0;
+    }
+    .stat-hero-card.highlight-card .stat-hero-val {
+      color: #ffffff;
+    }
+    .stat-hero-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text-main);
+    }
+    .stat-hero-lbl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Pool Alert Banner */
+    .pool-status-banner {
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .banner-surplus {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .banner-deficit {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .banner-balanced {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Settlement Breakdown Table */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0;
+    }
+    .settlement-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      table-layout: auto;
+    }
+    .settlement-table th {
+      background: #f8fafc;
+      padding: 8px 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .settlement-table th:first-child {
+      text-align: left;
+      padding-left: 6px;
+    }
+    .settlement-table td {
+      padding: 10px 4px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+    .settlement-table td:first-child {
+      text-align: left;
+      padding-left: 6px;
+    }
+    .settlement-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Net Balance Badges */
+    .net-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .net-get-back {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    .net-needs-to-pay {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .net-settled {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Direct Payment Transfers Card */
+    .transfer-box {
+      background: #f8fafc;
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .transfer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .transfer-item:last-child {
+      border-bottom: none;
+    }
+    .transfer-amount {
+      font-weight: 800;
+      color: #047857;
+    }
+
+    /* WhatsApp Text Box */
+    .result-box {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      margin-top: 10px;
+      overflow-x: auto;
+      line-height: 1.45;
+    }
+
+    /* Payment Box */
+    .payment-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      text-align: center;
+    }
+    .payment-box h3 {
+      color: #d97706;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .upi-details {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed #d97706;
+      font-size: 0.9rem;
+    }
+    .qr-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .qr-container img {
+      max-width: 140px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+      background: white;
+      padding: 6px;
+    }
+
+    /* Watermark for captured image */
+    .capture-watermark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 3px;
+      padding: 7px 10px;
+      font-size: 0.7rem;
+      color: #64748b;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 8px;
+      border: 1px dashed var(--border-color);
+      line-height: 1.3;
+      margin-top: 12px;
+    }
+
+    /* Capture Container */
+    .capture-container {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Top Header -->
+    <header>
+      <a href="https://www.linkedin.com/in/as400toawshussain" target="_blank" class="logo-badge">
+        <i class="fab fa-linkedin"></i> By Md Hussain
+      </a>
+      <div class="header-links">
+        <a href="box.html" class="nav-pill-link">
+          <i class="fas fa-baseball-ball" style="color: #ef4444;"></i> Cricket Ledger
+        </a>
+      </div>
+    </header>
+
+    <div class="header-title">
+      <h1>🚗 Trip Expense Tracker</h1>
+      <p>Easy per-head split, advance tracking & settlement</p>
+    </div>
+
+    <!-- MAIN CAPTURE SECTION FOR SCREENSHOT / IMAGE SHARING -->
+    <div class="capture-container" id="tripCaptureSection">
+
+      <!-- 1. Trip Information Card -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-map-marked-alt"></i> Trip Details</div>
+          <span id="memberCountBadge" style="font-size: 0.75rem; background: var(--primary-light); color: var(--primary); padding: 3px 8px; border-radius: 12px; font-weight: 700;">4 Members</span>
+        </div>
+
+        <div class="form-group">
+          <label>Trip Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-compass"></i>
+            <input type="text" id="tripName" value="Wayanad Weekend Getaway" oninput="recalculateAll()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Travelers / Members (comma separated)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-users"></i>
+            <input type="text" id="memberNames" value="Hussain, Ismu, Vinod, Rayan" oninput="handleMembersChange()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Advance / Pool Money Collection Card -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-wallet"></i> Advance Pool Money</div>
+          <button class="btn-outline" onclick="setEqualAdvancePrompt()" style="font-size: 0.75rem; padding: 4px 8px;">
+            <i class="fas fa-magic"></i> Set Equal
+          </button>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          Track advance payments or transfers collected into the trip pool.
+        </p>
+
+        <div class="advance-list" id="advanceListContainer">
+          <!-- Populated by JS based on members -->
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 0.88rem; font-weight: 700;">
+          <span>Total Advance Collected:</span>
+          <span style="color: var(--primary); font-size: 1.05rem;" id="totalAdvanceDisplay">₹8,000</span>
+        </div>
+      </div>
+
+      <!-- 3. Trip Expenses (Category Inputs) -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-receipt"></i> Trip Expenses</div>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="expensesCountDisplay">6 Categories</span>
+        </div>
+
+        <div class="category-grid">
+          <!-- Fuel -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-gas-pump" style="color: #ef4444;"></i> Fuel / Petrol</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expFuel" value="3500" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+
+          <!-- Hotel / Stay -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-hotel" style="color: #3b82f6;"></i> Hotel / Stay</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expHotel" value="6000" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+
+          <!-- Food & Eating -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-utensils" style="color: #f59e0b;"></i> Food & Drinks</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expFood" value="4200" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+
+          <!-- Tolls & Cabs -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-road" style="color: #64748b;"></i> Tolls & Parking</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expTolls" value="650" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+
+          <!-- Activities & Tickets -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-ticket-alt" style="color: #8b5cf6;"></i> Sightseeing</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expActivities" value="1200" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+
+          <!-- Other / Misc -->
+          <div class="category-item">
+            <div class="category-label"><i class="fas fa-shopping-bag" style="color: #10b981;"></i> Misc / Others</div>
+            <div class="category-input-wrap">
+              <span>₹</span>
+              <input type="number" id="expMisc" value="450" min="0" oninput="recalculateAll()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Itemized Expense Toggle -->
+        <div style="margin-top: 14px;">
+          <button class="btn-outline" onclick="toggleCustomExpenses()" id="btnCustomExpToggle" style="width: 100%; text-align: center;">
+            <i class="fas fa-plus-circle"></i> + Add Individual Extra Expense
+          </button>
+        </div>
+
+        <div id="customExpenseSection" style="display: none; margin-top: 12px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" id="newExpDesc" placeholder="e.g. Boating tickets">
+            </div>
+            <div class="form-group">
+              <label>Amount (₹)</label>
+              <input type="number" id="newExpAmt" placeholder="e.g. 800" min="0">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 6px;">
+            <div class="form-group">
+              <label>Paid By</label>
+              <select id="newExpPaidBy" style="width:100%; padding:9px; border-radius:6px; border:1px solid var(--border-color); outline:none; background:#fff; font-weight:600;">
+                <option value="pool">Advance Pool</option>
+              </select>
+            </div>
+            <div class="form-group" style="display: flex; align-items: flex-end;">
+              <button class="btn btn-primary" onclick="addCustomExpenseItem()" style="padding: 10px;">
+                <i class="fas fa-plus"></i> Add Expense
+              </button>
+            </div>
+          </div>
+
+          <!-- List of custom expenses -->
+          <div id="customExpensesList" style="margin-top: 10px;"></div>
+        </div>
+      </div>
+
+      <!-- 4. Grand Total & Per Head Share Highlights -->
+      <div class="card" style="padding: 16px;">
+        <div class="stats-hero-grid">
+          <div class="stat-hero-card highlight-card">
+            <div class="stat-hero-val" id="grandTotalDisplay">₹16,000</div>
+            <div class="stat-hero-lbl">Total Trip Expense</div>
+          </div>
+          <div class="stat-hero-card">
+            <div class="stat-hero-val" style="color: var(--primary);" id="perHeadDisplay">₹4,000</div>
+            <div class="stat-hero-lbl">Per Head Contribution</div>
+          </div>
+        </div>
+
+        <!-- Advance Pool Balance Status Banner -->
+        <div class="pool-status-banner banner-deficit" id="poolStatusBanner">
+          <span><i class="fas fa-info-circle"></i> <span id="poolStatusText">Pool Deficit: ₹8,000 extra needed</span></span>
+          <span id="poolStatusPill" style="font-weight: 800;">₹8,000</span>
+        </div>
+      </div>
+
+      <!-- 5. Member Settlement Table -->
+      <div class="card" style="margin: 0;">
+        <div class="card-title">
+          <div class="card-title-left"><i class="fas fa-balance-scale"></i> Member Settlement</div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal;">(Net Balance)</span>
+        </div>
+
+        <div class="table-container">
+          <table class="settlement-table">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Advance</th>
+                <th>Paid Direct</th>
+                <th>Total Paid</th>
+                <th>Fair Share</th>
+                <th>Net Balance</th>
+              </tr>
+            </thead>
+            <tbody id="settlementTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Smart Direct Settlement Plan -->
+        <div class="transfer-box" id="directTransferBox">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-exchange-alt" style="color: var(--primary);"></i> Direct Settlement Transfers:
+          </div>
+          <div id="directTransferList">
+            <!-- Calculated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Watermark -->
+      <div class="capture-watermark">
+        <span>🌐 https://hussainproit.github.io/trip.html</span>
+        <span>⚡ Trip Expense Tracker & Ledger | Developed by Md Hussain</span>
+      </div>
+
+    </div>
+    <!-- END CAPTURE SECTION -->
+
+    <!-- Action Buttons for Sharing -->
+    <div class="card" style="text-align: center; padding: 16px;">
+      <button class="btn btn-whatsapp" id="btnShareWhatsApp" onclick="shareTripAsImage()">
+        <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> Share Image to WhatsApp
+      </button>
+      <div style="display: flex; gap: 8px; margin-top: 10px;">
+        <button class="btn btn-outline" id="btnCopyImg" onclick="copyTripAsImage()" style="flex: 1; padding: 11px; font-weight: 700;">
+          <i class="fas fa-image"></i> Copy Image
+        </button>
+        <button class="btn btn-outline" id="btnCopyTxt" onclick="copyWhatsAppText()" style="flex: 1; padding: 11px; font-weight: 700;">
+          <i class="fas fa-copy"></i> Copy Text
+        </button>
+        <button class="btn btn-outline" onclick="downloadTripAsImage()" style="flex: 1; padding: 11px; font-weight: 700;">
+          <i class="fas fa-download"></i> Save Image
+        </button>
+      </div>
+    </div>
+
+    <!-- WhatsApp Text Preview (Collapsible / Readable) -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-left"><i class="fas fa-file-alt"></i> WhatsApp Message Summary</div>
+      </div>
+      <div class="result-box" id="whatsappSummaryText"></div>
+    </div>
+
+    <!-- Settlement Payment Details (PhonePe / UPI) -->
+    <div class="card payment-box">
+      <h3><i class="fas fa-qrcode"></i> Settlement Payment Options</h3>
+      
+      <div class="upi-details">
+        <span><i class="fas fa-mobile-alt"></i> PhonePe: <strong style="color: var(--primary);">9620447444</strong></span>
+        <button class="btn-copy-chip" onclick="copyPaymentUPI('9620447444', this)">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+      
+      <div class="upi-details">
+        <span><i class="fas fa-university"></i> UPI ID: <strong style="color: var(--primary);">9620447444@upi</strong></span>
+        <button class="btn-copy-chip" onclick="copyPaymentUPI('9620447444@upi', this)">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <div class="qr-container">
+        <p style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Scan to settle payment</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi%3A%2F%2Fpay%3Fpa%3D9620447444%40upi%26pn%3DMd%20Hussain%26cu%3DINR" 
+             alt="PhonePe / UPI QR Code">
+      </div>
+    </div>
+
+    <!-- Reset / Clear Trip -->
+    <div style="text-align: center; margin-top: 4px;">
+      <button class="btn-outline" onclick="resetTripToDefault()" style="font-size: 0.78rem; color: #94a3b8;">
+        <i class="fas fa-undo"></i> Reset to Sample Trip
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <i class="fas fa-check-circle" style="color: #34d399;"></i>
+    <span id="toastMsg">Copied!</span>
+  </div>
+
+  <script>
+    // ==========================================
+    // DATA MODEL & INITIALIZATION
+    // ==========================================
+    const STORAGE_KEY = 'hussain_trip_tracker_v1';
+
+    // Sample Trip Data to give an immediate polished experience
+    const DEFAULT_DATA = {
+      tripName: 'Wayanad Weekend Getaway',
+      members: ['Hussain', 'Ismu', 'Vinod', 'Rayan'],
+      advances: {
+        'Hussain': 2000,
+        'Ismu': 2000,
+        'Vinod': 2000,
+        'Rayan': 2000
+      },
+      categories: {
+        fuel: 3500,
+        hotel: 6000,
+        food: 4200,
+        tolls: 650,
+        activities: 1200,
+        misc: 450
+      },
+      customExpenses: []
+    };
+
+    let tripData = loadTripData();
+
+    function loadTripData() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && Array.isArray(parsed.members) && parsed.members.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    function saveTripData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tripData));
+    }
+
+    function resetTripToDefault() {
+      if (confirm('Reset trip data back to the sample Wayanad trip?')) {
+        tripData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        saveTripData();
+        hydrateUI();
+        recalculateAll();
+        showToast('Reset to sample trip data!');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    // ==========================================
+    // UI HYDRATION & EVENT HANDLERS
+    // ==========================================
+    function hydrateUI() {
+      document.getElementById('tripName').value = tripData.tripName || 'My Road Trip';
+      document.getElementById('memberNames').value = tripData.members.join(', ');
+
+      // Categories
+      document.getElementById('expFuel').value = tripData.categories.fuel || 0;
+      document.getElementById('expHotel').value = tripData.categories.hotel || 0;
+      document.getElementById('expFood').value = tripData.categories.food || 0;
+      document.getElementById('expTolls').value = tripData.categories.tolls || 0;
+      document.getElementById('expActivities').value = tripData.categories.activities || 0;
+      document.getElementById('expMisc').value = tripData.categories.misc || 0;
+
+      renderAdvancesList();
+      updatePaidBySelectOptions();
+      renderCustomExpensesList();
+    }
+
+    function handleMembersChange() {
+      const val = document.getElementById('memberNames').value;
+      const parsedMembers = val.split(',').map(m => m.trim()).filter(m => m.length > 0);
+      
+      tripData.members = parsedMembers.length > 0 ? parsedMembers : ['Member 1'];
+
+      // Ensure advances object has entries for all members
+      tripData.members.forEach(m => {
+        if (tripData.advances[m] === undefined) {
+          tripData.advances[m] = 0;
+        }
+      });
+
+      renderAdvancesList();
+      updatePaidBySelectOptions();
+      recalculateAll();
+    }
+
+    function renderAdvancesList() {
+      const container = document.getElementById('advanceListContainer');
+      container.innerHTML = '';
+
+      document.getElementById('memberCountBadge').textContent = `${tripData.members.length} Member${tripData.members.length === 1 ? '' : 's'}`;
+
+      tripData.members.forEach((member) => {
+        const amt = tripData.advances[member] || 0;
+        const row = document.createElement('div');
+        row.className = 'advance-row';
+        row.innerHTML = `
+          <div class="advance-name">
+            <i class="fas fa-user-circle" style="color: var(--primary);"></i>
+            <span>${member}</span>
+          </div>
+          <div class="advance-input-box">
+            <span>₹</span>
+            <input type="number" min="0" value="${amt}" 
+                   oninput="updateMemberAdvance('${member}', this.value)" 
+                   placeholder="0">
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function updateMemberAdvance(member, val) {
+      tripData.advances[member] = parseFloat(val) || 0;
+      recalculateAll();
+    }
+
+    function setEqualAdvancePrompt() {
+      const amtStr = prompt('Enter equal advance amount for each member (₹):', '2000');
+      if (amtStr !== null) {
+        const amt = parseFloat(amtStr) || 0;
+        tripData.members.forEach(m => {
+          tripData.advances[m] = amt;
+        });
+        renderAdvancesList();
+        recalculateAll();
+        showToast(`Set ₹${amt} advance for all members!`);
+      }
+    }
+
+    function updatePaidBySelectOptions() {
+      const select = document.getElementById('newExpPaidBy');
+      select.innerHTML = '<option value="pool">Advance Pool</option>';
+      tripData.members.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        select.appendChild(opt);
+      });
+    }
+
+    function toggleCustomExpenses() {
+      const sec = document.getElementById('customExpenseSection');
+      const btn = document.getElementById('btnCustomExpToggle');
+      if (sec.style.display === 'none') {
+        sec.style.display = 'block';
+        btn.innerHTML = '<i class="fas fa-minus-circle"></i> Hide Itemized Expenses';
+      } else {
+        sec.style.display = 'none';
+        btn.innerHTML = '<i class="fas fa-plus-circle"></i> + Add Individual Extra Expense';
+      }
+    }
+
+    function addCustomExpenseItem() {
+      const desc = document.getElementById('newExpDesc').value.trim();
+      const amt = parseFloat(document.getElementById('newExpAmt').value);
+      const paidBy = document.getElementById('newExpPaidBy').value;
+
+      if (!desc) {
+        alert('Please enter a description for the expense.');
+        return;
+      }
+      if (isNaN(amt) || amt <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+
+      tripData.customExpenses.push({
+        id: 'exp_' + Date.now(),
+        desc: desc,
+        amount: amt,
+        paidBy: paidBy
+      });
+
+      document.getElementById('newExpDesc').value = '';
+      document.getElementById('newExpAmt').value = '';
+
+      renderCustomExpensesList();
+      recalculateAll();
+      showToast('Added expense!');
+    }
+
+    function deleteCustomExpense(id) {
+      tripData.customExpenses = tripData.customExpenses.filter(e => e.id !== id);
+      renderCustomExpensesList();
+      recalculateAll();
+      showToast('Removed expense.');
+    }
+
+    function renderCustomExpensesList() {
+      const list = document.getElementById('customExpensesList');
+      list.innerHTML = '';
+      if (!tripData.customExpenses || tripData.customExpenses.length === 0) {
+        return;
+      }
+
+      tripData.customExpenses.forEach(exp => {
+        const div = document.createElement('div');
+        div.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 6px; font-size: 0.85rem;';
+        div.innerHTML = `
+          <div>
+            <strong>${exp.desc}</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 6px;">(Paid by: ${exp.paidBy === 'pool' ? 'Advance Pool' : exp.paidBy})</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <strong style="color: var(--primary);">₹${exp.amount.toLocaleString('en-IN')}</strong>
+            <button onclick="deleteCustomExpense('${exp.id}')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 2px;">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // ==========================================
+    // CALCULATION & SETTLEMENT ENGINE
+    // ==========================================
+    function recalculateAll() {
+      tripData.tripName = document.getElementById('tripName').value.trim() || 'Trip';
+
+      // Read categories
+      tripData.categories.fuel = parseFloat(document.getElementById('expFuel').value) || 0;
+      tripData.categories.hotel = parseFloat(document.getElementById('expHotel').value) || 0;
+      tripData.categories.food = parseFloat(document.getElementById('expFood').value) || 0;
+      tripData.categories.tolls = parseFloat(document.getElementById('expTolls').value) || 0;
+      tripData.categories.activities = parseFloat(document.getElementById('expActivities').value) || 0;
+      tripData.categories.misc = parseFloat(document.getElementById('expMisc').value) || 0;
+
+      saveTripData();
+
+      // 1. Calculate Total Expenses
+      const categoryTotal = tripData.categories.fuel +
+                            tripData.categories.hotel +
+                            tripData.categories.food +
+                            tripData.categories.tolls +
+                            tripData.categories.activities +
+                            tripData.categories.misc;
+
+      let customTotal = 0;
+      const memberDirectPaid = {};
+      tripData.members.forEach(m => memberDirectPaid[m] = 0);
+
+      tripData.customExpenses.forEach(exp => {
+        customTotal += exp.amount;
+        if (exp.paidBy && exp.paidBy !== 'pool' && memberDirectPaid[exp.paidBy] !== undefined) {
+          memberDirectPaid[exp.paidBy] += exp.amount;
+        }
+      });
+
+      const grandTotal = categoryTotal + customTotal;
+
+      // 2. Calculate Total Advance Collected
+      let totalAdvance = 0;
+      tripData.members.forEach(m => {
+        totalAdvance += (tripData.advances[m] || 0);
+      });
+
+      // 3. Per Head Contribution
+      const memberCount = Math.max(tripData.members.length, 1);
+      const perHeadShare = grandTotal / memberCount;
+
+      // 4. Update Header Metrics
+      document.getElementById('grandTotalDisplay').textContent = `₹${Math.round(grandTotal).toLocaleString('en-IN')}`;
+      document.getElementById('perHeadDisplay').textContent = `₹${Math.round(perHeadShare).toLocaleString('en-IN')}`;
+      document.getElementById('totalAdvanceDisplay').textContent = `₹${Math.round(totalAdvance).toLocaleString('en-IN')}`;
+
+      // 5. Pool Balance Status
+      const poolBanner = document.getElementById('poolStatusBanner');
+      const poolStatusText = document.getElementById('poolStatusText');
+      const poolStatusPill = document.getElementById('poolStatusPill');
+
+      const poolDiff = totalAdvance - grandTotal;
+      if (Math.abs(poolDiff) < 1) {
+        poolBanner.className = 'pool-status-banner banner-balanced';
+        poolStatusText.textContent = 'Advance Pool matches expenses perfectly!';
+        poolStatusPill.textContent = 'Balanced';
+      } else if (poolDiff > 0) {
+        poolBanner.className = 'pool-status-banner banner-surplus';
+        poolStatusText.textContent = `Surplus Cash in Hand (to be refunded):`;
+        poolStatusPill.textContent = `+₹${Math.round(poolDiff).toLocaleString('en-IN')}`;
+      } else {
+        poolBanner.className = 'pool-status-banner banner-deficit';
+        poolStatusText.textContent = `Pool Deficit (extra spent beyond advance):`;
+        poolStatusPill.textContent = `-₹${Math.round(Math.abs(poolDiff)).toLocaleString('en-IN')}`;
+      }
+
+      // 6. Member Settlements & Balance
+      const settlementData = [];
+      tripData.members.forEach(member => {
+        const adv = tripData.advances[member] || 0;
+        const direct = memberDirectPaid[member] || 0;
+        const totalPaidByMember = adv + direct;
+        const netBalance = totalPaidByMember - perHeadShare;
+
+        settlementData.push({
+          name: member,
+          advance: adv,
+          direct: direct,
+          totalPaid: totalPaidByMember,
+          share: perHeadShare,
+          netBalance: netBalance
+        });
+      });
+
+      renderSettlementTable(settlementData);
+      computeDirectTransfers(settlementData);
+      generateWhatsAppSummaryText(grandTotal, perHeadShare, totalAdvance, settlementData);
+    }
+
+    function renderSettlementTable(data) {
+      const tbody = document.getElementById('settlementTableBody');
+      tbody.innerHTML = '';
+
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        const netRounded = Math.round(item.netBalance);
+
+        let pillHtml = '';
+        if (netRounded > 0) {
+          pillHtml = `<span class="net-pill net-get-back"><i class="fas fa-arrow-down"></i> Gets ₹${Math.abs(netRounded).toLocaleString('en-IN')}</span>`;
+        } else if (netRounded < 0) {
+          pillHtml = `<span class="net-pill net-needs-to-pay"><i class="fas fa-arrow-up"></i> Pays ₹${Math.abs(netRounded).toLocaleString('en-IN')}</span>`;
+        } else {
+          pillHtml = `<span class="net-pill net-settled"><i class="fas fa-check"></i> Settled</span>`;
+        }
+
+        tr.innerHTML = `
+          <td><strong>${item.name}</strong></td>
+          <td>₹${Math.round(item.advance).toLocaleString('en-IN')}</td>
+          <td>₹${Math.round(item.direct).toLocaleString('en-IN')}</td>
+          <td style="font-weight: 700;">₹${Math.round(item.totalPaid).toLocaleString('en-IN')}</td>
+          <td style="color: var(--text-muted);">₹${Math.round(item.share).toLocaleString('en-IN')}</td>
+          <td>${pillHtml}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Minimum Cash-Flow Debt Simplification Algorithm
+    function computeDirectTransfers(settlementData) {
+      const container = document.getElementById('directTransferList');
+      container.innerHTML = '';
+
+      // Separate into debtors (need to pay) and creditors (get back)
+      let debtors = [];
+      let creditors = [];
+
+      settlementData.forEach(p => {
+        const net = Math.round(p.netBalance);
+        if (net < -1) {
+          debtors.push({ name: p.name, amount: Math.abs(net) });
+        } else if (net > 1) {
+          creditors.push({ name: p.name, amount: net });
+        }
+      });
+
+      debtors.sort((a, b) => b.amount - a.amount);
+      creditors.sort((a, b) => b.amount - a.amount);
+
+      if (debtors.length === 0 && creditors.length === 0) {
+        container.innerHTML = '<div style="color: #047857; font-size: 0.85rem;"><i class="fas fa-check-circle"></i> All members are completely settled! No transfers needed.</div>';
+        return;
+      }
+
+      let transfers = [];
+      let i = 0, j = 0;
+
+      while (i < debtors.length && j < creditors.length) {
+        const settleAmt = Math.min(debtors[i].amount, creditors[j].amount);
+        if (settleAmt > 0) {
+          transfers.push({
+            from: debtors[i].name,
+            to: creditors[j].name,
+            amount: settleAmt
+          });
+        }
+
+        debtors[i].amount -= settleAmt;
+        creditors[j].amount -= settleAmt;
+
+        if (debtors[i].amount === 0) i++;
+        if (creditors[j].amount === 0) j++;
+      }
+
+      transfers.forEach(t => {
+        const item = document.createElement('div');
+        item.className = 'transfer-item';
+        item.innerHTML = `
+          <span>👉 <strong>${t.from}</strong> transfers to <strong>${t.to}</strong></span>
+          <span class="transfer-amount">₹${t.amount.toLocaleString('en-IN')}</span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // ==========================================
+    // WHATSAPP TEXT GENERATION & COPY
+    // ==========================================
+    function generateWhatsAppSummaryText(grandTotal, perHeadShare, totalAdvance, settlementData) {
+      let msg = `🚗 *TRIP EXPENSE SUMMARY: ${tripData.tripName.toUpperCase()}* 🚗\n`;
+      msg += `👥 Travelers (${tripData.members.length}): ${tripData.members.join(', ')}\n\n`;
+
+      msg += `💰 *EXPENSES BREAKDOWN*:\n`;
+      if (tripData.categories.fuel > 0) msg += `• ⛽ Fuel: ₹${tripData.categories.fuel.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.hotel > 0) msg += `• 🏨 Hotel/Stay: ₹${tripData.categories.hotel.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.food > 0) msg += `• 🍽️ Food & Dining: ₹${tripData.categories.food.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.tolls > 0) msg += `• 🛣️ Tolls & Cabs: ₹${tripData.categories.tolls.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.activities > 0) msg += `• 🎟️ Sightseeing: ₹${tripData.categories.activities.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.misc > 0) msg += `• 🛍️ Misc: ₹${tripData.categories.misc.toLocaleString('en-IN')}\n`;
+
+      if (tripData.customExpenses && tripData.customExpenses.length > 0) {
+        tripData.customExpenses.forEach(e => {
+          msg += `• 📌 ${e.desc}: ₹${e.amount.toLocaleString('en-IN')} (${e.paidBy === 'pool' ? 'Pool' : e.paidBy})\n`;
+        });
+      }
+
+      msg += `---------------------------------\n`;
+      msg += `💵 *Total Trip Expense*: ₹${Math.round(grandTotal).toLocaleString('en-IN')}\n`;
+      msg += `📊 *Per Head Share*: ₹${Math.round(perHeadShare).toLocaleString('en-IN')} / person\n`;
+      msg += `🏦 *Advance Collected*: ₹${Math.round(totalAdvance).toLocaleString('en-IN')}\n`;
+      msg += `---------------------------------\n\n`;
+
+      msg += `💳 *MEMBER SETTLEMENT*:\n`;
+      settlementData.forEach(p => {
+        const net = Math.round(p.netBalance);
+        if (net > 0) {
+          msg += `• 🟢 *${p.name}*: Paid ₹${Math.round(p.totalPaid).toLocaleString('en-IN')} ➔ *Gets Back ₹${Math.abs(net).toLocaleString('en-IN')}*\n`;
+        } else if (net < 0) {
+          msg += `• 🔴 *${p.name}*: Paid ₹${Math.round(p.totalPaid).toLocaleString('en-IN')} ➔ *Needs to Pay ₹${Math.abs(net).toLocaleString('en-IN')}*\n`;
+        } else {
+          msg += `• ⚪ *${p.name}*: Paid ₹${Math.round(p.totalPaid).toLocaleString('en-IN')} ➔ *Settled ₹0*\n`;
+        }
+      });
+
+      msg += `\n📲 Settle via UPI / PhonePe: 9620447444@upi\n`;
+      msg += `🌐 View Full Trip Tracker: https://hussainproit.github.io/trip.html\n`;
+      msg += `👨‍💻 Developed by Md Hussain`;
+
+      document.getElementById('whatsappSummaryText').textContent = msg;
+    }
+
+    function copyWhatsAppText() {
+      const text = document.getElementById('whatsappSummaryText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnCopyTxt');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#059669';
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--text-muted)';
+        }, 2000);
+        showToast('Trip summary text copied for WhatsApp!');
+      });
+    }
+
+    // ==========================================
+    // IMAGE GENERATION & SHARING
+    // ==========================================
+    async function captureTripToBlob() {
+      const el = document.getElementById('tripCaptureSection');
+      if (typeof html2canvas !== 'function') {
+        throw new Error('Screenshot library is loading, please try again.');
+      }
+
+      const canvas = await html2canvas(el, {
+        scale: 2.5,
+        useCORS: true,
+        backgroundColor: '#f1f5f9',
+        logging: false,
+        scrollX: 0,
+        scrollY: 0
+      });
+
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), 'image/png');
+      });
+    }
+
+    async function shareTripAsImage() {
+      const btn = document.getElementById('btnShareWhatsApp');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing Image...';
+
+      try {
+        const blob = await captureTripToBlob();
+        const file = new File([blob], `${tripData.tripName.toLowerCase().replace(/\\s+/g, '-')}-expenses.png`, { type: 'image/png' });
+
+        // Mobile Web Share API
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: `Trip Expenses: ${tripData.tripName}`,
+            text: `🚗 Trip Expense Breakdown & Settlement for ${tripData.tripName}!`
+          });
+          btn.innerHTML = orig;
+          return;
+        }
+
+        // Desktop Fallback
+        await copyTripAsImage(false);
+        showToast('Image copied to clipboard! Paste (Ctrl+V) in WhatsApp.');
+        window.open('https://web.whatsapp.com', '_blank');
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error(err);
+          downloadTripAsImage();
+          showToast('Image downloaded! Share via WhatsApp.');
+        }
+      } finally {
+        btn.innerHTML = orig;
+      }
+    }
+
+    async function copyTripAsImage(showToastMsg = true) {
+      const btn = document.getElementById('btnCopyImg');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying...';
+
+      try {
+        const blob = await captureTripToBlob();
+        if (navigator.clipboard && navigator.clipboard.write) {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          btn.style.background = '#059669';
+          btn.style.color = '#ffffff';
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--text-muted)';
+          }, 2000);
+          if (showToastMsg) showToast('Trip image copied! Paste (Ctrl+V) in WhatsApp.');
+          return;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      downloadTripAsImage();
+    }
+
+    function downloadTripAsImage() {
+      captureTripToBlob().then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${tripData.tripName.toLowerCase().replace(/\\s+/g, '-')}-expenses.png`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('Image saved to downloads!');
+      });
+    }
+
+    function copyPaymentUPI(val, btn) {
+      navigator.clipboard.writeText(val).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = '#10b981';
+        btn.style.color = '#ffffff';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = '#eff6ff';
+          btn.style.color = '#1d4ed8';
+        }, 2000);
+        showToast(`Copied ${val}`);
+      });
+    }
+
+    // Initialize UI on page load
+    hydrateUI();
+    recalculateAll();
+  </script>
+</body>
+</html>
