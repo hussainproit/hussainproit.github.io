@@ -197,17 +197,23 @@
     }
 
     /* Category Grid */
-    /* Category Grid: Responsive 2-3 columns */
+    /* Category Grid: Responsive 2 columns on mobile, 3+ on tablet/desktop */
     .category-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 680px) {
+      .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
     }
     .category-item {
       background: #f8fafc;
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 10px;
+      padding: 8px 10px;
       transition: border-color 0.2s;
       display: flex;
       flex-direction: column;
@@ -217,23 +223,20 @@
       border-color: var(--primary);
       background: #fff;
     }
-    .category-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
     .category-label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .category-paidby-select {
-      font-size: 0.72rem;
-      padding: 2px 6px;
+      font-size: 0.7rem;
+      padding: 4px 6px;
       border-radius: 6px;
       border: 1px solid var(--border-color);
       background: #ffffff;
@@ -241,6 +244,7 @@
       color: #2563eb;
       outline: none;
       cursor: pointer;
+      width: 100%;
     }
     .category-input-wrap {
       position: relative;
@@ -256,7 +260,7 @@
     }
     .category-input-wrap input {
       width: 100%;
-      padding: 8px 8px 8px 24px;
+      padding: 6px 6px 6px 22px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.92rem;
@@ -281,44 +285,39 @@
       }
     }
 
-    /* Advance List: 2-column compact grid */
+    /* Advance List: Compact vertical list of single horizontal rows */
     .advance-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
       margin-top: 10px;
-    }
-    @media (max-width: 500px) {
-      .advance-grid {
-        grid-template-columns: 1fr;
-      }
     }
     .advance-card-item {
       background: #f8fafc;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 8px 10px;
+      padding: 7px 10px;
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
       transition: all 0.2s;
     }
     .advance-card-item:focus-within {
       border-color: var(--primary);
       background: #ffffff;
     }
-    .advance-item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-    }
     .advance-name {
       font-weight: 700;
+      font-size: 0.84rem;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       color: var(--text-main);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .advance-item-controls {
       display: flex;
@@ -327,7 +326,8 @@
     }
     .advance-input-box {
       position: relative;
-      flex: 1;
+      width: 82px;
+      flex: none;
     }
     .advance-input-box span {
       position: absolute;
@@ -340,10 +340,10 @@
     }
     .advance-input-box input {
       width: 100%;
-      padding: 6px 6px 6px 18px;
+      padding: 5px 6px 5px 16px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
       text-align: right;
       outline: none;
@@ -354,7 +354,7 @@
     }
     .advance-paidto-select {
       font-size: 0.72rem;
-      padding: 5px 6px;
+      padding: 5px 5px;
       border-radius: 6px;
       border: 1px solid var(--border-color);
       background: #ffffff;
@@ -363,6 +363,86 @@
       color: #1e293b;
       cursor: pointer;
       max-width: 90px;
+    }
+
+    /* Settlement Table Mobile Optimization */
+    .col-hide-mobile {
+      display: table-cell;
+    }
+    @media (max-width: 480px) {
+      .col-hide-mobile {
+        display: none !important;
+      }
+      .settlement-table th {
+        padding: 6px 3px;
+        font-size: 0.65rem;
+      }
+      .settlement-table td {
+        padding: 8px 3px;
+        font-size: 0.76rem;
+      }
+      .net-pill {
+        font-size: 0.68rem;
+        padding: 2px 6px;
+        gap: 2px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 8px 6px;
+        padding-bottom: 50px;
+      }
+      .container {
+        gap: 10px;
+      }
+      .card {
+        padding: 12px 10px;
+        border-radius: 12px;
+      }
+      .capture-container {
+        padding: 6px;
+        gap: 10px;
+        border-radius: 14px;
+      }
+      .header-title h1 {
+        font-size: 1.25rem;
+      }
+      .split-columns-grid {
+        gap: 10px;
+      }
+      .stats-hero-grid {
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .stat-hero-card {
+        padding: 10px 8px;
+      }
+      .stat-hero-val {
+        font-size: 1.2rem;
+      }
+      .admin-card {
+        padding: 10px;
+      }
+      .admin-edit-row {
+        grid-template-columns: 1fr;
+      }
+      .transfer-box {
+        padding: 10px 8px;
+      }
+      .category-grid {
+        gap: 6px;
+      }
+      .category-item {
+        padding: 6px 8px;
+      }
+      .category-label {
+        font-size: 0.74rem;
+      }
+      /* Prevent iOS Safari auto-zoom on main input focus */
+      #tripName, #memberNames, #newExpDesc, #newExpAmt, .admin-edit-row input {
+        font-size: 16px !important;
+      }
     }
 
     /* Buttons */
@@ -846,74 +926,62 @@
         <div class="category-grid" id="categoryGridContainer">
           <!-- Fuel -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-gas-pump" style="color: #ef4444;"></i> Fuel / Petrol</div>
-              <select class="category-paidby-select" id="paidBy_fuel" onchange="updateCategoryPaidBy('fuel', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-gas-pump" style="color: #ef4444;"></i> Fuel / Petrol</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expFuel" value="3500" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_fuel" onchange="updateCategoryPaidBy('fuel', this.value)" title="Paid by Admin/Member"></select>
           </div>
 
           <!-- Hotel / Stay -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-hotel" style="color: #3b82f6;"></i> Hotel / Stay</div>
-              <select class="category-paidby-select" id="paidBy_hotel" onchange="updateCategoryPaidBy('hotel', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-hotel" style="color: #3b82f6;"></i> Hotel / Stay</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expHotel" value="6000" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_hotel" onchange="updateCategoryPaidBy('hotel', this.value)" title="Paid by Admin/Member"></select>
           </div>
 
           <!-- Food & Eating -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-utensils" style="color: #f59e0b;"></i> Food & Drinks</div>
-              <select class="category-paidby-select" id="paidBy_food" onchange="updateCategoryPaidBy('food', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-utensils" style="color: #f59e0b;"></i> Food & Drinks</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expFood" value="4200" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_food" onchange="updateCategoryPaidBy('food', this.value)" title="Paid by Admin/Member"></select>
           </div>
 
           <!-- Tolls & Cabs -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-road" style="color: #64748b;"></i> Tolls & Parking</div>
-              <select class="category-paidby-select" id="paidBy_tolls" onchange="updateCategoryPaidBy('tolls', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-road" style="color: #64748b;"></i> Tolls & Parking</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expTolls" value="650" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_tolls" onchange="updateCategoryPaidBy('tolls', this.value)" title="Paid by Admin/Member"></select>
           </div>
 
           <!-- Activities & Tickets -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-ticket-alt" style="color: #8b5cf6;"></i> Sightseeing</div>
-              <select class="category-paidby-select" id="paidBy_activities" onchange="updateCategoryPaidBy('activities', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-ticket-alt" style="color: #8b5cf6;"></i> Sightseeing</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expActivities" value="1200" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_activities" onchange="updateCategoryPaidBy('activities', this.value)" title="Paid by Admin/Member"></select>
           </div>
 
           <!-- Other / Misc -->
           <div class="category-item">
-            <div class="category-top-row">
-              <div class="category-label"><i class="fas fa-shopping-bag" style="color: #10b981;"></i> Misc / Others</div>
-              <select class="category-paidby-select" id="paidBy_misc" onchange="updateCategoryPaidBy('misc', this.value)" title="Paid by Admin/Member"></select>
-            </div>
+            <div class="category-label"><i class="fas fa-shopping-bag" style="color: #10b981;"></i> Misc / Others</div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expMisc" value="450" min="0" oninput="recalculateAll()">
             </div>
+            <select class="category-paidby-select" id="paidBy_misc" onchange="updateCategoryPaidBy('misc', this.value)" title="Paid by Admin/Member"></select>
           </div>
         </div>
 
@@ -1026,10 +1094,10 @@
               <thead>
                 <tr>
                   <th>Member</th>
-                  <th>Advance</th>
-                  <th>Total Paid</th>
-                  <th>Fair Share</th>
-                  <th>Net Balance</th>
+                  <th class="col-hide-mobile">Advance</th>
+                  <th>Paid</th>
+                  <th>Share</th>
+                  <th>Net</th>
                 </tr>
               </thead>
               <tbody id="settlementTableBody">
@@ -1551,14 +1619,9 @@
         const card = document.createElement('div');
         card.className = 'advance-card-item';
         card.innerHTML = `
-          <div class="advance-item-top">
-            <span class="advance-name">
-              <i class="fas fa-user-circle" style="color: var(--primary);"></i>
-              <strong>${member}</strong>
-            </span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">
-              Paid: <strong style="color: var(--primary);">₹${amt.toLocaleString('en-IN')}</strong>
-            </span>
+          <div class="advance-name">
+            <i class="fas fa-user-circle" style="color: var(--primary); font-size: 0.95rem;"></i>
+            <span>${member}</span>
           </div>
           <div class="advance-item-controls">
             <div class="advance-input-box">
@@ -1960,7 +2023,7 @@
 
         tr.innerHTML = `
           <td><strong>${item.name}</strong></td>
-          <td>₹${Math.round(item.advance).toLocaleString('en-IN')}</td>
+          <td class="col-hide-mobile">₹${Math.round(item.advance).toLocaleString('en-IN')}</td>
           <td style="font-weight: 700;">₹${Math.round(item.totalPaid).toLocaleString('en-IN')}</td>
           <td style="color: var(--text-muted);">₹${Math.round(item.share).toLocaleString('en-IN')}</td>
           <td>${pillHtml}</td>
