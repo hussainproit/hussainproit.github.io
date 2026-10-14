@@ -43,7 +43,7 @@
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 980px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -197,10 +197,11 @@
     }
 
     /* Category Grid */
+    /* Category Grid: Responsive 2-3 columns */
     .category-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
     }
     .category-item {
       background: #f8fafc;
@@ -208,10 +209,19 @@
       border-radius: 10px;
       padding: 10px;
       transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .category-item:focus-within {
       border-color: var(--primary);
       background: #fff;
+    }
+    .category-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
     }
     .category-label {
       font-size: 0.8rem;
@@ -220,7 +230,17 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+    }
+    .category-paidby-select {
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      font-weight: 700;
+      color: #2563eb;
+      outline: none;
+      cursor: pointer;
     }
     .category-input-wrap {
       position: relative;
@@ -248,52 +268,101 @@
       border-color: var(--primary);
     }
 
-    /* Advance List Rows */
-    .advance-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    /* 2-Column Split Grid for Advance Pool & Settlement */
+    .split-columns-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .split-columns-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+    }
+
+    /* Advance List: 2-column compact grid */
+    .advance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-top: 10px;
     }
-    .advance-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+    @media (max-width: 500px) {
+      .advance-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .advance-card-item {
       background: #f8fafc;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 8px 12px;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .advance-card-item:focus-within {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+    .advance-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
     }
     .advance-name {
       font-weight: 700;
-      font-size: 0.88rem;
       display: flex;
       align-items: center;
+      gap: 5px;
+      color: var(--text-main);
+    }
+    .advance-item-controls {
+      display: flex;
       gap: 6px;
-      flex: 1;
+      align-items: center;
     }
     .advance-input-box {
-      width: 120px;
       position: relative;
+      flex: 1;
     }
     .advance-input-box span {
       position: absolute;
-      left: 8px;
+      left: 6px;
       top: 50%;
       transform: translateY(-50%);
       font-weight: 700;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     .advance-input-box input {
       width: 100%;
-      padding: 7px 8px 7px 22px;
+      padding: 6px 6px 6px 18px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       text-align: right;
+      outline: none;
+      background: #ffffff;
+    }
+    .advance-input-box input:focus {
+      border-color: var(--primary);
+    }
+    .advance-paidto-select {
+      font-size: 0.72rem;
+      padding: 5px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      outline: none;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      max-width: 90px;
     }
 
     /* Buttons */
@@ -536,42 +605,128 @@
       line-height: 1.45;
     }
 
-    /* Payment Box */
-    .payment-box {
-      background: #fffbeb;
+    /* Admins Grid & Card Styles */
+    .admins-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .admin-card {
+      background: #ffffff;
       border: 1px solid #fde68a;
-      text-align: center;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
     }
-    .payment-box h3 {
-      color: #d97706;
-      font-size: 1rem;
-      margin-bottom: 12px;
-    }
-    .upi-details {
-      background: white;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      margin-bottom: 10px;
+    .admin-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px dashed #d97706;
-      font-size: 0.9rem;
+      border-bottom: 1px solid #fef3c7;
+      padding-bottom: 8px;
     }
-    .qr-container {
-      margin-top: 12px;
+    .admin-name-tag {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #b45309;
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 6px;
     }
-    .qr-container img {
-      max-width: 140px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    .admin-role-badge {
+      font-size: 0.7rem;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 7px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    .admin-edit-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .admin-edit-row input {
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      outline: none;
+      background: #f8fafc;
+      font-weight: 600;
+    }
+    .admin-edit-row input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+    .admin-qr-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fffbeb;
+      border: 1px dashed #fde68a;
+      border-radius: 8px;
+      padding: 8px 12px;
+      gap: 10px;
+    }
+    .admin-qr-wrap img {
+      width: 72px;
+      height: 72px;
+      border-radius: 6px;
       background: white;
-      padding: 6px;
+      padding: 3px;
+      border: 1px solid #fef3c7;
+    }
+
+    /* Admin Cash Balance Ledger Box */
+    .admin-ledger-banner {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .admin-ledger-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .admin-ledger-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .admin-ledger-item {
+      background: #ffffff;
+      border: 1px solid #fef3c7;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .admin-rebalance-alert {
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: #eff6ff;
+      border: 1px dashed #93c5fd;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Watermark for captured image */
@@ -681,44 +836,20 @@
         </div>
       </div>
 
-      <!-- 2. Advance / Pool Money Collection Card -->
-      <div class="card">
-        <div class="card-title">
-          <div class="card-title-left"><i class="fas fa-wallet"></i> Advance Pool Money</div>
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn-outline" onclick="setEqualAdvancePrompt()" style="font-size: 0.75rem; padding: 4px 8px;">
-              <i class="fas fa-magic"></i> Set Equal
-            </button>
-            <button class="btn btn-primary" id="btnSubmitSync" onclick="submitAndShareTrip()" style="font-size: 0.75rem; padding: 5px 12px; width: auto; box-shadow: none;">
-              <i class="fas fa-cloud-upload-alt"></i> Submit to Cloud
-            </button>
-          </div>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-          Track advance payments or transfers collected into the trip pool.
-        </p>
-
-        <div class="advance-list" id="advanceListContainer">
-          <!-- Populated by JS based on members -->
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 0.88rem; font-weight: 700;">
-          <span>Total Advance Collected:</span>
-          <span style="color: var(--primary); font-size: 1.05rem;" id="totalAdvanceDisplay">₹4,000</span>
-        </div>
-      </div>
-
-      <!-- 3. Trip Expenses (Category Inputs) -->
+      <!-- 2. Trip Expenses (Category Inputs) - Moved directly after Trip Details -->
       <div class="card">
         <div class="card-title">
           <div class="card-title-left"><i class="fas fa-receipt"></i> Trip Expenses</div>
           <span style="font-size: 0.8rem; color: var(--text-muted);" id="expensesCountDisplay">6 Categories</span>
         </div>
 
-        <div class="category-grid">
+        <div class="category-grid" id="categoryGridContainer">
           <!-- Fuel -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-gas-pump" style="color: #ef4444;"></i> Fuel / Petrol</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-gas-pump" style="color: #ef4444;"></i> Fuel / Petrol</div>
+              <select class="category-paidby-select" id="paidBy_fuel" onchange="updateCategoryPaidBy('fuel', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expFuel" value="3500" min="0" oninput="recalculateAll()">
@@ -727,7 +858,10 @@
 
           <!-- Hotel / Stay -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-hotel" style="color: #3b82f6;"></i> Hotel / Stay</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-hotel" style="color: #3b82f6;"></i> Hotel / Stay</div>
+              <select class="category-paidby-select" id="paidBy_hotel" onchange="updateCategoryPaidBy('hotel', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expHotel" value="6000" min="0" oninput="recalculateAll()">
@@ -736,7 +870,10 @@
 
           <!-- Food & Eating -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-utensils" style="color: #f59e0b;"></i> Food & Drinks</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-utensils" style="color: #f59e0b;"></i> Food & Drinks</div>
+              <select class="category-paidby-select" id="paidBy_food" onchange="updateCategoryPaidBy('food', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expFood" value="4200" min="0" oninput="recalculateAll()">
@@ -745,7 +882,10 @@
 
           <!-- Tolls & Cabs -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-road" style="color: #64748b;"></i> Tolls & Parking</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-road" style="color: #64748b;"></i> Tolls & Parking</div>
+              <select class="category-paidby-select" id="paidBy_tolls" onchange="updateCategoryPaidBy('tolls', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expTolls" value="650" min="0" oninput="recalculateAll()">
@@ -754,7 +894,10 @@
 
           <!-- Activities & Tickets -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-ticket-alt" style="color: #8b5cf6;"></i> Sightseeing</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-ticket-alt" style="color: #8b5cf6;"></i> Sightseeing</div>
+              <select class="category-paidby-select" id="paidBy_activities" onchange="updateCategoryPaidBy('activities', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expActivities" value="1200" min="0" oninput="recalculateAll()">
@@ -763,7 +906,10 @@
 
           <!-- Other / Misc -->
           <div class="category-item">
-            <div class="category-label"><i class="fas fa-shopping-bag" style="color: #10b981;"></i> Misc / Others</div>
+            <div class="category-top-row">
+              <div class="category-label"><i class="fas fa-shopping-bag" style="color: #10b981;"></i> Misc / Others</div>
+              <select class="category-paidby-select" id="paidBy_misc" onchange="updateCategoryPaidBy('misc', this.value)" title="Paid by Admin/Member"></select>
+            </div>
             <div class="category-input-wrap">
               <span>₹</span>
               <input type="number" id="expMisc" value="450" min="0" oninput="recalculateAll()">
@@ -772,7 +918,7 @@
         </div>
 
         <!-- Additional Itemized Expense Toggle -->
-        <div style="margin-top: 14px;">
+        <div style="margin-top: 12px;">
           <button class="btn-outline" onclick="toggleCustomExpenses()" id="btnCustomExpToggle" style="width: 100%; text-align: center;">
             <i class="fas fa-plus-circle"></i> + Add Individual Extra Expense
           </button>
@@ -808,7 +954,7 @@
         </div>
       </div>
 
-      <!-- 4. Grand Total & Per Head Share Highlights -->
+      <!-- 3. Grand Total & Per Head Share Highlights -->
       <div class="card" style="padding: 16px;">
         <div class="stats-hero-grid">
           <div class="stat-hero-card highlight-card">
@@ -816,7 +962,7 @@
             <div class="stat-hero-lbl">Total Trip Expense</div>
           </div>
           <div class="stat-hero-card">
-            <div class="stat-hero-val" style="color: var(--primary);" id="perHeadDisplay">₹4,000</div>
+            <div class="stat-hero-val" style="color: var(--primary);" id="perHeadDisplay">₹2,286</div>
             <div class="stat-hero-lbl">Per Head Contribution</div>
           </div>
         </div>
@@ -828,39 +974,104 @@
         </div>
       </div>
 
-      <!-- 5. Member Settlement Table -->
-      <div class="card" style="margin: 0;">
-        <div class="card-title">
-          <div class="card-title-left"><i class="fas fa-balance-scale"></i> Member Settlement</div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal;">(Net Balance)</span>
+      <!-- 4. 2-COLUMN SPLIT GRID: Advance Pool (Left) & Member Settlement (Right) -->
+      <div class="split-columns-grid">
+
+        <!-- Column 1: Advance / Pool Money Collection Card -->
+        <div class="card" style="margin: 0;">
+          <div class="card-title">
+            <div class="card-title-left"><i class="fas fa-wallet"></i> Advance Pool Money</div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button class="btn-outline" onclick="setEqualAdvancePrompt()" style="font-size: 0.72rem; padding: 4px 7px;">
+                <i class="fas fa-magic"></i> Set Equal
+              </button>
+              <button class="btn btn-primary" id="btnSubmitSync" onclick="submitAndShareTrip()" style="font-size: 0.72rem; padding: 5px 10px; width: auto; box-shadow: none;">
+                <i class="fas fa-cloud-upload-alt"></i> Submit
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+              Track advance payments collected.
+            </p>
+            <button class="btn-outline" onclick="setAllAdvancesToFirstAdmin()" style="font-size: 0.7rem; padding: 2px 6px; color: var(--primary);" title="Set all paid to first admin">
+              All to <span id="lblPrimaryAdmin">Ismail</span>
+            </button>
+          </div>
+
+          <div class="advance-grid" id="advanceListContainer">
+            <!-- 2-column grid populated by JS based on members -->
+          </div>
+
+          <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700;">
+              <span>Total Advance Collected:</span>
+              <span style="color: var(--primary); font-size: 1.05rem;" id="totalAdvanceDisplay">₹8,000</span>
+            </div>
+            <div id="advanceAdminSubtotals" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px;">
+              <!-- Admin breakdown -->
+            </div>
+          </div>
         </div>
 
-        <div class="table-container">
-          <table class="settlement-table">
-            <thead>
-              <tr>
-                <th>Member</th>
-                <th>Advance</th>
-                <th>Paid Direct</th>
-                <th>Total Paid</th>
-                <th>Fair Share</th>
-                <th>Net Balance</th>
-              </tr>
-            </thead>
-            <tbody id="settlementTableBody">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
+        <!-- Column 2: Member Settlement Table -->
+        <div class="card" style="margin: 0;">
+          <div class="card-title">
+            <div class="card-title-left"><i class="fas fa-balance-scale"></i> Member Settlement</div>
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal;">(Net Balance)</span>
+          </div>
+
+          <div class="table-container">
+            <table class="settlement-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Advance</th>
+                  <th>Total Paid</th>
+                  <th>Fair Share</th>
+                  <th>Net Balance</th>
+                </tr>
+              </thead>
+              <tbody id="settlementTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Smart Direct Settlement Plan -->
+          <div class="transfer-box" id="directTransferBox">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <i class="fas fa-exchange-alt" style="color: var(--primary);"></i> Direct Settlement Transfers:
+            </div>
+            <div id="directTransferList">
+              <!-- Calculated via JS -->
+            </div>
+          </div>
         </div>
 
-        <!-- Smart Direct Settlement Plan -->
-        <div class="transfer-box" id="directTransferBox">
-          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <i class="fas fa-exchange-alt" style="color: var(--primary);"></i> Direct Settlement Transfers:
-          </div>
-          <div id="directTransferList">
-            <!-- Calculated via JS -->
-          </div>
+      </div>
+      <!-- END 2-COLUMN SPLIT GRID -->
+
+      <!-- 5. Trip Admins & Fund Accounts Card -->
+      <div class="card" style="text-align: left; padding: 16px; background: #fffcf2; border: 1px solid #fed7aa;">
+        <div class="card-title" style="color: #b45309; margin-bottom: 6px;">
+          <div class="card-title-left"><i class="fas fa-user-shield"></i> Trip Admins & Fund Accounts</div>
+          <button class="btn-outline" onclick="promptAddAdmin()" id="btnAddAdminBtn" style="font-size: 0.72rem; padding: 3px 8px; border-color: #fde68a; color: #b45309;">
+            <i class="fas fa-plus"></i> Add Admin
+          </button>
+        </div>
+        <p style="font-size: 0.78rem; color: #78716c; margin-bottom: 12px;">
+          Trip organizers managing hotel booking, fuel and expenses.
+        </p>
+
+        <!-- Admin Cash-in-Hand Balance Box (solves: who is holding how much) -->
+        <div class="admin-ledger-banner" id="adminCashLedger">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Admin UPI & QR Cards -->
+        <div class="admins-grid" id="adminsListContainer">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
@@ -891,39 +1102,6 @@
       </div>
     </div>
 
-    <!-- WhatsApp Text Preview (Collapsible / Readable) -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-left"><i class="fas fa-file-alt"></i> WhatsApp Message Summary</div>
-      </div>
-      <div class="result-box" id="whatsappSummaryText"></div>
-    </div>
-
-    <!-- Settlement Payment Details (PhonePe / UPI) -->
-    <div class="card payment-box">
-      <h3><i class="fas fa-qrcode"></i> Settlement Payment Options</h3>
-      
-      <div class="upi-details">
-        <span><i class="fas fa-mobile-alt"></i> PhonePe: <strong style="color: var(--primary);">9620447444</strong></span>
-        <button class="btn-copy-chip" onclick="copyPaymentUPI('9620447444', this)">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-      </div>
-      
-      <div class="upi-details">
-        <span><i class="fas fa-university"></i> UPI ID: <strong style="color: var(--primary);">9620447444@upi</strong></span>
-        <button class="btn-copy-chip" onclick="copyPaymentUPI('9620447444@upi', this)">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-      </div>
-
-      <div class="qr-container">
-        <p style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Scan to settle payment</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi%3A%2F%2Fpay%3Fpa%3D9620447444%40upi%26pn%3DMd%20Hussain%26cu%3DINR" 
-             alt="PhonePe / UPI QR Code">
-      </div>
-    </div>
-
     <!-- Reset / Clear Trip -->
     <div style="text-align: center; margin-top: 4px;">
       <button class="btn-outline" onclick="resetTripToDefault()" style="font-size: 0.78rem; color: #94a3b8;">
@@ -943,21 +1121,35 @@
     // ==========================================
     // DATA MODEL & INITIALIZATION
     // ==========================================
-    const STORAGE_KEY = 'hussain_trip_tracker_v5';
+    const STORAGE_KEY = 'hussain_trip_tracker_v6';
     const CLOUD_OBJECT_ID = 'ff808181a09d98f701a13a3733f35e3e';
     const CLOUD_API_URL = 'https://api.restful-api.dev/objects/' + CLOUD_OBJECT_ID;
 
-    // Default Malanad Mist Trip Data (6 members, Hussain & Anees ₹2000 advance)
+    // Default Malanad Mist Trip Data (Admins: Ismail & Hussain, 7 members)
     const DEFAULT_DATA = {
       tripName: 'Malanad Mist',
-      members: ['Hussain', 'Ismu', 'Anees', 'Anshad', 'Ashiq', 'Sachu'],
+      members: ['Hussain', 'Ismu', 'Anees', 'Anshad', 'Ashiq', 'Sachu', 'Nishad'],
+      admins: [
+        { id: '1', name: 'Ismail', role: 'Hotel & Stay Booking', upi: 'ismail@upi', phone: '' },
+        { id: '2', name: 'Hussain', role: 'Fuel & Daily Expenses', upi: '9620447444@upi', phone: '9620447444' }
+      ],
       advances: {
         'Hussain': 2000,
-        'Ismu': 0,
+        'Ismu': 2000,
         'Anees': 2000,
         'Anshad': 0,
         'Ashiq': 0,
-        'Sachu': 0
+        'Sachu': 0,
+        'Nishad': 2000
+      },
+      advancePaidTo: {
+        'Hussain': 'Ismail',
+        'Ismu': 'Ismail',
+        'Anees': 'Ismail',
+        'Anshad': 'Ismail',
+        'Ashiq': 'Ismail',
+        'Sachu': 'Ismail',
+        'Nishad': 'Ismail'
       },
       categories: {
         fuel: 3500,
@@ -967,10 +1159,19 @@
         activities: 1200,
         misc: 450
       },
+      categoryPaidBy: {
+        fuel: 'Hussain',
+        hotel: 'Ismail',
+        food: 'Hussain',
+        tolls: 'Hussain',
+        activities: 'Hussain',
+        misc: 'Hussain'
+      },
       customExpenses: []
     };
 
     let tripData = loadTripData();
+    let currentWhatsAppSummary = '';
 
     function updateCloudBadge(status, text) {
       const badge = document.getElementById('cloudStatusBadge');
@@ -999,7 +1200,22 @@
         const payload = {
           name: 'Malanad Mist Master Trip Tracker',
           data: {
-            ...data,
+            tripName: data.tripName,
+            members: data.members,
+            advances: data.advances,
+            categories: data.categories,
+            customExpenses: data.customExpenses,
+            admin1Name: data.admins[0]?.name || 'Ismail',
+            admin1Upi: data.admins[0]?.upi || '',
+            admin1Role: data.admins[0]?.role || '',
+            admin2Name: data.admins[1]?.name || 'Hussain',
+            admin2Upi: data.admins[1]?.upi || '',
+            admin2Role: data.admins[1]?.role || '',
+            admin3Name: data.admins[2]?.name || '',
+            admin3Upi: data.admins[2]?.upi || '',
+            admin3Role: data.admins[2]?.role || '',
+            advancePaidToJson: JSON.stringify(data.advancePaidTo || {}),
+            categoryPaidByJson: JSON.stringify(data.categoryPaidBy || {}),
             updatedAt: Date.now()
           }
         };
@@ -1019,7 +1235,6 @@
     }
 
     async function fetchFromCloud() {
-      // If user came via an explicit shared hash link, respect the link data
       if (window.location.hash && window.location.hash.length > 5) {
         return;
       }
@@ -1029,11 +1244,41 @@
         if (res.ok) {
           const json = await res.json();
           if (json && json.data && Array.isArray(json.data.members) && json.data.members.length > 0) {
+            let loadedAdmins = [...DEFAULT_DATA.admins];
+            if (json.data.admin1Name) {
+              loadedAdmins[0] = { id: '1', name: json.data.admin1Name, upi: json.data.admin1Upi || 'ismail@upi', role: json.data.admin1Role || 'Hotel & Stay Booking', phone: '' };
+            }
+            if (json.data.admin2Name) {
+              loadedAdmins[1] = { id: '2', name: json.data.admin2Name, upi: json.data.admin2Upi || '9620447444@upi', role: json.data.admin2Role || 'Fuel & Daily Expenses', phone: '9620447444' };
+            }
+            if (json.data.admin3Name) {
+              loadedAdmins[2] = { id: '3', name: json.data.admin3Name, upi: json.data.admin3Upi || '', role: json.data.admin3Role || 'Trip Admin', phone: '' };
+            }
+
+            let loadedAdvancePaidTo = { ...DEFAULT_DATA.advancePaidTo };
+            if (json.data.advancePaidToJson) {
+              try { loadedAdvancePaidTo = JSON.parse(json.data.advancePaidToJson); } catch(e){}
+            }
+
+            let loadedCategoryPaidBy = { ...DEFAULT_DATA.categoryPaidBy };
+            if (json.data.categoryPaidByJson) {
+              try { loadedCategoryPaidBy = JSON.parse(json.data.categoryPaidByJson); } catch(e){}
+            }
+
+            // Clean advances: keep only active members
+            const cleanAdvances = {};
+            json.data.members.forEach(m => {
+              cleanAdvances[m] = json.data.advances?.[m] || 0;
+            });
+
             tripData = {
               tripName: json.data.tripName || 'Malanad Mist',
               members: json.data.members,
-              advances: json.data.advances || {},
+              admins: loadedAdmins,
+              advances: cleanAdvances,
+              advancePaidTo: loadedAdvancePaidTo,
               categories: json.data.categories || DEFAULT_DATA.categories,
+              categoryPaidBy: loadedCategoryPaidBy,
               customExpenses: json.data.customExpenses || []
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tripData));
@@ -1054,8 +1299,11 @@
         const compact = {
           t: data.tripName,
           m: data.members,
+          d: data.admins,
           a: data.advances,
+          p: data.advancePaidTo,
           c: data.categories,
+          b: data.categoryPaidBy,
           x: data.customExpenses
         };
         const str = JSON.stringify(compact);
@@ -1076,8 +1324,11 @@
           return {
             tripName: parsed.t || 'Malanad Mist',
             members: parsed.m,
+            admins: parsed.d || DEFAULT_DATA.admins,
             advances: parsed.a || {},
+            advancePaidTo: parsed.p || {},
             categories: parsed.c || DEFAULT_DATA.categories,
+            categoryPaidBy: parsed.b || DEFAULT_DATA.categoryPaidBy,
             customExpenses: parsed.x || []
           };
         }
@@ -1154,6 +1405,9 @@
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && Array.isArray(parsed.members) && parsed.members.length > 0) {
+            if (!parsed.admins || parsed.admins.length === 0) parsed.admins = DEFAULT_DATA.admins;
+            if (!parsed.advancePaidTo) parsed.advancePaidTo = DEFAULT_DATA.advancePaidTo;
+            if (!parsed.categoryPaidBy) parsed.categoryPaidBy = DEFAULT_DATA.categoryPaidBy;
             return parsed;
           }
         }
@@ -1186,6 +1440,7 @@
     function showToast(msg) {
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
       toastMsg.textContent = msg;
       toast.classList.add('show');
       setTimeout(() => {
@@ -1208,7 +1463,14 @@
       document.getElementById('expActivities').value = tripData.categories.activities || 0;
       document.getElementById('expMisc').value = tripData.categories.misc || 0;
 
+      // Update primary admin label
+      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+      const lbl = document.getElementById('lblPrimaryAdmin');
+      if (lbl) lbl.textContent = primaryAdmin;
+
+      renderCategoryPaidByOptions();
       renderAdvancesList();
+      renderAdminsList();
       updatePaidBySelectOptions();
       renderCustomExpensesList();
     }
@@ -1219,15 +1481,53 @@
       
       tripData.members = parsedMembers.length > 0 ? parsedMembers : ['Member 1'];
 
-      // Ensure advances object has entries for all members
+      // Ensure advances and advancePaidTo exist for all active members
+      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
       tripData.members.forEach(m => {
-        if (tripData.advances[m] === undefined) {
-          tripData.advances[m] = 0;
-        }
+        if (tripData.advances[m] === undefined) tripData.advances[m] = 0;
+        if (!tripData.advancePaidTo[m]) tripData.advancePaidTo[m] = primaryAdmin;
+      });
+
+      // Clean up deleted members from advances
+      Object.keys(tripData.advances).forEach(k => {
+        if (!tripData.members.includes(k)) delete tripData.advances[k];
       });
 
       renderAdvancesList();
       updatePaidBySelectOptions();
+      recalculateAll();
+    }
+
+    function renderCategoryPaidByOptions() {
+      const categories = ['fuel', 'hotel', 'food', 'tolls', 'activities', 'misc'];
+      categories.forEach(cat => {
+        const select = document.getElementById('paidBy_' + cat);
+        if (!select) return;
+        select.innerHTML = '';
+        tripData.admins.forEach(admin => {
+          const opt = document.createElement('option');
+          opt.value = admin.name;
+          opt.textContent = `Paid by: ${admin.name}`;
+          select.appendChild(opt);
+        });
+
+        // Add travelers as alternative payers if someone else paid
+        tripData.members.forEach(m => {
+          if (!tripData.admins.some(a => a.name === m)) {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = `Paid by: ${m}`;
+            select.appendChild(opt);
+          }
+        });
+
+        const currentVal = tripData.categoryPaidBy[cat] || (cat === 'hotel' ? tripData.admins[0]?.name : tripData.admins[1]?.name);
+        select.value = currentVal;
+      });
+    }
+
+    function updateCategoryPaidBy(cat, payer) {
+      tripData.categoryPaidBy[cat] = payer;
       recalculateAll();
     }
 
@@ -1237,29 +1537,63 @@
 
       document.getElementById('memberCountBadge').textContent = `${tripData.members.length} Member${tripData.members.length === 1 ? '' : 's'}`;
 
+      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+
       tripData.members.forEach((member) => {
         const amt = tripData.advances[member] || 0;
-        const row = document.createElement('div');
-        row.className = 'advance-row';
-        row.innerHTML = `
-          <div class="advance-name">
-            <i class="fas fa-user-circle" style="color: var(--primary);"></i>
-            <span>${member}</span>
+        const currentPaidTo = tripData.advancePaidTo[member] || primaryAdmin;
+
+        let optionsHtml = '';
+        tripData.admins.forEach(a => {
+          optionsHtml += `<option value="${a.name}" ${a.name === currentPaidTo ? 'selected' : ''}>To ${a.name}</option>`;
+        });
+
+        const card = document.createElement('div');
+        card.className = 'advance-card-item';
+        card.innerHTML = `
+          <div class="advance-item-top">
+            <span class="advance-name">
+              <i class="fas fa-user-circle" style="color: var(--primary);"></i>
+              <strong>${member}</strong>
+            </span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">
+              Paid: <strong style="color: var(--primary);">₹${amt.toLocaleString('en-IN')}</strong>
+            </span>
           </div>
-          <div class="advance-input-box">
-            <span>₹</span>
-            <input type="number" min="0" value="${amt}" 
-                   oninput="updateMemberAdvance('${member}', this.value)" 
-                   placeholder="0">
+          <div class="advance-item-controls">
+            <div class="advance-input-box">
+              <span>₹</span>
+              <input type="number" min="0" value="${amt}" 
+                     oninput="updateMemberAdvance('${member}', this.value)" 
+                     placeholder="0">
+            </div>
+            <select class="advance-paidto-select" onchange="updateAdvancePaidTo('${member}', this.value)" title="Transferred to Admin">
+              ${optionsHtml}
+            </select>
           </div>
         `;
-        container.appendChild(row);
+        container.appendChild(card);
       });
     }
 
     function updateMemberAdvance(member, val) {
       tripData.advances[member] = parseFloat(val) || 0;
       recalculateAll();
+    }
+
+    function updateAdvancePaidTo(member, adminName) {
+      tripData.advancePaidTo[member] = adminName;
+      recalculateAll();
+    }
+
+    function setAllAdvancesToFirstAdmin() {
+      const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+      tripData.members.forEach(m => {
+        tripData.advancePaidTo[m] = primaryAdmin;
+      });
+      renderAdvancesList();
+      recalculateAll();
+      showToast(`All member advances set as paid to ${primaryAdmin}`);
     }
 
     function setEqualAdvancePrompt() {
@@ -1275,14 +1609,138 @@
       }
     }
 
+    // ==========================================
+    // TRIP ADMINS MANAGEMENT & CARDS
+    // ==========================================
+    function renderAdminsList() {
+      const container = document.getElementById('adminsListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const addBtn = document.getElementById('btnAddAdminBtn');
+      if (addBtn) addBtn.style.display = tripData.admins.length >= 3 ? 'none' : 'inline-flex';
+
+      tripData.admins.forEach((admin, idx) => {
+        const card = document.createElement('div');
+        card.className = 'admin-card';
+
+        const upiVal = admin.upi || `${admin.name.toLowerCase().trim()}@upi`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=upi%3A%2F%2Fpay%3Fpa%3D${encodeURIComponent(upiVal)}%26pn%3D${encodeURIComponent(admin.name)}%26cu%3DINR`;
+
+        card.innerHTML = `
+          <div class="admin-card-header">
+            <span class="admin-name-tag">
+              <i class="fas fa-user-shield"></i> ${admin.name}
+            </span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span class="admin-role-badge">${admin.role || `Admin ${idx + 1}`}</span>
+              ${tripData.admins.length > 1 ? `
+                <button onclick="removeAdmin('${admin.id || idx}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.75rem;" title="Remove Admin">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              ` : ''}
+            </div>
+          </div>
+
+          <div class="admin-edit-row">
+            <div>
+              <label style="font-size: 0.7rem; font-weight:700; color: #78716c;">Admin Name</label>
+              <input type="text" value="${admin.name}" oninput="updateAdminField('${admin.id}', 'name', this.value)" placeholder="Admin Name">
+            </div>
+            <div>
+              <label style="font-size: 0.7rem; font-weight:700; color: #78716c;">Role / For</label>
+              <input type="text" value="${admin.role || ''}" oninput="updateAdminField('${admin.id}', 'role', this.value)" placeholder="e.g. Hotel Booking">
+            </div>
+          </div>
+
+          <div class="admin-qr-wrap">
+            <div style="flex: 1; display:flex; flex-direction:column; gap: 4px;">
+              <span style="font-size: 0.72rem; color: #92400e; font-weight: 700;"><i class="fas fa-university"></i> UPI ID:</span>
+              <input type="text" value="${upiVal}" oninput="updateAdminField('${admin.id}', 'upi', this.value)" 
+                     style="padding: 5px 8px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fed7aa; border-radius: 6px; background:#fff; color:#b45309;">
+              <div style="margin-top: 4px;">
+                <button class="btn-copy-chip" onclick="copyPaymentUPI('${upiVal}', this)" style="padding: 4px 8px; font-size: 0.72rem;">
+                  <i class="fas fa-copy"></i> Copy UPI
+                </button>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <img src="${qrUrl}" alt="${admin.name} QR Code" title="Scan to pay ${admin.name}">
+              <div style="font-size: 0.65rem; color: #78716c; margin-top: 2px;">Scan to Pay</div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function promptAddAdmin() {
+      if (tripData.admins.length >= 3) {
+        alert('Maximum 3 admins can be configured.');
+        return;
+      }
+      const name = prompt('Enter new Admin name (e.g. Anees):');
+      if (!name || !name.trim()) return;
+      const cleanName = name.trim();
+      const upi = prompt(`Enter UPI ID for ${cleanName} (e.g. ${cleanName.toLowerCase()}@upi):`, `${cleanName.toLowerCase()}@upi`);
+      const role = prompt(`Enter Role / Purpose for ${cleanName} (e.g. Food & Daily Expenses):`, 'Trip Organizer') || 'Trip Admin';
+
+      tripData.admins.push({
+        id: 'admin_' + Date.now(),
+        name: cleanName,
+        role: role.trim(),
+        upi: upi ? upi.trim() : `${cleanName.toLowerCase()}@upi`,
+        phone: ''
+      });
+
+      hydrateUI();
+      recalculateAll();
+      showToast(`Added admin ${cleanName}!`);
+    }
+
+    function removeAdmin(id) {
+      if (tripData.admins.length <= 1) {
+        alert('You must have at least one Admin.');
+        return;
+      }
+      tripData.admins = tripData.admins.filter(a => a.id !== id && a.name !== id);
+      hydrateUI();
+      recalculateAll();
+      showToast('Admin removed.');
+    }
+
+    function updateAdminField(id, field, val) {
+      const admin = tripData.admins.find(a => a.id === id);
+      if (admin) {
+        admin[field] = val.trim();
+        // If name changed, update dropdowns
+        if (field === 'name') {
+          renderCategoryPaidByOptions();
+          const primaryAdmin = tripData.admins[0]?.name || 'Ismail';
+          const lbl = document.getElementById('lblPrimaryAdmin');
+          if (lbl) lbl.textContent = primaryAdmin;
+        }
+        recalculateAll();
+      }
+    }
+
     function updatePaidBySelectOptions() {
       const select = document.getElementById('newExpPaidBy');
+      if (!select) return;
       select.innerHTML = '<option value="pool">Advance Pool</option>';
-      tripData.members.forEach(m => {
+      tripData.admins.forEach(a => {
         const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = m;
+        opt.value = a.name;
+        opt.textContent = `Admin: ${a.name}`;
         select.appendChild(opt);
+      });
+      tripData.members.forEach(m => {
+        if (!tripData.admins.some(a => a.name === m)) {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          select.appendChild(opt);
+        }
       });
     }
 
@@ -1336,6 +1794,7 @@
 
     function renderCustomExpensesList() {
       const list = document.getElementById('customExpensesList');
+      if (!list) return;
       list.innerHTML = '';
       if (!tripData.customExpenses || tripData.customExpenses.length === 0) {
         return;
@@ -1399,8 +1858,18 @@
 
       // 2. Calculate Total Advance Collected
       let totalAdvance = 0;
+      const adminAdvanceCollected = {};
+      tripData.admins.forEach(a => adminAdvanceCollected[a.name] = 0);
+
       tripData.members.forEach(m => {
-        totalAdvance += (tripData.advances[m] || 0);
+        const amt = (tripData.advances[m] || 0);
+        totalAdvance += amt;
+        const toAdmin = tripData.advancePaidTo[m] || tripData.admins[0]?.name;
+        if (toAdmin && adminAdvanceCollected[toAdmin] !== undefined) {
+          adminAdvanceCollected[toAdmin] += amt;
+        } else if (toAdmin) {
+          adminAdvanceCollected[toAdmin] = (adminAdvanceCollected[toAdmin] || 0) + amt;
+        }
       });
 
       // 3. Per Head Contribution
@@ -1412,7 +1881,18 @@
       document.getElementById('perHeadDisplay').textContent = `₹${Math.round(perHeadShare).toLocaleString('en-IN')}`;
       document.getElementById('totalAdvanceDisplay').textContent = `₹${Math.round(totalAdvance).toLocaleString('en-IN')}`;
 
-      // 5. Pool Balance Status
+      // 5. Update Advance Admin Subtotals Banner
+      const subtotalContainer = document.getElementById('advanceAdminSubtotals');
+      if (subtotalContainer) {
+        let subHtml = '';
+        tripData.admins.forEach(a => {
+          const colAmt = adminAdvanceCollected[a.name] || 0;
+          subHtml += `<span>👤 <strong>${a.name}</strong> collected: <strong style="color:var(--primary);">₹${colAmt.toLocaleString('en-IN')}</strong></span>`;
+        });
+        subtotalContainer.innerHTML = subHtml;
+      }
+
+      // 6. Pool Balance Status
       const poolBanner = document.getElementById('poolStatusBanner');
       const poolStatusText = document.getElementById('poolStatusText');
       const poolStatusPill = document.getElementById('poolStatusPill');
@@ -1432,7 +1912,7 @@
         poolStatusPill.textContent = `-₹${Math.round(Math.abs(poolDiff)).toLocaleString('en-IN')}`;
       }
 
-      // 6. Member Settlements & Balance
+      // 7. Member Settlements & Balance
       const settlementData = [];
       tripData.members.forEach(member => {
         const adv = tripData.advances[member] || 0;
@@ -1452,11 +1932,17 @@
 
       renderSettlementTable(settlementData);
       computeDirectTransfers(settlementData);
+
+      // 8. Admin Cash-in-Hand Ledger Calculation
+      calculateAdminLedger(adminAdvanceCollected);
+
+      // 9. Generate WhatsApp Summary
       generateWhatsAppSummaryText(grandTotal, perHeadShare, totalAdvance, settlementData);
     }
 
     function renderSettlementTable(data) {
       const tbody = document.getElementById('settlementTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       data.forEach(item => {
@@ -1475,7 +1961,6 @@
         tr.innerHTML = `
           <td><strong>${item.name}</strong></td>
           <td>₹${Math.round(item.advance).toLocaleString('en-IN')}</td>
-          <td>₹${Math.round(item.direct).toLocaleString('en-IN')}</td>
           <td style="font-weight: 700;">₹${Math.round(item.totalPaid).toLocaleString('en-IN')}</td>
           <td style="color: var(--text-muted);">₹${Math.round(item.share).toLocaleString('en-IN')}</td>
           <td>${pillHtml}</td>
@@ -1487,9 +1972,9 @@
     // Minimum Cash-Flow Debt Simplification Algorithm
     function computeDirectTransfers(settlementData) {
       const container = document.getElementById('directTransferList');
+      if (!container) return;
       container.innerHTML = '';
 
-      // Separate into debtors (need to pay) and creditors (get back)
       let debtors = [];
       let creditors = [];
 
@@ -1542,6 +2027,103 @@
     }
 
     // ==========================================
+    // ADMIN CASH-IN-HAND LEDGER
+    // ==========================================
+    function calculateAdminLedger(adminAdvanceCollected) {
+      const ledgerBox = document.getElementById('adminCashLedger');
+      if (!ledgerBox) return;
+
+      // Track expenses handled by each admin
+      const adminExpensesHandled = {};
+      tripData.admins.forEach(a => adminExpensesHandled[a.name] = 0);
+
+      // Categories
+      const categories = ['fuel', 'hotel', 'food', 'tolls', 'activities', 'misc'];
+      categories.forEach(cat => {
+        const amt = tripData.categories[cat] || 0;
+        const payer = tripData.categoryPaidBy[cat];
+        if (payer && adminExpensesHandled[payer] !== undefined) {
+          adminExpensesHandled[payer] += amt;
+        } else if (payer) {
+          adminExpensesHandled[payer] = (adminExpensesHandled[payer] || 0) + amt;
+        }
+      });
+
+      // Custom expenses
+      tripData.customExpenses.forEach(exp => {
+        if (exp.paidBy && exp.paidBy !== 'pool' && adminExpensesHandled[exp.paidBy] !== undefined) {
+          adminExpensesHandled[exp.paidBy] += exp.amount;
+        }
+      });
+
+      // Build cards for each admin
+      let gridHtml = '';
+      const adminBalances = [];
+
+      tripData.admins.forEach(admin => {
+        const collected = adminAdvanceCollected[admin.name] || 0;
+        const spent = adminExpensesHandled[admin.name] || 0;
+        const netCash = collected - spent;
+
+        adminBalances.push({ name: admin.name, netCash: netCash, collected: collected, spent: spent });
+
+        let statusBadge = '';
+        if (netCash > 0) {
+          statusBadge = `<strong style="color: #047857; font-size: 0.92rem;"><i class="fas fa-coins"></i> +₹${netCash.toLocaleString('en-IN')} Cash in Hand</strong>`;
+        } else if (netCash < 0) {
+          statusBadge = `<strong style="color: #ef4444; font-size: 0.92rem;"><i class="fas fa-hand-holding-usd"></i> -₹${Math.abs(netCash).toLocaleString('en-IN')} Out of Pocket</strong>`;
+        } else {
+          statusBadge = `<strong style="color: #64748b; font-size: 0.92rem;"><i class="fas fa-check"></i> ₹0 Balanced</strong>`;
+        }
+
+        gridHtml += `
+          <div class="admin-ledger-item">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.88rem; color: #92400e;">
+              <span><i class="fas fa-user-circle"></i> ${admin.name}</span>
+              <span style="font-size: 0.72rem; color: #78716c; font-weight: 600;">${admin.role || 'Admin'}</span>
+            </div>
+            <div style="font-size: 0.75rem; color: #57534e; margin-top: 2px;">
+              • Advance Received: <strong>₹${collected.toLocaleString('en-IN')}</strong><br>
+              • Expenses Paid: <strong>₹${spent.toLocaleString('en-IN')}</strong>
+            </div>
+            <div style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed #fed7aa;">
+              ${statusBadge}
+            </div>
+          </div>
+        `;
+      });
+
+      // Compute inter-admin rebalancing transfer
+      let rebalanceHtml = '';
+      const surplusAdmin = adminBalances.find(a => a.netCash > 1);
+      const deficitAdmin = adminBalances.find(a => a.netCash < -1);
+
+      if (surplusAdmin && deficitAdmin) {
+        const transferAmt = Math.min(surplusAdmin.netCash, Math.abs(deficitAdmin.netCash));
+        rebalanceHtml = `
+          <div class="admin-rebalance-alert">
+            <i class="fas fa-exchange-alt" style="font-size: 1.1rem; color: #2563eb;"></i>
+            <div>
+              <strong>Fund Equalization Transfer:</strong><br>
+              👉 <strong>${surplusAdmin.name}</strong> transfers <strong>₹${transferAmt.toLocaleString('en-IN')}</strong> to <strong>${deficitAdmin.name}</strong> (passes collected advance to cover expenses).
+            </div>
+          </div>
+        `;
+      }
+
+      ledgerBox.innerHTML = `
+        <div class="admin-ledger-title">
+          <span><i class="fas fa-balance-scale"></i> Admin Fund Status (Who Holds How Much)</span>
+          <span style="font-size: 0.72rem; font-weight: normal; color: #78716c;">Tracks Advance vs Expenses Handled</span>
+        </div>
+        <div class="admin-ledger-grid">
+          ${gridHtml}
+        </div>
+        ${rebalanceHtml}
+      `;
+    }
+
+    // ==========================================
     // WHATSAPP TEXT GENERATION & COPY
     // ==========================================
     function generateWhatsAppSummaryText(grandTotal, perHeadShare, totalAdvance, settlementData) {
@@ -1549,16 +2131,16 @@
       msg += `👥 Travelers (${tripData.members.length}): ${tripData.members.join(', ')}\n\n`;
 
       msg += `💰 *EXPENSES BREAKDOWN*:\n`;
-      if (tripData.categories.fuel > 0) msg += `• ⛽ Fuel: ₹${tripData.categories.fuel.toLocaleString('en-IN')}\n`;
-      if (tripData.categories.hotel > 0) msg += `• 🏨 Hotel/Stay: ₹${tripData.categories.hotel.toLocaleString('en-IN')}\n`;
-      if (tripData.categories.food > 0) msg += `• 🍽️ Food & Dining: ₹${tripData.categories.food.toLocaleString('en-IN')}\n`;
-      if (tripData.categories.tolls > 0) msg += `• 🛣️ Tolls & Cabs: ₹${tripData.categories.tolls.toLocaleString('en-IN')}\n`;
-      if (tripData.categories.activities > 0) msg += `• 🎟️ Sightseeing: ₹${tripData.categories.activities.toLocaleString('en-IN')}\n`;
-      if (tripData.categories.misc > 0) msg += `• 🛍️ Misc: ₹${tripData.categories.misc.toLocaleString('en-IN')}\n`;
+      if (tripData.categories.fuel > 0) msg += `• ⛽ Fuel: ₹${tripData.categories.fuel.toLocaleString('en-IN')} (${tripData.categoryPaidBy.fuel || 'Hussain'})\n`;
+      if (tripData.categories.hotel > 0) msg += `• 🏨 Hotel/Stay: ₹${tripData.categories.hotel.toLocaleString('en-IN')} (${tripData.categoryPaidBy.hotel || 'Ismail'})\n`;
+      if (tripData.categories.food > 0) msg += `• 🍽️ Food & Dining: ₹${tripData.categories.food.toLocaleString('en-IN')} (${tripData.categoryPaidBy.food || 'Hussain'})\n`;
+      if (tripData.categories.tolls > 0) msg += `• 🛣️ Tolls & Cabs: ₹${tripData.categories.tolls.toLocaleString('en-IN')} (${tripData.categoryPaidBy.tolls || 'Hussain'})\n`;
+      if (tripData.categories.activities > 0) msg += `• 🎟️ Sightseeing: ₹${tripData.categories.activities.toLocaleString('en-IN')} (${tripData.categoryPaidBy.activities || 'Hussain'})\n`;
+      if (tripData.categories.misc > 0) msg += `• 🛍️ Misc: ₹${tripData.categories.misc.toLocaleString('en-IN')} (${tripData.categoryPaidBy.misc || 'Hussain'})\n`;
 
       if (tripData.customExpenses && tripData.customExpenses.length > 0) {
         tripData.customExpenses.forEach(e => {
-          msg += `• 📌 ${e.desc}: ₹${e.amount.toLocaleString('en-IN')} (${e.paidBy === 'pool' ? 'Pool' : e.paidBy})\n`;
+          msg += `• 📌 ${e.desc}: ₹${e.amount.toLocaleString('en-IN')} (${e.paidBy})\n`;
         });
       }
 
@@ -1580,17 +2162,21 @@
         }
       });
 
+      msg += `\n📲 *TRIP ADMIN SETTLEMENT ACCOUNTS*:\n`;
+      tripData.admins.forEach(a => {
+        msg += `• 👤 *${a.name}* (${a.role || 'Admin'}): ${a.upi}\n`;
+      });
+
       const shareUrl = getLiveShareUrl();
-      msg += `\n📲 Settle via UPI / PhonePe: 9620447444@upi\n`;
-      msg += `🌐 View Live Trip Tracker: ${shareUrl}\n`;
+      msg += `\n🌐 View Live Trip Tracker: ${shareUrl}\n`;
       msg += `👨‍💻 Developed by Md Hussain`;
 
-      document.getElementById('whatsappSummaryText').textContent = msg;
+      currentWhatsAppSummary = msg;
     }
 
     function copyWhatsAppText() {
-      const text = document.getElementById('whatsappSummaryText').textContent;
-      navigator.clipboard.writeText(text).then(() => {
+      if (!currentWhatsAppSummary) return;
+      navigator.clipboard.writeText(currentWhatsAppSummary).then(() => {
         const btn = document.getElementById('btnCopyTxt');
         const orig = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
