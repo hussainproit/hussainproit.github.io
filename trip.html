@@ -671,7 +671,7 @@
           <label>Travelers / Members (comma separated)</label>
           <div class="input-wrapper">
             <i class="fas fa-users"></i>
-            <input type="text" id="memberNames" value="Hussain, Ismu, Vinod, Rayan" oninput="handleMembersChange()">
+            <input type="text" id="memberNames" value="Hussain, Ismu, Anees, Anshad, Ashiq, Sachu, Akif" oninput="handleMembersChange()">
           </div>
         </div>
       </div>
@@ -933,17 +933,20 @@
     // ==========================================
     // DATA MODEL & INITIALIZATION
     // ==========================================
-    const STORAGE_KEY = 'hussain_trip_tracker_v1';
+    const STORAGE_KEY = 'hussain_trip_tracker_v2';
 
     // Sample Trip Data to give an immediate polished experience
     const DEFAULT_DATA = {
       tripName: 'Wayanad Weekend Getaway',
-      members: ['Hussain', 'Ismu', 'Vinod', 'Rayan'],
+      members: ['Hussain', 'Ismu', 'Anees', 'Anshad', 'Ashiq', 'Sachu', 'Akif'],
       advances: {
         'Hussain': 2000,
         'Ismu': 2000,
-        'Vinod': 2000,
-        'Rayan': 2000
+        'Anees': 2000,
+        'Anshad': 2000,
+        'Ashiq': 2000,
+        'Sachu': 2000,
+        'Akif': 2000
       },
       categories: {
         fuel: 3500,
